@@ -1,0 +1,4 @@
+interface:
+  display_name: "Taiwan DCF Valuation"
+  short_description: "主動研究官方台股資料，以來源清楚的假設完成可編輯三情境 DCF 粗估"
+  default_prompt: "使用 $taiwan-dcf-valuation 主動查找指定台股公司的官方財報與最新 IR，以有來源的假設完成三情境估值、Excel 與可用的原生重算驗證。"

@@ -1,0 +1,13 @@
+[project]
+name = "taiwan-dcf-valuation"
+version = "1.0.0"
+description = "Official Taiwan financial data intake and editable DCF workbooks"
+requires-python = ">=3.11"
+dependencies = ["openpyxl>=3.1.5,<4"]
+license = "MIT"
+
+[dependency-groups]
+dev = ["autopep8>=2.3,<3", "flake8>=7.3,<8"]
+
+[tool.uv]
+package = false

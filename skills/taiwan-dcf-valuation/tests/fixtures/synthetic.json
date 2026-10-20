@@ -1,0 +1,1097 @@
+{
+  "notice": "SYNTHETIC TEST FIXTURE. Not a company, guidance, investment data or a default assumption set.",
+  "facts": [
+    {
+      "metric": "revenue",
+      "value": 1000,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "ebit",
+      "value": 200,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "pretax_income",
+      "value": 200,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "tax_expense",
+      "value": 40,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "depreciation",
+      "value": 40,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "amortisation",
+      "value": 10,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_ppe",
+      "value": 50,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_intangible",
+      "value": 10,
+      "start": "2021-01-01",
+      "end": "2021-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "nwc",
+      "value": 100,
+      "start": "",
+      "end": "2021-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "cash",
+      "value": 50,
+      "start": "",
+      "end": "2021-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "debt",
+      "value": 100,
+      "start": "",
+      "end": "2021-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "shares",
+      "value": 10,
+      "start": "",
+      "end": "2021-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "million shares"
+    },
+    {
+      "metric": "equity_adjustment",
+      "value": -20,
+      "start": "",
+      "end": "2021-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "revenue",
+      "value": 1000,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "ebit",
+      "value": 200,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "pretax_income",
+      "value": 200,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "tax_expense",
+      "value": 40,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "depreciation",
+      "value": 40,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "amortisation",
+      "value": 10,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_ppe",
+      "value": 50,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_intangible",
+      "value": 10,
+      "start": "2022-01-01",
+      "end": "2022-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "nwc",
+      "value": 100,
+      "start": "",
+      "end": "2022-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "cash",
+      "value": 50,
+      "start": "",
+      "end": "2022-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "debt",
+      "value": 100,
+      "start": "",
+      "end": "2022-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "shares",
+      "value": 10,
+      "start": "",
+      "end": "2022-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "million shares"
+    },
+    {
+      "metric": "equity_adjustment",
+      "value": -20,
+      "start": "",
+      "end": "2022-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "revenue",
+      "value": 1000,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "ebit",
+      "value": 200,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "pretax_income",
+      "value": 200,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "tax_expense",
+      "value": 40,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "depreciation",
+      "value": 40,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "amortisation",
+      "value": 10,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_ppe",
+      "value": 50,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_intangible",
+      "value": 10,
+      "start": "2023-01-01",
+      "end": "2023-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "nwc",
+      "value": 100,
+      "start": "",
+      "end": "2023-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "cash",
+      "value": 50,
+      "start": "",
+      "end": "2023-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "debt",
+      "value": 100,
+      "start": "",
+      "end": "2023-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "shares",
+      "value": 10,
+      "start": "",
+      "end": "2023-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "million shares"
+    },
+    {
+      "metric": "equity_adjustment",
+      "value": -20,
+      "start": "",
+      "end": "2023-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "revenue",
+      "value": 1000,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "ebit",
+      "value": 200,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "pretax_income",
+      "value": 200,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "tax_expense",
+      "value": 40,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "depreciation",
+      "value": 40,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "amortisation",
+      "value": 10,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_ppe",
+      "value": 50,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_intangible",
+      "value": 10,
+      "start": "2024-01-01",
+      "end": "2024-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "nwc",
+      "value": 100,
+      "start": "",
+      "end": "2024-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "cash",
+      "value": 50,
+      "start": "",
+      "end": "2024-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "debt",
+      "value": 100,
+      "start": "",
+      "end": "2024-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "shares",
+      "value": 10,
+      "start": "",
+      "end": "2024-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "million shares"
+    },
+    {
+      "metric": "equity_adjustment",
+      "value": -20,
+      "start": "",
+      "end": "2024-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "revenue",
+      "value": 1000,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "ebit",
+      "value": 200,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "pretax_income",
+      "value": 200,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "tax_expense",
+      "value": 40,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "depreciation",
+      "value": 40,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "amortisation",
+      "value": 10,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_ppe",
+      "value": 50,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "capex_intangible",
+      "value": 10,
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "period": "annual",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "nwc",
+      "value": 100,
+      "start": "",
+      "end": "2025-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "cash",
+      "value": 50,
+      "start": "",
+      "end": "2025-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "debt",
+      "value": 100,
+      "start": "",
+      "end": "2025-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    },
+    {
+      "metric": "shares",
+      "value": 10,
+      "start": "",
+      "end": "2025-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "million shares"
+    },
+    {
+      "metric": "equity_adjustment",
+      "value": -20,
+      "start": "",
+      "end": "2025-12-31",
+      "period": "instant",
+      "source_url": "synthetic://fixture",
+      "retrieved_at": "2026-10-20T00:00:00+00:00",
+      "raw_unit": "TWD million"
+    }
+  ],
+  "inputs": {
+    "base_revenue": {
+      "value": 1000,
+      "source": "synthetic://fixture",
+      "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+      "classification": "analyst_estimate"
+    },
+    "base_nwc": {
+      "value": 100,
+      "source": "synthetic://fixture",
+      "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+      "classification": "analyst_estimate"
+    },
+    "cash": {
+      "value": 50,
+      "source": "synthetic://fixture",
+      "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+      "classification": "analyst_estimate"
+    },
+    "debt": {
+      "value": 100,
+      "source": "synthetic://fixture",
+      "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+      "classification": "analyst_estimate"
+    },
+    "shares": {
+      "value": 10,
+      "source": "synthetic://fixture",
+      "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+      "classification": "analyst_estimate"
+    },
+    "equity_adjustment": {
+      "value": -20,
+      "source": "synthetic://fixture",
+      "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+      "classification": "analyst_estimate"
+    }
+  },
+  "scenarios": {
+    "bear": {
+      "revenue_growth": {
+        "value": [
+          0.03,
+          0.03,
+          0.03,
+          0.03,
+          0.03
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "ebit_margin": {
+        "value": [
+          0.15,
+          0.15,
+          0.15,
+          0.15,
+          0.15
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "tax_rate": {
+        "value": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "da_ratio": {
+        "value": [
+          0.05,
+          0.05,
+          0.05,
+          0.05,
+          0.05
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "capex_ratio": {
+        "value": [
+          0.06,
+          0.06,
+          0.06,
+          0.06,
+          0.06
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "nwc_ratio": {
+        "value": [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "risk_free": {
+        "value": 0.03,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "beta": {
+        "value": 1.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "equity_risk_premium": {
+        "value": 0.06,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "cost_of_debt": {
+        "value": 0.05,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "debt_weight": {
+        "value": 0.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "wacc_tax_rate": {
+        "value": 0.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "terminal_growth": {
+        "value": 0.01,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "extra_reinvestment": {
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "classification": "analyst_estimate",
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: explicit model test assumption, not company data"
+      },
+      "terminal_roic": {
+        "value": 0.1,
+        "classification": "analyst_estimate",
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: explicit model test assumption, not company data"
+      }
+    },
+    "base": {
+      "revenue_growth": {
+        "value": [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "ebit_margin": {
+        "value": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "tax_rate": {
+        "value": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "da_ratio": {
+        "value": [
+          0.05,
+          0.05,
+          0.05,
+          0.05,
+          0.05
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "capex_ratio": {
+        "value": [
+          0.06,
+          0.06,
+          0.06,
+          0.06,
+          0.06
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "nwc_ratio": {
+        "value": [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "risk_free": {
+        "value": 0.03,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "beta": {
+        "value": 1,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "equity_risk_premium": {
+        "value": 0.06,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "cost_of_debt": {
+        "value": 0.05,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "debt_weight": {
+        "value": 0.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "wacc_tax_rate": {
+        "value": 0.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "terminal_growth": {
+        "value": 0.02,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "extra_reinvestment": {
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "classification": "analyst_estimate",
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: explicit model test assumption, not company data"
+      },
+      "terminal_roic": {
+        "value": 0.1,
+        "classification": "analyst_estimate",
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: explicit model test assumption, not company data"
+      }
+    },
+    "bull": {
+      "revenue_growth": {
+        "value": [
+          0.15,
+          0.15,
+          0.15,
+          0.15,
+          0.15
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "ebit_margin": {
+        "value": [
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "tax_rate": {
+        "value": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "da_ratio": {
+        "value": [
+          0.05,
+          0.05,
+          0.05,
+          0.05,
+          0.05
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "capex_ratio": {
+        "value": [
+          0.06,
+          0.06,
+          0.06,
+          0.06,
+          0.06
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "nwc_ratio": {
+        "value": [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "risk_free": {
+        "value": 0.03,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "beta": {
+        "value": 0.9,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "equity_risk_premium": {
+        "value": 0.06,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "cost_of_debt": {
+        "value": 0.05,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "debt_weight": {
+        "value": 0.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "wacc_tax_rate": {
+        "value": 0.2,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "terminal_growth": {
+        "value": 0.025,
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: arbitrary test values, not company data",
+        "classification": "analyst_estimate"
+      },
+      "extra_reinvestment": {
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "classification": "analyst_estimate",
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: explicit model test assumption, not company data"
+      },
+      "terminal_roic": {
+        "value": 0.1,
+        "classification": "analyst_estimate",
+        "source": "synthetic://fixture",
+        "method": "SYNTHETIC ONLY: explicit model test assumption, not company data"
+      }
+    }
+  }
+}

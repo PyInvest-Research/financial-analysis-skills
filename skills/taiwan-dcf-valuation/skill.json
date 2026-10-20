@@ -1,0 +1,25 @@
+{
+  "slug": "taiwan-dcf-valuation",
+  "name": "Taiwan DCF Valuation",
+  "version": "1.0.0",
+  "summary": "主動查找台灣官方財報與公司資訊，以有來源的分析師假設完成三情境 DCF 粗估與可編輯 Excel。",
+  "status": "published",
+  "license": "MIT",
+  "githubOwner": "PyInvest-Research",
+  "githubUrl": "https://github.com/PyInvest-Research/financial-analysis-skills/tree/main/skills/taiwan-dcf-valuation",
+  "files": [
+    "SKILL.md",
+    "LICENSE",
+    "skill.json",
+    "pyproject.toml",
+    ".python-version",
+    "uv.lock",
+    "agents/openai.yaml",
+    "references/data-sources.md",
+    "references/model.md",
+    "references/supplemental-data.md",
+    "scripts/taiwan_dcf.py",
+    "tests/test_taiwan_dcf.py",
+    "tests/fixtures/synthetic.json"
+  ]
+}
