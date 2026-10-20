@@ -940,10 +940,13 @@ def _assumptions(
                            and fact.period == "instant"),
                           key=lambda fact: fact.end, reverse=True)
     if current_cash and "cash" not in supplement.get("inputs", {}):
-        _input(sheet, 9, 3, current_cash[0].value)
-        _cell(sheet, 9, 9, (
-            f"reported: Cash at {current_cash[0].end}; "
-            f"{current_cash[0].source_url}"))
+        cash = current_cash[0]
+        _input(sheet, 9, 3, cash.value)
+        note = (f"{cash.classification}: Cash at {cash.end}; "
+                f"{cash.source_url}")
+        if cash.method:
+            note += f"; {cash.method}"
+        _cell(sheet, 9, 9, note)
     if "shares" not in supplement.get("inputs", {}):
         sheet["I11"] = "Outstanding common shares; not EPS weighted shares."
     if "equity_adjustment" not in supplement.get("inputs", {}):

@@ -293,6 +293,55 @@ class WorkbookTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     write_workbook(self.data, Path(directory) / "invalid.xlsx")
 
+    def test_auto_cash_preserves_fact_provenance(self) -> None:
+        """Both fact inputs preserve the latest cash provenance."""
+        self.supplement["inputs"].pop("cash")
+        for origin in ("dataset", "supplement"):
+            for classification in ("reported", "derived", "analyst_estimate"):
+                with self.subTest(
+                        origin=origin, classification=classification):
+                    cash = Fact(
+                        "cash", 500, "", "2026-06-30", "instant",
+                        "synthetic://cash-provenance", STAMP,
+                        classification=classification,
+                        method="SYNTHETIC: disclosed cash calculation.",
+                    )
+                    older = replace(cash, value=50, end="2026-03-31")
+                    self.data.facts = (
+                        [older, cash] if origin == "dataset" else [])
+                    self.supplement["facts"] = (
+                        [asdict(older), asdict(cash)]
+                        if origin == "supplement" else [])
+                    with tempfile.TemporaryDirectory() as directory:
+                        path = Path(directory) / "cash.xlsx"
+                        write_workbook(self.data, path, self.supplement)
+                        sheet = load_workbook(path)["Assumptions"]
+                        self.assertEqual(sheet["C9"].value, cash.value)
+                        self.assertEqual(
+                            sheet["I9"].value,
+                            f"{classification}: Cash at {cash.end}; "
+                            f"{cash.source_url}; {cash.method}",
+                        )
+
+    def test_explicit_cash_input_takes_precedence_over_facts(self) -> None:
+        """An explicit cash assumption keeps its own value and provenance."""
+        self.data.facts = [
+            Fact("cash", 500, "", "2026-06-30", "instant",
+                 "synthetic://cash-fact", STAMP,
+                 classification="reported"),
+        ]
+        cash = self.supplement["inputs"]["cash"]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "cash-override.xlsx"
+            write_workbook(self.data, path, self.supplement)
+            sheet = load_workbook(path)["Assumptions"]
+            self.assertEqual(sheet["C9"].value, cash["value"])
+            self.assertEqual(
+                sheet["I9"].value,
+                f'{cash["classification"]}: {cash["source"]}; '
+                f'{cash["method"]}',
+            )
+
     def test_supplied_sources_survive_explanatory_notes(self) -> None:
         """Preserve terminal provenance in all three selectable cases."""
         with tempfile.TemporaryDirectory() as directory:
