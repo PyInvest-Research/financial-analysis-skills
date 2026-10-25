@@ -13,13 +13,13 @@
 
 規格：[TWSE swagger](https://openapi.twse.com.tw/v1/swagger.json)、[TPEx swagger](https://www.tpex.org.tw/openapi/swagger.json)。不繞過驗證、存取封鎖或限制；抓取失敗寫入 gaps，再用官方財報手工補充。
 
-執行環境由 `.python-version` 選用 Python 3.12。此輪本機 Python 3.14 對公開來源 TLS chain 回報 `Missing Subject Key Identifier`；保留標準憑證與主機名稱驗證，不以關閉 TLS 驗證解決。
+Python HTTPS 取數前先完成 [執行環境安全檢查](runtime-safety.md)。`.python-version` 選用 Python 3.12 只為環境一致，不代表 CA 已修補。若遇到 `Missing Subject Key Identifier` 等憑證錯誤，保留憑證與主機名稱驗證，改用 Web 路徑；不能靠降版 Python 或放寬 TLS 驗證繞過。
 
 ## ChatGPT Web 取數流程
 
 一般 ChatGPT 的搜尋／瀏覽與資料分析 Python 是不同工具。[OpenAI 資料分析文件](https://help.openai.com/en/articles/8437071-data-analysis-with-chatgpt) 說明 Python 環境不能直接呼叫外部網站或 API；不能因 `requests` 或名錄抓取失敗，就判定公司資料不存在。工具能力可能改變，以當次結果為準。
 
-1. 若 Python 已能連網，照常使用現有 API collector。否則從可用的 Web 工具開始，不要求使用者修改 DNS、安裝本機工具或申請金鑰。
+1. 若 Python 已完成安全檢查且能連網，使用現有 API collector。否則從可用的 Web 工具開始，不要求使用者修改 DNS、安裝本機工具或申請金鑰；連線成功本身不是安全檢查通過。
 2. **Web 也可嘗試直接讀公開 GET API**：用上表官方 URL，只有讀到實際回應中的公司列、欄位與日期才算成功。Swagger 文件、搜尋摘要、空白頁或只有下載連結，都不代表已取得 API 數據。不假設工具能送任意 POST、headers 或處理全部 JSON／CSV。
 3. API 讀不到時，改查同一官方資料的網頁、公司 IR／法說與財報 PDF；再使用可追溯的可信次級來源。重大輸入能交叉核對就核對，不以來源數量作估值門檻。遇到 DNS、403、驗證或不支援格式就換可用來源，不反覆嘗試同一路徑或繞過限制。
 4. 從實際讀到的原文整理必要欄位，寫入 `normalized.json`／補充 JSON。記錄 URL、期間、單位、合併範圍、取得時間，PDF 可加頁碼；搜尋摘要只作找來源線索。網頁取得的官方數字仍是 `reported`，不因取數工具不同變成估計。真正缺少的資料才使用揭露完整的代理。

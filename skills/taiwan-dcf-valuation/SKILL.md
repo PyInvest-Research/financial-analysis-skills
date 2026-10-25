@@ -5,7 +5,7 @@ description: 建立台股上市或上櫃非金融公司的當前 FCFF DCF 估值
 
 # Taiwan DCF Valuation
 
-版本 1.0.0。為指定台股非金融公司完成三情境 DCF 粗估與可編輯 Excel。**預設要完成估值：資料不足就補查或合理估計，完整揭露；不要因為資料不完美而只交空模型。** 不設股票白名單。
+版本 1.0.1。為指定台股非金融公司完成三情境 DCF 粗估與可編輯 Excel。**預設要完成估值：資料不足就補查或合理估計，完整揭露；不要因為資料不完美而只交空模型。** 不設股票白名單。
 
 公告數字、推導數值與分析師估計分開標示。可以使用歷史比率、同業代理、前期數值延用、簡化假設與有理由的零值，不需逐項等待使用者確認。說清楚理由、來源日期及可能影響；不得把估計說成公告值，或虛構來源。
 
@@ -15,9 +15,11 @@ description: 建立台股上市或上櫃非金融公司的當前 FCFF DCF 估值
 
 AI 先確認本次對話能讀檔、搜尋／瀏覽及執行 Python；工具與額度以當次環境為準，不要求一般使用者設定 Python、API key 或後端。讀到網站或 Chrome 分頁不等於已載入其他檔案，也不等於 Python 可以連網。
 
+**安裝或連網前的安全檢查：** 在安裝／更新套件、下載 Python 或使用 Python HTTPS 之前，先依 [執行環境安全檢查](references/runtime-safety.md) 核對實際下載工具、修補版本與 CA 信任來源。2026-10 事件的最低基準為 `uv >= 0.13.4`、使用 pip 時 `pip >= 26.2.2`、使用 certifi 時 `certifi >= 2026.10.19`；版本符合仍須核對實際 CA。不要先用舊 pip 連網升級，也不能關閉 TLS 驗證。無法確認託管環境時，改用可用的搜尋／瀏覽工具取得資料與既有套件離線產表；缺套件且無安全安裝路徑時如實說明產檔限制。
+
 **API 與 Web 兩條取數路徑並存，共用同一個模型：**
 
-- **可連網的 Python**：保留 `collect_current_data()`，取得官方資料後繼續補查。
+- **已完成安全檢查且可連網的 Python**：保留 `collect_current_data()`，取得官方資料後繼續補查。
 - **ChatGPT Web**：由可用的搜尋／瀏覽工具取得官方資料；可先試讀公開 GET API，讀不到就改公司 IR、財報 PDF 或可信次級來源。把查到的資料寫成 JSON，再離線呼叫 `create_researched_workbook()`，不必先成功執行抓取程式。詳見 [Web 取數流程](references/data-sources.md#chatgpt-web-取數流程)。
 
 以下由 AI 在已解壓的套件目錄執行；兩份 JSON 由本次研究建立，格式見 [補充資料](references/supplemental-data.md)，不使用測試數字估值：
@@ -39,7 +41,7 @@ result = create_researched_workbook(
 print(result)
 ```
 
-本機／開發環境可在套件目錄使用 `uv run`，`.python-version` 選用 Python 3.12；或使用自己專案的虛擬環境。API 入口仍為 `data = collect_current_data(ticker, capture_dir=...)`，再將 `data` 傳給相同的 `create_researched_workbook()`。相依套件列於 `pyproject.toml`。
+本機／開發環境完成安全檢查後，可在套件目錄使用 `uv run --locked --no-build --no-python-downloads`，或使用自己專案的既有虛擬環境，不全域安裝。`.python-version` 選用 Python 3.12，並非安全修補證明；缺少合適的 Python 時先完成安全安裝，不移除限制重試。API 入口仍為 `data = collect_current_data(ticker, capture_dir=...)`，再將 `data` 傳給相同的 `create_researched_workbook()`。相依套件列於 `pyproject.toml`。
 
 ## 工作方式
 
@@ -65,8 +67,8 @@ print(result)
 ## 驗證 helper
 
 ```text
-uv run --group dev python -m unittest discover -s tests -v
-uv run --group dev flake8 scripts tests
+uv run --locked --no-build --no-python-downloads --group dev python -m unittest discover -s tests -v
+uv run --locked --no-build --no-python-downloads --group dev flake8 scripts tests
 ```
 
 `tests/fixtures/synthetic.json` 完全是合成資料，只驗算公式與邊界，不代表任何公司估值或投資建議。

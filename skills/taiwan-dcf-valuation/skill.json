@@ -1,7 +1,7 @@
 {
   "slug": "taiwan-dcf-valuation",
   "name": "Taiwan DCF Valuation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "summary": "主動查找台灣官方財報與公司資訊，以有來源的分析師假設完成三情境 DCF 粗估與可編輯 Excel。",
   "status": "published",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "uv.lock",
     "agents/openai.yaml",
     "references/data-sources.md",
+    "references/runtime-safety.md",
     "references/model.md",
     "references/supplemental-data.md",
     "scripts/taiwan_dcf.py",
