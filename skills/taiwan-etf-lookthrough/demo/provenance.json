@@ -1,0 +1,156 @@
+{
+  "scope": "User-approved fixed historical demo exception; not daily Cathay publication or current portfolio data.",
+  "hypothetical_portfolio": true,
+  "currency": "TWD",
+  "total_value_twd": 1000000,
+  "holdings_date": "2026-10-22",
+  "valuation_date": "2026-10-22",
+  "fixed_demo_exception": "The one qualified 00878 snapshot may accompany this fixed skill demo; five daily Cathay routes remain official_only. External release still requires Task24 approval.",
+  "portfolio_sha256": "f09eca81c01ee98b6d2b25d1f1447f39d97faf855cfa518ae3c7f645e7b602fb",
+  "snapshots": {
+    "0050": {
+      "sha256": "e428fdac0751c6b23639fe7e53e62617e10e4f8928676cad6cf047d6c66ce263",
+      "bytes": 7658,
+      "canonical_snapshot_sha256": "fe1fd550553ababc125a3d3820df30acbde2b0e3ed00500482243bb9b71e6374",
+      "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0050%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0050",
+      "fetched_at": "2026-10-25T17:31:44.456607+00:00",
+      "issuer": "yuanta",
+      "source_kind": "agent_official",
+      "original_research_path": "acceptance/original-five-draft/snapshots/0050.json"
+    },
+    "006208": {
+      "sha256": "2375af7fd043be81a18eb897bf01faa087dc42197828df25e16481254c16fbc8",
+      "bytes": 8785,
+      "canonical_snapshot_sha256": "0aec1d8dc94f92b708f39f60628385428540e08a5e616c1e896c774248187532",
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?lan=TW&stkId=006208",
+      "fetched_at": "2026-10-26T01:59:23.367326+00:00",
+      "issuer": "fubon",
+      "source_kind": "official",
+      "original_research_path": "acceptance/original-five-draft/snapshots/006208.json"
+    },
+    "0056": {
+      "sha256": "a4951148747569f0687af20be9478587624f86e699298aa7a15a701395411212",
+      "bytes": 7489,
+      "canonical_snapshot_sha256": "e3e2ac3c239365f0353af8b63faa46defc07cc6b66d363b4528c01f14b4cdac6",
+      "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0056%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0056",
+      "fetched_at": "2026-10-25T17:31:47.680916+00:00",
+      "issuer": "yuanta",
+      "source_kind": "agent_official",
+      "original_research_path": "acceptance/original-five-draft/snapshots/0056.json"
+    },
+    "00878": {
+      "sha256": "2db9b1bc5f845f8db5dd8fd2b842359d57ae05cac36d290c7c8c385a041f6697",
+      "bytes": 4920,
+      "canonical_snapshot_sha256": "e5f8ccee0d0b0343924604d0d97fcc30a7eaa3c7aac4187bedcf9b11b715992b",
+      "source_url": "https://www.cathaysite.com.tw/ETF/detail/ECN?tab=etf3",
+      "fetched_at": "2026-10-25T18:15:27.356Z",
+      "issuer": "cathay",
+      "source_kind": "agent_official",
+      "original_research_path": "acceptance/original-five-draft/snapshots/00878.json"
+    },
+    "00919": {
+      "sha256": "b67e49923f1a5b4a0abc4aff30d18100fd207dc7199a953f950d112e0229d1fb",
+      "bytes": 6343,
+      "canonical_snapshot_sha256": "1a94d3df21a2adf997e7097ccff5edb89d495632305677b64309a9632a2aea56",
+      "source_url": "https://www.capitalfund.com.tw/CFWeb/api/etf/buyback",
+      "fetched_at": "2026-10-26T03:38:05.652132+00:00",
+      "issuer": "capital",
+      "source_kind": "agent_official",
+      "original_research_path": "acceptance/original-five-draft/snapshots/00919.json"
+    }
+  },
+  "sources": [
+    {
+      "symbol": "0050",
+      "issuer": "yuanta",
+      "is_active": false,
+      "descriptor_route": "http",
+      "raw_path": "sources/inputs/0050-daily-api.json",
+      "original_fixture": "skills/taiwan-etf-lookthrough/tests/fixtures/issuers/yuanta/000-646594ac16ab2311.json",
+      "sha256": "816b5d25a70f87dbf5e3fa5a8e795f5a49d97ad7e55d18e96bef8f6c8027d375",
+      "bytes": 14270,
+      "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0050%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0050",
+      "fetched_at": "2026-10-25T17:31:44.456607+00:00",
+      "representation": "original_official_HTTP_body",
+      "expected_holdings_date": "2026-10-22",
+      "stock_conversion": "native disclosed per-stock percentage / 100; rounding preserved"
+    },
+    {
+      "symbol": "006208",
+      "issuer": "fubon",
+      "is_active": false,
+      "descriptor_route": "http",
+      "raw_path": "sources/inputs/006208-assets.html",
+      "original_fixture": "skills/taiwan-etf-lookthrough/tests/fixtures/issuers/fubon/006208.2026-10-22.html",
+      "sha256": "5b6b3ab9850577d90926bb29c3ab2fe7a09f68451bcb8137bc6496795e8f2a1e",
+      "bytes": 204847,
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?lan=TW&stkId=006208",
+      "fetched_at": "2026-10-26T01:59:23.367326+00:00",
+      "representation": "original_official_HTTP_body",
+      "expected_holdings_date": "2026-10-22",
+      "stock_conversion": "official stock TWD amount / same-page TWD NAV"
+    },
+    {
+      "symbol": "0056",
+      "issuer": "yuanta",
+      "is_active": false,
+      "descriptor_route": "http",
+      "raw_path": "sources/inputs/0056-daily-api.json",
+      "original_fixture": "skills/taiwan-etf-lookthrough/tests/fixtures/issuers/yuanta/001-d8b0b2047a4c840e.json",
+      "sha256": "72360c315778182e7288c913c1b1f5d6ac494f616bc457c2868bac5b701e8c1c",
+      "bytes": 14253,
+      "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0056%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0056",
+      "fetched_at": "2026-10-25T17:31:47.680916+00:00",
+      "representation": "original_official_HTTP_body",
+      "expected_holdings_date": "2026-10-22",
+      "stock_conversion": "native disclosed per-stock percentage / 100; rounding preserved"
+    },
+    {
+      "symbol": "00878",
+      "issuer": "cathay",
+      "is_active": false,
+      "descriptor_route": "playwright",
+      "raw_path": "sources/inputs/00878-qualified-chinese-capture.json",
+      "original_fixture": "skills/taiwan-etf-lookthrough/tests/fixtures/issuers/cathay/cathay-00878-rendered-complete.json",
+      "sha256": "5686f768d56342b205b18dd9b2df0518844271c4cd76902db012b10251490b44",
+      "bytes": 96076,
+      "source_url": "https://www.cathaysite.com.tw/ETF/detail/ECN?tab=etf3",
+      "fetched_at": "2026-10-25T18:15:27.356Z",
+      "representation": "official rendered DOM plus visible date-control value; not a downloaded XLSX or HTTP response",
+      "expected_holdings_date": "2026-10-22",
+      "stock_conversion": "native disclosed per-stock percentage / 100; rounding preserved"
+    },
+    {
+      "symbol": "00919",
+      "issuer": "capital",
+      "is_active": false,
+      "descriptor_route": "http",
+      "raw_path": "sources/inputs/00919-explicit-date-api.json",
+      "original_fixture": "skills/taiwan-etf-lookthrough/tests/fixtures/issuers/capital/00919-pcf-20261027-api.json",
+      "sha256": "4ae27405a4dab31be533e3b4b27e5a631b6eec33139c730948dd76809d9e83b6",
+      "bytes": 10056,
+      "source_url": "https://www.capitalfund.com.tw/CFWeb/api/etf/buyback",
+      "fetched_at": "2026-10-26T03:38:05.652132+00:00",
+      "representation": "original_official_HTTP_body",
+      "expected_holdings_date": "2026-10-22",
+      "stock_conversion": "native disclosed per-stock percentage / 100; rounding preserved"
+    }
+  ],
+  "original_source_manifest": {
+    "repository_path": "research/etf-lookthrough-feasibility/acceptance/original-five-draft/source-manifest.json",
+    "sha256": "27a40fb2bbe9dacafc5072a74e3c54306dbbff3dfd32a2e8c0c624153e6a62d3"
+  },
+  "original_source_context_sha256": "fd046bf1fb007e10b051166965b72ea3654f3659f4322fc9fc234d9d77e74f3f",
+  "independent_precheck_sha256": "aa825756740e5197fcd03507e2a6fd4b7832248cf428b93508e7c24fae69e155",
+  "directory_sha256": "4b6fe4db2c8cd311c3b09dc9e9dd445c0a11b4a20d1c1fc0c840fd2d10c0d8d4",
+  "raw_sources_in_download_package": false,
+  "raw_sources_note": "Original raw bodies, full provenance and screenshots remain unchanged in the repository research case; this package contains canonical snapshots with source identity and hashes.",
+  "full_comparison_removes_only": "$.generated_at",
+  "release_candidate": {
+    "code_version": "1.0.0",
+    "input_bytes_unchanged": true,
+    "generated_at": "2026-10-26T10:49:02.935424+00:00",
+    "generation_evidence_sha256": "b803275770a3500909ce453438fafdfc7e0f017e9f2269c4baf42ac259ccbfb4",
+    "external_publication_performed": false
+  }
+}

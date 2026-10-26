@@ -1,0 +1,83 @@
+{
+  "scope": "One actual v1.0.0 local fixed-demo generation; not external publication or new source capture.",
+  "actual_fixed_demo_generation_count": 2,
+  "started_at_utc": "2026-10-26T10:49:02.928111+00:00",
+  "generated_at": "2026-10-26T10:49:02.935424+00:00",
+  "runtime_date_taipei": "2026-10-26",
+  "today_argument_supplied": false,
+  "use_network": false,
+  "network_attempts": [],
+  "pre_run_evidence_sha256": "7423aff0dd217fc1960aafcb46c3eeb008c2b969e201cf108c7f678caf92eba9",
+  "pre_run_saved_at_utc": "2026-10-26T10:49:02.810059+00:00",
+  "original_precheck_sha256": "aa825756740e5197fcd03507e2a6fd4b7832248cf428b93508e7c24fae69e155",
+  "independent_expected_2330_twd": "384951.7099907112528127300190",
+  "actual_2330_twd": 384951.7099907112,
+  "actual_minus_independent_expected_twd": "-5.28127300190E-11",
+  "2330_tolerance_twd": "0.0000001",
+  "full_json_removed_paths": [
+    "$.generated_at"
+  ],
+  "full_normalized_json_equals_approved_research_run": false,
+  "normalized_result_sha256": "322861e88e7f2f3fbe59ce035a3d9e4df25647890ac2848c490eb96302d1e035",
+  "bucket_sum_minus_total_twd": 44.631996610434726,
+  "totals": {
+    "cash_value": 3351.994619240979,
+    "coverage": 0.9934328768510489,
+    "futures": [
+      {
+        "amount_twd": null,
+        "security_code": "NYF"
+      },
+      {
+        "amount_twd": null,
+        "security_code": "TX"
+      },
+      {
+        "amount_twd": null,
+        "security_code": "TX202611"
+      },
+      {
+        "amount_twd": null,
+        "security_code": "WTXX6F"
+      }
+    ],
+    "identified_stock_value": 993432.8768510489,
+    "not_looked_through_value": 0.0,
+    "other_value": 1939.7605263205364,
+    "total_value": 1000000.0,
+    "unclassified_gap_value": 1320.0,
+    "unresolved_value": 0.0
+  },
+  "warnings": [],
+  "inputs_unchanged_after_generation": true,
+  "outputs": {
+    "result.json": {
+      "sha256": "8d479fb4082f871c4af1e3537894a96ba79829f4aa7ca228af723c475c782160",
+      "bytes": 67361
+    },
+    "report.md": {
+      "sha256": "c6b88658fbb4ed6305b2f3245d2233a7670a9c87e749c56007f96103ff3bf4b7",
+      "bytes": 6352
+    },
+    "exposures.csv": {
+      "sha256": "affef5d8a6a3d029b592087146c43727ddc3d5cc987aded217262d20f7cd5cda",
+      "bytes": 15861
+    }
+  },
+  "packaged_expected_result_sha256": "8d479fb4082f871c4af1e3537894a96ba79829f4aa7ca228af723c475c782160",
+  "packaged_report_with_context_sha256": "2db480554903240f5f97456c960a8e4283656a848bc1037bdd86459bc0799ada",
+  "v1_actual_generation_count": 1,
+  "code_version": "1.0.0",
+  "elapsed_seconds": 0.010809209023136646,
+  "previous_draft_generation_sha256": "0177b768652898b3e0ce29abc5cbbc70f1f2245d847c9e55263cce797494708d",
+  "only_expected_differences_from_draft": [
+    "generated_at",
+    "code_version"
+  ],
+  "full_financial_source_validation_equality_with_draft": true,
+  "draft_comparison_removed_paths": [
+    "$.generated_at",
+    "$.code_version"
+  ],
+  "draft_comparison_note": "Code version intentionally changed; all other non-generated fields match the approved draft."
+}

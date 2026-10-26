@@ -1,0 +1,79 @@
+{
+  "version": "1",
+  "directory_path": "company-directory.json",
+  "directory_sha256": "4b6fe4db2c8cd311c3b09dc9e9dd445c0a11b4a20d1c1fc0c840fd2d10c0d8d4",
+  "directory_as_of": "2026-10-25",
+  "directory_sources": [
+    {
+      "market": "TWSE",
+      "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+      "sha256": "ad2f13eee00e1c118d7a89acccf38bcaca3fd3dd3ed35e9a0308888fbe6e8513",
+      "row_count": 1097,
+      "source_dates": [
+        "1151024"
+      ],
+      "fetched_at": "2026-10-25T14:22:03.758657+00:00"
+    },
+    {
+      "market": "TPEx",
+      "url": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O",
+      "sha256": "00d924c450bac6973506a5e2a57075f6cb95533d99da77be4307a2b8cd61d081",
+      "row_count": 894,
+      "source_dates": [
+        "1151025"
+      ],
+      "fetched_at": "2026-10-25T14:22:03.758657+00:00"
+    }
+  ],
+  "supplemental_mappings": [
+    {
+      "original_name": "國巨",
+      "lookup_key": "國巨",
+      "code": "2327",
+      "method": "derived exact supplemental native Cathay code/name match",
+      "source_symbol": "00400A",
+      "source_url": "https://www.cathaysite.com.tw/ETF/detail/EEA?tab=etf3",
+      "holdings_date": "2026-10-22",
+      "captured_at": "2026-10-25T18:12:25.484Z",
+      "fixture": "tests/fixtures/issuers/cathay/cathay-00400A-rendered-capture.json",
+      "raw_sha256": "b100b3b9705bbc0f487dff758201a377fbc79d2effcbdc7e6aa97b7be6fdb932",
+      "html_sha256": "08eeb0e3d281afa0796b0421ac02e713d84874b9cf90acda5b12a7969a900447",
+      "selector": "div.code_and_name > span.code + span.name",
+      "native_node_html": "<div _ngcontent-serverapp-c182=\"\" class=\"code_and_name ng-star-inserted\"><span _ngcontent-serverapp-c182=\"\" class=\"code ng-star-inserted\">2327</span><!----><span _ngcontent-serverapp-c182=\"\" class=\"name\">國巨</span></div>",
+      "match_count": 1
+    },
+    {
+      "original_name": "世界先進",
+      "lookup_key": "世界先進",
+      "code": "5347",
+      "method": "derived exact supplemental native Cathay code/name match",
+      "source_symbol": "00878",
+      "source_url": "https://www.cathaysite.com.tw/ETF/detail/ECN?tab=etf3",
+      "holdings_date": "2026-10-22",
+      "captured_at": "2026-10-25T18:15:27.356Z",
+      "fixture": "tests/fixtures/issuers/cathay/cathay-00878-rendered-complete.json",
+      "raw_sha256": "5686f768d56342b205b18dd9b2df0518844271c4cd76902db012b10251490b44",
+      "html_sha256": "2051fefb5204f779dd8c7275ad8a218d281e571e1b9f3e4c06bd065f9fd64d18",
+      "selector": "div.code_and_name > span.code + span.name",
+      "native_node_html": "<div _ngcontent-serverapp-c182=\"\" class=\"code_and_name ng-star-inserted\"><span _ngcontent-serverapp-c182=\"\" class=\"code ng-star-inserted\">5347</span><!----><span _ngcontent-serverapp-c182=\"\" class=\"name\">世界先進</span></div>",
+      "match_count": 1
+    },
+    {
+      "original_name": "Lotes Co Ltd",
+      "lookup_key": "LotesCoLtd",
+      "code": "3533",
+      "method": "derived exact supplemental native Cathay code/name match",
+      "source_symbol": "00400A",
+      "source_url": "https://www.cathaysite.com.tw/ETF/detail/EEA?tab=etf3",
+      "holdings_date": "2026-10-22",
+      "captured_at": "2026-10-25T18:12:25.484Z",
+      "fixture": "tests/fixtures/issuers/cathay/cathay-00400A-rendered-capture.json",
+      "raw_sha256": "b100b3b9705bbc0f487dff758201a377fbc79d2effcbdc7e6aa97b7be6fdb932",
+      "html_sha256": "08eeb0e3d281afa0796b0421ac02e713d84874b9cf90acda5b12a7969a900447",
+      "selector": "div.code_and_name > span.code + span.name",
+      "native_node_html": "<div _ngcontent-serverapp-c182=\"\" class=\"code_and_name ng-star-inserted\"><span _ngcontent-serverapp-c182=\"\" class=\"code ng-star-inserted\">3533</span><!----><span _ngcontent-serverapp-c182=\"\" class=\"name\">Lotes Co Ltd</span></div>",
+      "match_count": 1
+    }
+  ],
+  "note": "Only exact whitespace-normalized matches; modern pages do not disclose native stock codes. Supplemental dates are evidence, not runtime date allowlists."
+}

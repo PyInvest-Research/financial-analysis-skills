@@ -1,0 +1,42 @@
+{
+  "prepared_at": "2026-10-26T03:44:49.213788+00:00",
+  "scope": "Independent source-based precheck before the first original-five draft pipeline run; no pinned example claim",
+  "holdings_date": "2026-10-22",
+  "hypothetical_portfolio_total_twd": 1000000,
+  "0050": {
+    "source_weight_percent": "57",
+    "market_value_twd": 300000,
+    "expected_2330_twd": "171000.00"
+  },
+  "006208": {
+    "source_2330_row": [
+      "2330",
+      "台積電",
+      "109,364,064",
+      "260,833,292,640",
+      "56.9758"
+    ],
+    "source_2330_amount_twd": "260833292640",
+    "source_nav_twd": "457796188686",
+    "raw_html_sha256": "5b6b3ab9850577d90926bb29c3ab2fe7a09f68451bcb8137bc6496795e8f2a1e",
+    "market_value_twd": 200000,
+    "expected_2330_twd": "113951.7099907112528127300190"
+  },
+  "other_three": {
+    "0056": {
+      "complete_stock_rows": 50,
+      "2330_present": false
+    },
+    "00878": {
+      "complete_stock_rows": 29,
+      "2330_present": false
+    },
+    "00919": {
+      "complete_stock_rows": 40,
+      "2330_present": false
+    }
+  },
+  "direct_2330_twd": 100000,
+  "independent_expected_2330_twd": "384951.7099907112528127300190",
+  "method": "Read official row values and verify 2330 absence in complete source tables; apply original portfolio formula with Decimal. Do not derive from result.json or rescale source weights."
+}

@@ -1,0 +1,313 @@
+{
+  "etf_symbol": "00919",
+  "fetched_at": "2026-10-26T03:38:05.652132+00:00",
+  "holdings": [
+    {
+      "code": "2881",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "富邦金",
+      "weight": 0.153929
+    },
+    {
+      "code": "2882",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "國泰金",
+      "weight": 0.126199
+    },
+    {
+      "code": "2891",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "中信金",
+      "weight": 0.111227
+    },
+    {
+      "code": "2382",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "廣達",
+      "weight": 0.099842
+    },
+    {
+      "code": "2887",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台新新光金",
+      "weight": 0.085306
+    },
+    {
+      "code": "2357",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "華碩",
+      "weight": 0.05804
+    },
+    {
+      "code": "2883",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "凱基金",
+      "weight": 0.052497
+    },
+    {
+      "code": "2603",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "長榮",
+      "weight": 0.043098
+    },
+    {
+      "code": "3034",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "聯詠",
+      "weight": 0.033719
+    },
+    {
+      "code": "2379",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "瑞昱",
+      "weight": 0.029669
+    },
+    {
+      "code": "4938",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "和碩",
+      "weight": 0.023277
+    },
+    {
+      "code": "2618",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "長榮航",
+      "weight": 0.01714
+    },
+    {
+      "code": "3293",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "鈊象",
+      "weight": 0.015578
+    },
+    {
+      "code": "5871",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "中租-KY",
+      "weight": 0.013415
+    },
+    {
+      "code": "2347",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "聯強",
+      "weight": 0.010389
+    },
+    {
+      "code": "1402",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "遠東新",
+      "weight": 0.009684
+    },
+    {
+      "code": "2855",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "統一證",
+      "weight": 0.009252
+    },
+    {
+      "code": "2474",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "可成",
+      "weight": 0.008085
+    },
+    {
+      "code": "5522",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "遠雄",
+      "weight": 0.006978
+    },
+    {
+      "code": "2105",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "正新",
+      "weight": 0.006113
+    },
+    {
+      "code": "2504",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "國產",
+      "weight": 0.006016
+    },
+    {
+      "code": "2385",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "群光",
+      "weight": 0.005845
+    },
+    {
+      "code": "2637",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "慧洋-KY",
+      "weight": 0.005626
+    },
+    {
+      "code": "2542",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "興富發",
+      "weight": 0.005141
+    },
+    {
+      "code": "8454",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "富邦媒",
+      "weight": 0.004955
+    },
+    {
+      "code": "6121",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "新普",
+      "weight": 0.004948
+    },
+    {
+      "code": "1477",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "聚陽",
+      "weight": 0.0048
+    },
+    {
+      "code": "2606",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "裕民",
+      "weight": 0.004681
+    },
+    {
+      "code": "8112",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "至上",
+      "weight": 0.003999
+    },
+    {
+      "code": "9910",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "豐泰",
+      "weight": 0.003996
+    },
+    {
+      "code": "2597",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "潤弘",
+      "weight": 0.003883
+    },
+    {
+      "code": "9941",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "裕融",
+      "weight": 0.003835
+    },
+    {
+      "code": "1319",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "東陽",
+      "weight": 0.003667
+    },
+    {
+      "code": "6670",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "復盛應用",
+      "weight": 0.003493
+    },
+    {
+      "code": "1210",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "大成",
+      "weight": 0.003395
+    },
+    {
+      "code": "2458",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "義隆",
+      "weight": 0.003275
+    },
+    {
+      "code": "6890",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "來億-KY",
+      "weight": 0.003112
+    },
+    {
+      "code": "4763",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "材料*-KY",
+      "weight": 0.003023
+    },
+    {
+      "code": "4915",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "致伸",
+      "weight": 0.002932
+    },
+    {
+      "code": "2211",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "長榮鋼",
+      "weight": 0.00262
+    },
+    {
+      "code": "保證金",
+      "exposure_weight": null,
+      "kind": "other",
+      "name": "保證金",
+      "weight": 0.002976129109044267
+    },
+    {
+      "code": "現金",
+      "exposure_weight": null,
+      "kind": "cash",
+      "name": "現金",
+      "weight": 0.00010958876351943978
+    },
+    {
+      "code": "TX202611",
+      "exposure_weight": null,
+      "kind": "futures",
+      "name": "台指期202611",
+      "weight": null
+    }
+  ],
+  "holdings_date": "2026-10-22",
+  "is_active": false,
+  "issuer": "capital",
+  "schema_version": "1",
+  "source_kind": "agent_official",
+  "source_url": "https://www.capitalfund.com.tw/CFWeb/api/etf/buyback"
+}

@@ -1,0 +1,36 @@
+{
+  "currency": "TWD",
+  "positions": [
+    {
+      "kind": "etf",
+      "market_value": 300000,
+      "symbol": "0050"
+    },
+    {
+      "kind": "etf",
+      "market_value": 200000,
+      "symbol": "006208"
+    },
+    {
+      "kind": "etf",
+      "market_value": 150000,
+      "symbol": "0056"
+    },
+    {
+      "kind": "etf",
+      "market_value": 150000,
+      "symbol": "00878"
+    },
+    {
+      "kind": "etf",
+      "market_value": 100000,
+      "symbol": "00919"
+    },
+    {
+      "kind": "stock",
+      "market_value": 100000,
+      "symbol": "2330"
+    }
+  ],
+  "valuation_date": "2026-10-22"
+}

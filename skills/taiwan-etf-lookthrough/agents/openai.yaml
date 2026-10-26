@@ -1,0 +1,4 @@
+interface:
+  display_name: "Taiwan ETF Lookthrough"
+  short_description: "依官方完整持股與資料日期，整理台灣 ETF 組合的公司曝險與重疊"
+  default_prompt: "請使用 $taiwan-etf-lookthrough，依我的部位與估值日計算曝險並保留來源與資料缺口。"

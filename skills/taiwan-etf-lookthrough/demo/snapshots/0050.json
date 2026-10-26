@@ -1,0 +1,376 @@
+{
+  "etf_symbol": "0050",
+  "fetched_at": "2026-10-25T17:31:44.456607+00:00",
+  "holdings": [
+    {
+      "code": "2330",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台積電",
+      "weight": 0.57
+    },
+    {
+      "code": "2454",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "聯發科",
+      "weight": 0.0577
+    },
+    {
+      "code": "2308",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台達電",
+      "weight": 0.0294
+    },
+    {
+      "code": "2317",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "鴻海",
+      "weight": 0.0292
+    },
+    {
+      "code": "3711",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "日月光投控",
+      "weight": 0.0212
+    },
+    {
+      "code": "1303",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "南亞",
+      "weight": 0.0145
+    },
+    {
+      "code": "2383",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台光電",
+      "weight": 0.0144
+    },
+    {
+      "code": "2303",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "聯電",
+      "weight": 0.0143
+    },
+    {
+      "code": "3037",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "欣興",
+      "weight": 0.014
+    },
+    {
+      "code": "2891",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "中信金",
+      "weight": 0.013
+    },
+    {
+      "code": "2881",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "富邦金",
+      "weight": 0.0129
+    },
+    {
+      "code": "2882",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "國泰金",
+      "weight": 0.0106
+    },
+    {
+      "code": "3017",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "奇鋐",
+      "weight": 0.0098
+    },
+    {
+      "code": "2887",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台新新光金",
+      "weight": 0.0096
+    },
+    {
+      "code": "2345",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "智邦",
+      "weight": 0.0086
+    },
+    {
+      "code": "2382",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "廣達",
+      "weight": 0.0083
+    },
+    {
+      "code": "2885",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "元大金",
+      "weight": 0.0081
+    },
+    {
+      "code": "2327",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "國巨*",
+      "weight": 0.0078
+    },
+    {
+      "code": "2884",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "玉山金",
+      "weight": 0.0078
+    },
+    {
+      "code": "2360",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "致茂",
+      "weight": 0.0071
+    },
+    {
+      "code": "2886",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "兆豐金",
+      "weight": 0.0064
+    },
+    {
+      "code": "2357",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "華碩",
+      "weight": 0.0062
+    },
+    {
+      "code": "2890",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "永豐金",
+      "weight": 0.006
+    },
+    {
+      "code": "3443",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "創意",
+      "weight": 0.006
+    },
+    {
+      "code": "2412",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "中華電",
+      "weight": 0.0059
+    },
+    {
+      "code": "2883",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "凱基金",
+      "weight": 0.0058
+    },
+    {
+      "code": "3008",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "大立光",
+      "weight": 0.0057
+    },
+    {
+      "code": "3231",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "緯創",
+      "weight": 0.0056
+    },
+    {
+      "code": "6669",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "緯穎",
+      "weight": 0.0056
+    },
+    {
+      "code": "2059",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "川湖",
+      "weight": 0.0053
+    },
+    {
+      "code": "2408",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "南亞科",
+      "weight": 0.0052
+    },
+    {
+      "code": "3653",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "健策",
+      "weight": 0.0052
+    },
+    {
+      "code": "2301",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "光寶科",
+      "weight": 0.0049
+    },
+    {
+      "code": "2344",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "華邦電",
+      "weight": 0.0047
+    },
+    {
+      "code": "2880",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "華南金",
+      "weight": 0.0046
+    },
+    {
+      "code": "2892",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "第一金",
+      "weight": 0.0046
+    },
+    {
+      "code": "4958",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "臻鼎-KY",
+      "weight": 0.0044
+    },
+    {
+      "code": "1216",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "統一",
+      "weight": 0.0039
+    },
+    {
+      "code": "2368",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "金像電",
+      "weight": 0.0038
+    },
+    {
+      "code": "6446",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "藥華藥",
+      "weight": 0.0036
+    },
+    {
+      "code": "3665",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "貿聯-KY",
+      "weight": 0.0033
+    },
+    {
+      "code": "8046",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "南電",
+      "weight": 0.0031
+    },
+    {
+      "code": "2395",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "研華",
+      "weight": 0.003
+    },
+    {
+      "code": "5880",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "合庫金",
+      "weight": 0.003
+    },
+    {
+      "code": "2449",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "京元電子",
+      "weight": 0.0029
+    },
+    {
+      "code": "7769",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "鴻勁",
+      "weight": 0.0029
+    },
+    {
+      "code": "2603",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "長榮",
+      "weight": 0.0028
+    },
+    {
+      "code": "4904",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "遠傳",
+      "weight": 0.002
+    },
+    {
+      "code": "3045",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台灣大",
+      "weight": 0.0018
+    },
+    {
+      "code": "6505",
+      "exposure_weight": null,
+      "kind": "stock",
+      "name": "台塑化",
+      "weight": 0.0012
+    },
+    {
+      "code": "TX",
+      "exposure_weight": null,
+      "kind": "futures",
+      "name": "臺股期貨",
+      "weight": null
+    },
+    {
+      "code": "NYF",
+      "exposure_weight": null,
+      "kind": "futures",
+      "name": "台灣50ETF股票期貨",
+      "weight": null
+    }
+  ],
+  "holdings_date": "2026-10-22",
+  "is_active": false,
+  "issuer": "yuanta",
+  "schema_version": "1",
+  "source_kind": "agent_official",
+  "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0050%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0050"
+}

@@ -1,0 +1,15 @@
+[project]
+name = "taiwan-etf-lookthrough"
+version = "1.0.0"
+description = "Source-backed Taiwan ETF holdings snapshots and lookthrough"
+requires-python = ">=3.11"
+dependencies = ["openpyxl>=3.1.5,<4"]
+license = "MIT"
+
+[dependency-groups]
+dev = ["autopep8>=2.3,<3", "flake8>=7.3,<8"]
+browser = ["playwright>=1.56,<2"]
+
+[tool.uv]
+package = false
+required-version = ">=0.13.4"
