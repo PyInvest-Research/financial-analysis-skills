@@ -61,12 +61,16 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     No network, input mutation or weight normalization is performed.
     """
     stocks = tuple(h for h in s.holdings if h.kind == "stock")
+    mixed = s.schema_version == "2"
+    equities = tuple(h for h in s.holdings
+                     if h.kind in ("stock", "foreign_stock"))
     invalid_rows = []
     for i, holding in enumerate(s.holdings):
         weight = holding.weight
         lower_bound = (-1 if holding.kind in (
             "cash", "other", "derivative_nav") else 0)
-        if ((weight is None and holding.kind in ("stock", "derivative_nav"))
+        if ((weight is None and holding.kind in (
+                "stock", "foreign_stock", "derivative_nav"))
                 or (weight is not None and (
                     not _finite_number(weight)
                     or not lower_bound <= weight <= 1))
@@ -80,19 +84,20 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         f"Invalid numeric/NAV weights at rows: {invalid_rows}",
     )]
 
-    valid_stock_weights = all(_finite_number(h.weight) for h in stocks)
+    checked_stocks = equities if mixed else stocks
+    valid_stock_weights = all(_finite_number(h.weight) for h in checked_stocks)
     stock_total = sum(
-        h.weight for h in stocks) if valid_stock_weights else None
+        h.weight for h in checked_stocks) if valid_stock_weights else None
     sum_status: Status = "pass"
     if (stock_total is None or not _finite_number(stock_total)
             or stock_total > MAX_STOCK_WEIGHT_SUM
-            or stock_total < MIN_STOCK_WEIGHT_SUM):
+            or stock_total < (0 if mixed else MIN_STOCK_WEIGHT_SUM)):
         sum_status = "fail"
-    elif stock_total < WARN_STOCK_WEIGHT_SUM:
+    elif not mixed and stock_total < WARN_STOCK_WEIGHT_SUM:
         sum_status = "warn"
     checks.append(Check("stock_weight_sum", sum_status,
                         f"Stock NAV weight total: {stock_total}"))
-    top_n_fail = (len(stocks) <= TOP_N_TRAP_COUNT
+    top_n_fail = (not mixed and len(stocks) <= TOP_N_TRAP_COUNT
                   and (stock_total is None
                        or not _finite_number(stock_total)
                        or stock_total < WARN_STOCK_WEIGHT_SUM))
@@ -101,12 +106,18 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         f"Stock rows: {len(stocks)}; NAV weight total: {stock_total}",
     ))
 
-    counts = Counter(h.code for h in stocks)
-    duplicates = sorted(code for code, count in counts.items() if count > 1)
+    counts = Counter((h.market, h.code) if mixed else h.code
+                     for h in checked_stocks)
+    duplicates = sorted((code for code, count in counts.items() if count > 1),
+                        key=str)
     checks.append(Check(
         "no_duplicate_security", "fail" if duplicates else "pass",
         f"Duplicate stock codes: {duplicates}",
     ))
+    if mixed or s.equity_evidence is not None or any(
+            h.kind == "foreign_stock" or h.market is not None
+            for h in s.holdings):
+        checks.append(_mixed_evidence(s, directory))
     age = ((today - s.holdings_date).days
            if type(s.holdings_date) is date else None)
     checks.append(Check(
@@ -138,3 +149,48 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     severity = {"pass": 0, "warn": 1, "fail": 2}
     status = max((check.status for check in checks), key=severity.__getitem__)
     return ValidationResult(status, tuple(checks))
+
+
+def _mixed_evidence(snapshot: Snapshot, directory: CompanyDirectory) -> Check:
+    """Require explicit markets, complete rows and same-NAV reconciliation."""
+    evidence = snapshot.equity_evidence
+    equities = [h for h in snapshot.holdings
+                if h.kind in ("stock", "foreign_stock")]
+    valid = snapshot.schema_version == "2" and evidence is not None
+    if valid:
+        valid = (evidence.complete is True
+                 and type(evidence.stock_rows) is int
+                 and evidence.stock_rows == len(equities) > 0
+                 and _finite_number(evidence.total_nav_twd)
+                 and evidence.total_nav_twd > 0
+                 and _finite_number(evidence.stock_value_twd)
+                 and 0 <= evidence.stock_value_twd
+                 <= evidence.total_nav_twd * MAX_STOCK_WEIGHT_SUM
+                 and bool(evidence.source_hashes)
+                 and all(_finite_number(h.weight) for h in equities))
+    if valid:
+        valid = all(
+            (h.market in ("TWSE", "TPEx") if h.kind == "stock"
+             else h.market in ("KOSPI", "KOSDAQ", "NASDAQ"))
+            for h in equities)
+        valid = valid and all(
+            directory.get(h.code) is None
+            or directory.get(h.code).market == h.market
+            for h in equities if h.kind == "stock")
+    if valid:
+        # Two printed percentage decimals allow half .01 percentage point.
+        tolerance = len(equities) * .00005 + 1e-12
+        total = sum(h.weight for h in equities)
+        valid = abs(total - evidence.stock_value_twd
+                    / evidence.total_nav_twd) <= tolerance
+        taiwan = evidence.taiwan_stock_value_twd
+        if taiwan is not None:
+            local = [h for h in equities if h.kind == "stock"]
+            valid = (valid and _finite_number(taiwan)
+                     and 0 <= taiwan <= evidence.stock_value_twd
+                     and abs(sum(h.weight for h in local)
+                             - taiwan / evidence.total_nav_twd)
+                     <= len(local) * .00005 + 1e-12)
+    return Check("mixed_equity_evidence", "pass" if valid else "fail",
+                 "Complete actual equity rows, explicit listing markets and "
+                 "whole-fund NAV aggregates must reconcile; no rescaling")

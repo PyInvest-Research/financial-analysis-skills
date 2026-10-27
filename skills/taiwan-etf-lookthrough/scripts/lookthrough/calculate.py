@@ -72,6 +72,7 @@ class LookthroughResult:
     not_looked_through_value: float
     positions: tuple[PositionStatus, ...]
     warnings: tuple[str, ...]
+    foreign_stock_value: float = 0.0
 
 
 def _record_security(
@@ -141,7 +142,7 @@ def compute_lookthrough(
     sources: dict[str, list[SourceShare]] = {}
     buckets: dict[str, list[float]] = {
         "unresolved": [], "cash": [], "other": [], "gap": [],
-        "unprocessed": [],
+        "unprocessed": [], "foreign_stock": [],
     }
     futures: dict[str, list[float | None]] = {}
     positions: list[PositionStatus] = []
@@ -220,4 +221,5 @@ def compute_lookthrough(
         fsum(buckets["unresolved"]), fsum(buckets["cash"]),
         fsum(buckets["other"]), fsum(buckets["gap"]), futures_totals,
         fsum(buckets["unprocessed"]), tuple(positions), tuple(warnings),
+        fsum(buckets["foreign_stock"]),
     )

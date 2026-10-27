@@ -1,0 +1,872 @@
+{
+  "observed_at": "2026-10-27",
+  "archive_sha256": "6f6daa207cc4b1690b32a6c93c60ee999336e5df8be0bd69747e4b487a6b280c",
+  "products": {
+    "00982T": {
+      "2330": {
+        "name": "台積電",
+        "market": "TWSE",
+        "listing_date": "1994-09-05",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2454": {
+        "name": "聯發科",
+        "market": "TWSE",
+        "listing_date": "2001-07-23",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2317": {
+        "name": "鴻海",
+        "market": "TWSE",
+        "listing_date": "1991-06-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2303": {
+        "name": "聯電",
+        "market": "TWSE",
+        "listing_date": "1985-07-16",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2327": {
+        "name": "國巨",
+        "market": "TWSE",
+        "listing_date": "1993-10-22",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3026": {
+        "name": "禾伸堂",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6669": {
+        "name": "緯穎",
+        "market": "TWSE",
+        "listing_date": "2019-03-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6147": {
+        "name": "頎邦科技",
+        "market": "TPEx",
+        "listing_date": "2002-01-31",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "2449": {
+        "name": "京元電",
+        "market": "TWSE",
+        "listing_date": "2001-05-09",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3264": {
+        "name": "欣銓科技",
+        "market": "TPEx",
+        "listing_date": "2005-01-05",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "6139": {
+        "name": "亞翔工程",
+        "market": "TWSE",
+        "listing_date": "2003-08-25",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2451": {
+        "name": "創見資訊",
+        "market": "TWSE",
+        "listing_date": "2001-05-03",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6278": {
+        "name": "台表科",
+        "market": "TWSE",
+        "listing_date": "2010-08-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3260": {
+        "name": "威剛科技",
+        "market": "TPEx",
+        "listing_date": "2004-10-08",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "6196": {
+        "name": "帆宣科技",
+        "market": "TWSE",
+        "listing_date": "2004-05-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3533": {
+        "name": "嘉澤端子",
+        "market": "TWSE",
+        "listing_date": "2007-12-10",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2481": {
+        "name": "強茂",
+        "market": "TWSE",
+        "listing_date": "2001-09-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3042": {
+        "name": "晶技",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3030": {
+        "name": "德律科技",
+        "market": "TWSE",
+        "listing_date": "2002-10-29",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6290": {
+        "name": "良維科技",
+        "market": "TPEx",
+        "listing_date": "2005-06-03",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "2472": {
+        "name": "立隆電子",
+        "market": "TWSE",
+        "listing_date": "2001-09-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2489": {
+        "name": "瑞軒",
+        "market": "TWSE",
+        "listing_date": "2001-09-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "4967": {
+        "name": "十銓",
+        "market": "TWSE",
+        "listing_date": "2019-01-14",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3693": {
+        "name": "營邦",
+        "market": "TPEx",
+        "listing_date": "2013-11-27",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "8271": {
+        "name": "宇瞻科技",
+        "market": "TWSE",
+        "listing_date": "2010-12-29",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "5386": {
+        "name": "青雲國際",
+        "market": "TPEx",
+        "listing_date": "1999-05-13",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "6664": {
+        "name": "群翊",
+        "market": "TPEx",
+        "listing_date": "2018-09-12",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "3028": {
+        "name": "增你強",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6903": {
+        "name": "巨漢",
+        "market": "TPEx",
+        "listing_date": "2024-06-12",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      },
+      "3289": {
+        "name": "宜特科技",
+        "market": "TPEx",
+        "listing_date": "2004-12-28",
+        "identity_source_sha256": "a35f465dde54d3afd209c07bbca4047507050ae394879b9cf1f8ae92893bacee"
+      }
+    },
+    "00981T": {
+      "2330": {
+        "name": "台積電",
+        "market": "TWSE",
+        "listing_date": "1994-09-05",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2454": {
+        "name": "聯發科",
+        "market": "TWSE",
+        "listing_date": "2001-07-23",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2308": {
+        "name": "台達電",
+        "market": "TWSE",
+        "listing_date": "1988-12-19",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2317": {
+        "name": "鴻海",
+        "market": "TWSE",
+        "listing_date": "1991-06-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3711": {
+        "name": "日月光投控",
+        "market": "TWSE",
+        "listing_date": "2018-04-30",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "1303": {
+        "name": "南亞",
+        "market": "TWSE",
+        "listing_date": "1967-11-15",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2881": {
+        "name": "富邦金",
+        "market": "TWSE",
+        "listing_date": "2001-12-19",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2303": {
+        "name": "聯電",
+        "market": "TWSE",
+        "listing_date": "1985-07-16",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2891": {
+        "name": "中信金",
+        "market": "TWSE",
+        "listing_date": "2002-05-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3037": {
+        "name": "欣興",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2383": {
+        "name": "台光電",
+        "market": "TWSE",
+        "listing_date": "1998-11-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2059": {
+        "name": "川湖",
+        "market": "TWSE",
+        "listing_date": "2008-06-25",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2882": {
+        "name": "國泰金",
+        "market": "TWSE",
+        "listing_date": "2001-12-31",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2887": {
+        "name": "台新新光金",
+        "market": "TWSE",
+        "listing_date": "2002-02-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3017": {
+        "name": "奇鋐",
+        "market": "TWSE",
+        "listing_date": "2002-09-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2345": {
+        "name": "智邦",
+        "market": "TWSE",
+        "listing_date": "1995-11-15",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2327": {
+        "name": "國巨*",
+        "market": "TWSE",
+        "listing_date": "1993-10-22",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2885": {
+        "name": "元大金",
+        "market": "TWSE",
+        "listing_date": "2002-02-04",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2382": {
+        "name": "廣達",
+        "market": "TWSE",
+        "listing_date": "1999-01-08",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2408": {
+        "name": "南亞科",
+        "market": "TWSE",
+        "listing_date": "2000-08-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6669": {
+        "name": "緯穎",
+        "market": "TWSE",
+        "listing_date": "2019-03-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2412": {
+        "name": "中華電",
+        "market": "TWSE",
+        "listing_date": "2000-10-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3008": {
+        "name": "大立光",
+        "market": "TWSE",
+        "listing_date": "2002-03-11",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2360": {
+        "name": "致茂",
+        "market": "TWSE",
+        "listing_date": "1996-12-21",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "7769": {
+        "name": "鴻勁",
+        "market": "TWSE",
+        "listing_date": "2025-11-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      }
+    },
+    "00980T": {
+      "AAPL_US": {
+        "name": "Apple",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "NVDA_US": {
+        "name": "NVIDIA Corp",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "MSFT_US": {
+        "name": "MICROSOFT",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "AMZN_US": {
+        "name": "Amazon.com Inc",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "GOOGL_US": {
+        "name": "Alphabet INC-CL A",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "AVGO_US": {
+        "name": "BROADCOM LTD",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "META_US": {
+        "name": "Meta Platforms Inc",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "TSLA_US": {
+        "name": "Tesla Motors",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "MU_US": {
+        "name": "Micron Technology Inc",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      },
+      "AMD_US": {
+        "name": "Advanced Micro Devices Inc",
+        "market": "NASDAQ",
+        "listing_date": null,
+        "identity_source_sha256": "6bde728fff6d11ff73a24cfaaa38638d1680a7ee99763c08a1503e73a99c51a2"
+      }
+    },
+    "00735": {
+      "2330": {
+        "name": "台積電",
+        "market": "TWSE",
+        "listing_date": "1994-09-05",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "005930.KS": {
+        "name": "Samsung Electron Rg",
+        "market": "KOSPI",
+        "listing_date": "1975-06-11",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "000660.KS": {
+        "name": "SK Hynix Inc",
+        "market": "KOSPI",
+        "listing_date": "1996-12-26",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2454": {
+        "name": "聯發科",
+        "market": "TWSE",
+        "listing_date": "2001-07-23",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3711": {
+        "name": "日月光投控",
+        "market": "TWSE",
+        "listing_date": "2018-04-30",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2317": {
+        "name": "鴻海",
+        "market": "TWSE",
+        "listing_date": "1991-06-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2383": {
+        "name": "台光電",
+        "market": "TWSE",
+        "listing_date": "1998-11-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3037": {
+        "name": "欣興",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "009150.KS": {
+        "name": "Samsung Electro-Mech Co",
+        "market": "KOSPI",
+        "listing_date": "1979-02-27",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2303": {
+        "name": "聯電",
+        "market": "TWSE",
+        "listing_date": "1985-07-16",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2308": {
+        "name": "台達電",
+        "market": "TWSE",
+        "listing_date": "1988-12-19",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3017": {
+        "name": "奇鋐",
+        "market": "TWSE",
+        "listing_date": "2002-09-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2327": {
+        "name": "國巨",
+        "market": "TWSE",
+        "listing_date": "1993-10-22",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2382": {
+        "name": "廣達",
+        "market": "TWSE",
+        "listing_date": "1999-01-08",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2345": {
+        "name": "智邦",
+        "market": "TWSE",
+        "listing_date": "1995-11-15",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2360": {
+        "name": "致茂",
+        "market": "TWSE",
+        "listing_date": "1996-12-21",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "006400.KS": {
+        "name": "Samsung SDI Co",
+        "market": "KOSPI",
+        "listing_date": "1979-02-27",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2059": {
+        "name": "川湖",
+        "market": "TWSE",
+        "listing_date": "2008-06-25",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2408": {
+        "name": "南亞科",
+        "market": "TWSE",
+        "listing_date": "2000-08-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2357": {
+        "name": "華碩",
+        "market": "TWSE",
+        "listing_date": "1996-11-14",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "035420.KS": {
+        "name": "NAVER Corp",
+        "market": "KOSPI",
+        "listing_date": "2008-11-28",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "3443": {
+        "name": "創意",
+        "market": "TWSE",
+        "listing_date": "2006-11-03",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6669": {
+        "name": "緯穎",
+        "market": "TWSE",
+        "listing_date": "2019-03-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3231": {
+        "name": "緯創",
+        "market": "TWSE",
+        "listing_date": "2003-08-19",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3008": {
+        "name": "大立光",
+        "market": "TWSE",
+        "listing_date": "2002-03-11",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2412": {
+        "name": "中華電",
+        "market": "TWSE",
+        "listing_date": "2000-10-27",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2301": {
+        "name": "光寶科",
+        "market": "TWSE",
+        "listing_date": "1995-11-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3653": {
+        "name": "健策",
+        "market": "TWSE",
+        "listing_date": "2009-11-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2344": {
+        "name": "華邦電",
+        "market": "TWSE",
+        "listing_date": "1995-10-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "4958": {
+        "name": "臻鼎-KY",
+        "market": "TWSE",
+        "listing_date": "2011-12-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2379": {
+        "name": "瑞昱",
+        "market": "TWSE",
+        "listing_date": "1998-10-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2368": {
+        "name": "金像電",
+        "market": "TWSE",
+        "listing_date": "1998-03-09",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3481": {
+        "name": "群創電子",
+        "market": "TWSE",
+        "listing_date": "2006-10-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3034": {
+        "name": "聯詠",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2395": {
+        "name": "研華",
+        "market": "TWSE",
+        "listing_date": "1999-12-13",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "8046": {
+        "name": "南電",
+        "market": "TWSE",
+        "listing_date": "2006-04-07",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2449": {
+        "name": "京元電子",
+        "market": "TWSE",
+        "listing_date": "2001-05-09",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3189": {
+        "name": "景碩",
+        "market": "TWSE",
+        "listing_date": "2004-11-01",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3661": {
+        "name": "世芯-KY",
+        "market": "TWSE",
+        "listing_date": "2014-10-28",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6770": {
+        "name": "力積電",
+        "market": "TWSE",
+        "listing_date": "2021-12-06",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3044": {
+        "name": "健鼎",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3045": {
+        "name": "台灣大",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2313": {
+        "name": "華通",
+        "market": "TWSE",
+        "listing_date": "1990-07-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "035720.KS": {
+        "name": "Kakao Corp",
+        "market": "KOSPI",
+        "listing_date": "2017-07-10",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "4938": {
+        "name": "和碩",
+        "market": "TWSE",
+        "listing_date": "2010-06-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2409": {
+        "name": "友達",
+        "market": "TWSE",
+        "listing_date": "2000-09-08",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "018260.KS": {
+        "name": "Samsung SDS Co Ltd",
+        "market": "KOSPI",
+        "listing_date": "2014-11-14",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2337": {
+        "name": "Macronix International Co Ltd",
+        "market": "TWSE",
+        "listing_date": "1995-03-15",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "4904": {
+        "name": "遠傳",
+        "market": "TWSE",
+        "listing_date": "2005-08-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2356": {
+        "name": "英業達",
+        "market": "TWSE",
+        "listing_date": "1996-11-13",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "042700.KS": {
+        "name": "Hanmi Semiconductor",
+        "market": "KOSPI",
+        "listing_date": "2005-07-22",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "3702": {
+        "name": "大聯大",
+        "market": "TWSE",
+        "listing_date": "2005-11-09",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2376": {
+        "name": "技嘉",
+        "market": "TWSE",
+        "listing_date": "1998-09-24",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "017670.KS": {
+        "name": "SK Telecom Co Ltd",
+        "market": "KOSPI",
+        "listing_date": "1989-11-07",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "3533": {
+        "name": "Lotes Co Ltd",
+        "market": "TWSE",
+        "listing_date": "2007-12-10",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6239": {
+        "name": "力成                          ",
+        "market": "TWSE",
+        "listing_date": "2004-11-08",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "3036": {
+        "name": "文曄",
+        "market": "TWSE",
+        "listing_date": "2002-08-26",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2324": {
+        "name": "仁寶",
+        "market": "TWSE",
+        "listing_date": "1992-02-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2347": {
+        "name": "聯強",
+        "market": "TWSE",
+        "listing_date": "1995-12-13",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "036930.KS": {
+        "name": "周星工程股份有限公司",
+        "market": "KOSDAQ",
+        "listing_date": "1999-12-24",
+        "identity_source_sha256": "4dd1baa5c8417d437543fd7b82eb3eebfc48005029a0d2198703c2190535a572"
+      },
+      "011070.KS": {
+        "name": "LG Innotek Co",
+        "market": "KOSPI",
+        "listing_date": "2008-07-24",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2492": {
+        "name": "華新科",
+        "market": "TWSE",
+        "listing_date": "2001-09-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "259960.KS": {
+        "name": "Krafton Inc",
+        "market": "KOSPI",
+        "listing_date": "2021-08-10",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2377": {
+        "name": "微星",
+        "market": "TWSE",
+        "listing_date": "1998-10-31",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "007660.KS": {
+        "name": "Isu Petasys Co Ltd",
+        "market": "KOSPI",
+        "listing_date": "2003-10-07",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "6257": {
+        "name": "Sigurd Microelectronics",
+        "market": "TWSE",
+        "listing_date": "2003-08-25",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "352820.KS": {
+        "name": "HYBE Co Ltd",
+        "market": "KOSPI",
+        "listing_date": "2020-10-15",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2474": {
+        "name": "可成",
+        "market": "TWSE",
+        "listing_date": "2001-09-17",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "2353": {
+        "name": "宏碁",
+        "market": "TWSE",
+        "listing_date": "1996-09-18",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "064400.KS": {
+        "name": "LG CNS Co Ltd",
+        "market": "KOSPI",
+        "listing_date": "2025-02-05",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "3706": {
+        "name": "神達",
+        "market": "TWSE",
+        "listing_date": "2013-09-12",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "6285": {
+        "name": "啟  碁",
+        "market": "TWSE",
+        "listing_date": "2003-09-22",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "058470.KS": {
+        "name": "李諾工業公司",
+        "market": "KOSDAQ",
+        "listing_date": "2001-12-18",
+        "identity_source_sha256": "4dd1baa5c8417d437543fd7b82eb3eebfc48005029a0d2198703c2190535a572"
+      },
+      "036570.KS": {
+        "name": "NCsoft Corp",
+        "market": "KOSPI",
+        "listing_date": "2003-05-22",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "2385": {
+        "name": "群光",
+        "market": "TWSE",
+        "listing_date": "1999-01-05",
+        "identity_source_sha256": "aa48af6ef502f149f411d1b1785ba8c8b5722d64d87cdfd5b6f615a552299abe"
+      },
+      "034220.KS": {
+        "name": "LG Display Co Ltd",
+        "market": "KOSPI",
+        "listing_date": "2004-07-23",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "307950.KS": {
+        "name": "Hyundai Autoever Corp",
+        "market": "KOSPI",
+        "listing_date": "2019-03-28",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      },
+      "030200.KS": {
+        "name": "KT Corp",
+        "market": "KOSPI",
+        "listing_date": "1998-12-23",
+        "identity_source_sha256": "b2be2b160fc72cd78439e96501bf0967f64685e358e3f7cc6783674d754ccd48"
+      }
+    }
+  }
+}

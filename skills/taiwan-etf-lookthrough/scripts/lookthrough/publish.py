@@ -20,7 +20,9 @@ from zoneinfo import ZoneInfo
 
 from .directory import CompanyDirectory
 from .issuers import capital, fhtrust, ftft
-from .issuers import ab, esun, fsitc, jpmorgan, mega, nomura, sinopac, tsit
+from .issuers import (
+    ab, esun, fsitc, jpmorgan, mega, mixed, nomura, sinopac, tsit,
+)
 from .issuers._assets import asset_day, read_json
 from .issuers.registry import PARSERS, SUPPORTED_ETFS, SupportedEtf
 from .models import Snapshot, snapshot_from_dict, snapshot_to_dict
@@ -36,6 +38,7 @@ _HOSTS = frozenset({
     "sitc.sinopac.com", "www.tsit.com.tw", "www.megafunds.com.tw",
     "www.nomurafunds.com.tw", "www.esunam.com", "www.fsitc.com.tw",
     "am.jpmorgan.com", "webapi.alliancebernstein.com",
+    "www.kgifund.com.tw", "cwapi.cathaysite.com.tw",
 })
 _SYMBOL = re.compile(r"[0-9A-Z]{4,6}")
 _DATED_FILE = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})\.json")
@@ -250,7 +253,8 @@ def _atomic_write(path: Path, raw: bytes) -> None:
 
 def publish_all(out_root: Path, *, fetch: Callable[[SupportedEtf], bytes],
                 today: date, fetched_at: str,
-                directory: CompanyDirectory) -> dict:
+                directory: CompanyDirectory,
+                symbols: set[str] | None = None) -> dict:
     """Publish validated dated/latest/index JSON, preserving good failures.
 
     Fetch errors and parser/schema/identity/validation failures update only
@@ -262,13 +266,14 @@ def publish_all(out_root: Path, *, fetch: Callable[[SupportedEtf], bytes],
     """
     return _publish_all(out_root, fetch=fetch, today=today,
                         fetched_at=fetched_at, directory=directory,
-                        write=True, observations=[])
+                        write=True, observations=[], selected=symbols)
 
 
 def _publish_all(
         out_root: Path, *, fetch: Callable[[SupportedEtf], bytes], today: date,
         fetched_at: str, directory: CompanyDirectory, write: bool,
         observations: list[tuple[str, str, str | None, float | None]],
+        selected: set[str] | None = None,
 ) -> dict:
     """Share real acquisition/validation between writing and read-only runs."""
     root = _safe_root(out_root)
@@ -276,6 +281,11 @@ def _publish_all(
     rows = _read_index(root)
     dated, latest = _existing(root, rows, directory)
     registry = sorted(SUPPORTED_ETFS, key=lambda row: row.symbol)
+    if selected is not None:
+        if (not isinstance(selected, set) or not selected
+                or not selected <= {row.symbol for row in registry}):
+            raise ValueError("Selected publication requires known symbols")
+        registry = [row for row in registry if row.symbol in selected]
     symbols: set[str] = set()
     for etf in registry:
         symbol = _symbol(etf.symbol)
@@ -488,7 +498,7 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.1.0",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.2.0",
                  "Content-Type": "application/json"}, method="POST",
     )
     with opener.open(request, timeout=30) as response:
@@ -535,7 +545,7 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.1.0"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.2.0"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
@@ -658,6 +668,8 @@ def fetch_official(etf: SupportedEtf) -> bytes:
     """
     if etf.route != "http":
         raise ValueError(f"Unsupported acquisition route: {etf.route}")
+    if etf.symbol in mixed.PRODUCTS:
+        return _fetch_mixed(etf)
     if etf.issuer in ("fhtrust", "ftft"):
         return _fetch_new_source(etf)
     if etf.issuer in _EXPANSION:
@@ -667,7 +679,7 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.1.0",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.2.0",
     })
     with opener.open(request, timeout=30) as response:
         _check_url(response.geturl(), host)
@@ -675,6 +687,30 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         if len(raw) > MAX_RESPONSE_BYTES:
             raise ValueError("Official response exceeds the 10MiB read cap")
         return raw
+
+
+def _fetch_mixed(etf: SupportedEtf) -> bytes:
+    """Read one HTML or four Cathay responses, with no retry/redirect."""
+    if (etf.is_active or (etf.issuer, etf.source_url)
+            != mixed.PRODUCTS[etf.symbol]):
+        raise ValueError("Unqualified mixed source descriptor")
+    host = _check_url(etf.source_url)
+    opener = build_opener(ProxyHandler({}), _NoSourceRedirect(host))
+    page = _source_get(opener, etf.source_url, host)
+    if etf.symbol != "00735":
+        return page
+    host = _check_url(mixed.API)
+    opener = build_opener(ProxyHandler({}), _NoSourceRedirect(host))
+    assets = _source_get(opener, mixed.API + 'GetETFAssets?FundCode=AW', host)
+    day = mixed.assets_day(assets)
+    stocks = _source_get(opener, mixed.API +
+                         f'GetETFDetailStockList?FundCode=AW&SearchDate={day}',
+                         host)
+    balance = _source_get(opener, mixed.API +
+                          f'GetETFDetailBalList?FundCode=AW&SearchDate={day}',
+                          host)
+    return mixed.capture_cathay(page, assets, stocks, balance,
+                                requested_date=day)
 
 
 def _utc_now() -> str:
@@ -693,6 +729,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--symbols", nargs="+", help="Only reviewed symbols")
     args = parser.parse_args(argv)
     try:
         root = _safe_root(args.out)
@@ -706,7 +743,8 @@ def main(argv: list[str] | None = None) -> int:
         index = _publish_all(
             root, fetch=fetch_official, today=today, fetched_at=stamp,
             directory=directory, write=not args.dry_run,
-            observations=observations)
+            observations=observations,
+            selected=set(args.symbols) if args.symbols else None)
         for symbol, status, day, stock_sum in observations:
             total = "unknown" if stock_sum is None else f"{stock_sum:.8f}"
             print(f"{symbol} {status} {day or '-'} {total}")

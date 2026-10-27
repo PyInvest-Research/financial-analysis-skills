@@ -4,6 +4,7 @@ import csv
 from dataclasses import asdict
 from html import escape
 import json
+from math import fsum
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +32,7 @@ CSV_FIELDS = ("issuer_code", "name", "industry_code", "amount_twd", "share",
 def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
     """Keep actual source identity or explicit nulls for unavailable ETFs."""
     snapshot = position.snapshot
-    return {
+    payload = {
         **({"source_note": SOURCE_NOTE} if snapshot is not None
            and snapshot.issuer == "cathay"
            and snapshot.source_url in SOURCE_URLS else {}),
@@ -48,6 +49,7 @@ def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
                               if position.validation else None),
         "date_status": position.date_status,
     }
+    return payload
 
 
 def build_result_json(
@@ -74,7 +76,7 @@ def build_result_json(
                                                    s.amount))],
     } for c in sorted(result.companies,
                       key=lambda c: (-c.amount, c.issuer_code))]
-    return {
+    payload = {
         "schema_version": "1", "code_version": __version__,
         "generated_at": generated_at, "input_sha256": portfolio.input_sha256,
         "valuation_date": portfolio.valuation_date.isoformat(),
@@ -117,6 +119,52 @@ def build_result_json(
         } for p in result.positions],
         "warnings": list(result.warnings),
         "limitations": list(LIMITATIONS),
+    }
+    if any(p.snapshot and p.snapshot.schema_version == "2"
+           for p in result.positions):
+        payload["taiwan_equity"] = _taiwan_equity(result)
+    return payload
+
+
+def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
+    """Separate allocation, printed equity exposure and processed positions."""
+    values, display_values, metadata = [], [], []
+    for position in result.positions:
+        if position.status == "not_looked_through":
+            continue
+        if position.kind == "stock":
+            values.append(position.market_value)
+            display_values.append(position.market_value)
+            continue
+        snapshot = position.snapshot
+        printed = fsum(h.weight for h in snapshot.holdings
+                       if h.kind == "stock")
+        evidence = snapshot.equity_evidence
+        aggregate = (evidence.taiwan_stock_value_twd
+                     if evidence else None)
+        ratio = (aggregate / evidence.total_nav_twd
+                 if aggregate is not None else printed)
+        basis = ("same_day_stock_value_over_fund_NAV"
+                 if aggregate is not None else "sum_of_displayed_NAV_weights")
+        values.append(position.market_value * ratio)
+        display_values.append(position.market_value * printed)
+        metadata.append(dict(symbol=position.symbol, share=ratio,
+                             displayed_share=printed, basis=basis,
+                             snapshot_schema=snapshot.schema_version))
+    amount = fsum(values)
+    displayed = fsum(display_values)
+    total = result.total_value
+    return {
+        "scope": "Taiwan-listed spot equities; derivatives excluded",
+        "allocation_value_twd": amount,
+        "confirmed_allocation_share": amount / total if total else 0.0,
+        "whole_portfolio_ratio_known": result.not_looked_through_value == 0,
+        "displayed_stock_value_twd": displayed,
+        "aggregate_minus_displayed_twd": amount - displayed,
+        "foreign_stock_value_twd": result.foreign_stock_value,
+        "processed_position_share": (
+            (total - result.not_looked_through_value) / total if total else 0),
+        "per_etf": metadata,
     }
 
 
@@ -185,6 +233,29 @@ def render_report_md(result_json: dict[str, Any]) -> str:
                         [label, _amount(totals[key]),
                          f"{totals[key] / total if total else 0:.2%}"]
                         for label, key in coverage])]
+    mixed = result_json.get("taiwan_equity")
+    if mixed:
+        sections.append("## 台股現貨配置與資料可用範圍\n\n" + _table(
+            ("項目", "數值"), [
+                ["已確認台股現貨配置占完整組合",
+                 f"{mixed['confirmed_allocation_share']:.4%}"],
+                ["海外股票顯示權重估計金額（TWD）",
+                 _amount(mixed['foreign_stock_value_twd'])],
+                ["已處理部位市值比例",
+                 f"{mixed['processed_position_share']:.2%}"],
+                ["聚合市值與逐股顯示權重的差額（TWD）",
+                 _amount(mixed['aggregate_minus_displayed_twd'])],
+            ]) + "\n\n台股配置比率與資料完整程度不同；已處理部位不代表"
+            "已涵蓋全部資產與衍生品風險。海外股票另列，不併入台股公司、"
+            "產業、重疊或有效持股數。\n\n"
+            + ("仍有未穿透部位，全組合實際台股比率未知。\n\n"
+               if not mixed['whole_portfolio_ratio_known'] else "")
+            + _table(("ETF", "台股占整檔 NAV", "逐股顯示加總", "計算基礎"), [
+                [r["symbol"], f"{r['share']:.6%}",
+                 f"{r['displayed_share']:.6%}", r["basis"]]
+                for r in mixed["per_etf"]])
+            + "\n\n顯示權重與聚合市值精度可能不同，差額不分攤、"
+            "不補零，也不重新放大。零值僅限已完整確認的該日台股現貨。")
     source_rows = [[
         s["symbol"], s["holdings_date"],
         "主動式" if s["is_active"] else

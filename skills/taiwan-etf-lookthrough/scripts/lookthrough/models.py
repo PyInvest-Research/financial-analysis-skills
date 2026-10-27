@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 import hashlib
 import json
 import math
+import re
 from typing import Any, Literal
 
 
@@ -27,9 +28,27 @@ class Holding:
 
     code: str
     name: str
-    kind: Literal["stock", "futures", "cash", "other", "derivative_nav"]
+    kind: Literal["stock", "foreign_stock", "futures", "cash", "other",
+                  "derivative_nav"]
     weight: float | None
     exposure_weight: float | None = None
+    market: str | None = None
+
+
+@dataclass(frozen=True)
+class EquityEvidence:
+    """Bind complete actual equity rows to whole-fund TWD NAV evidence.
+
+    Source aggregates and printed per-row percentages remain independent.
+    Unknown Taiwan aggregate value stays None; it is never residual-filled.
+    """
+
+    complete: bool
+    total_nav_twd: float
+    stock_value_twd: float
+    stock_rows: int
+    taiwan_stock_value_twd: float | None
+    source_hashes: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -49,13 +68,26 @@ class Snapshot:
     source_url: str
     source_kind: Literal["pyinvest", "official", "agent_official"]
     holdings: tuple[Holding, ...]
+    equity_evidence: EquityEvidence | None = None
 
 
 def snapshot_to_dict(snapshot: Snapshot) -> dict[str, Any]:
     """Return independent JSON-ready fields, using an ISO date and array."""
+    if snapshot.schema_version == "1" and (
+            snapshot.equity_evidence is not None or any(
+                h.market is not None or h.kind == "foreign_stock"
+                for h in snapshot.holdings)):
+        raise SchemaError("Mixed fields require snapshot schema 2")
     payload = asdict(snapshot)
     payload["holdings_date"] = snapshot.holdings_date.isoformat()
     payload["holdings"] = list(payload["holdings"])
+    if snapshot.schema_version == "1":
+        payload.pop("equity_evidence")
+        for row in payload["holdings"]:
+            row.pop("market")
+    elif snapshot.equity_evidence is not None:
+        payload["equity_evidence"]["source_hashes"] = list(
+            snapshot.equity_evidence.source_hashes)
     return payload
 
 
@@ -67,7 +99,7 @@ def snapshot_from_dict(payload: dict[str, Any]) -> Snapshot:
     """
     if not isinstance(payload, dict):
         raise SchemaError("Snapshot must be a JSON object")
-    if payload.get("schema_version") != "1":
+    if payload.get("schema_version") not in ("1", "2"):
         raise SchemaError("Unsupported snapshot schema_version")
     try:
         for key in ("etf_symbol", "issuer", "holdings_date", "fetched_at",
@@ -93,6 +125,23 @@ def snapshot_from_dict(payload: dict[str, Any]) -> Snapshot:
         fields["holdings"] = tuple(
             _holding_from_dict(row) for row in payload["holdings"]
         )
+        if payload["schema_version"] == "1":
+            if "equity_evidence" in payload or any(
+                    h.market is not None or h.kind == "foreign_stock"
+                    for h in fields["holdings"]):
+                raise SchemaError("Mixed fields require snapshot schema 2")
+        else:
+            evidence = payload.get("equity_evidence")
+            if not isinstance(evidence, dict):
+                raise SchemaError("Schema 2 requires equity_evidence")
+            evidence = dict(evidence)
+            hashes = evidence.get("source_hashes")
+            if (not isinstance(hashes, list) or not 1 <= len(hashes) <= 10
+                    or any(not isinstance(h, str) or not re.fullmatch(
+                        r"[0-9a-f]{64}", h) for h in hashes)):
+                raise SchemaError("Missing or invalid original source hashes")
+            evidence["source_hashes"] = tuple(hashes)
+            fields["equity_evidence"] = EquityEvidence(**evidence)
         return Snapshot(**fields)
     except SchemaError:
         raise
@@ -108,8 +157,12 @@ def _holding_from_dict(payload: dict[str, Any]) -> Holding:
     if not isinstance(holding.code, str) or not isinstance(holding.name, str):
         raise SchemaError("Holding code and name must be strings")
     if holding.kind not in (
-            "stock", "futures", "cash", "other", "derivative_nav"):
+            "stock", "foreign_stock", "futures", "cash", "other",
+            "derivative_nav"):
         raise SchemaError("Unknown holding kind")
+    if holding.market not in (None, "TWSE", "TPEx", "KOSPI", "KOSDAQ",
+                              "NASDAQ"):
+        raise SchemaError("Unknown verified listing market")
     for key in ("weight", "exposure_weight"):
         value = getattr(holding, key)
         if value is not None and (

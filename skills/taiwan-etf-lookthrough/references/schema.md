@@ -1,5 +1,11 @@
 # JSON 與執行合約
 
+v1.2.0 新增混合型 Snapshot schema 2：`Holding.market` 明示掛牌市場，
+`foreign_stock` 不進入台股公司計算；`equity_evidence` 提供股票完整性、
+同日整檔 NAV、股票聚合市值、股票列數及原始來源雜湊。完整欄位與離線
+parser 合約見 [mixed-etfs.md](mixed-etfs.md)。schema 1 的序列化與雜湊保留，
+不得在 schema 1 塞入混合型欄位以繞過驗證。下方為原 schema 1 合約。
+
 ## Snapshot / Holding
 
 每個本機 snapshot JSON 頂層直接是一個 Snapshot，放在指定資料夾的 `*.json`，不是陣列或包裝物件。JSON `null` 對應 Python `None`。`snapshot_from_dict` 解碼後仍須通過 `validate_snapshot`，不能只確認 JSON 語法。

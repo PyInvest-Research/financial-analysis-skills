@@ -1,7 +1,7 @@
 {
   "slug": "taiwan-etf-lookthrough",
   "name": "Taiwan ETF Lookthrough",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "summary": "以有來源與日期的台灣 ETF 持股快照，整理投資組合底層曝險與持股重疊。",
   "status": "published",
   "license": "MIT",
@@ -71,7 +71,10 @@
     "scripts/lookthrough/issuers/nomura.py",
     "scripts/lookthrough/issuers/sinopac.py",
     "scripts/lookthrough/issuers/tsit.py",
-    "scripts/lookthrough/issuers/union.py"
+    "scripts/lookthrough/issuers/union.py",
+    "scripts/lookthrough/issuers/mixed.py",
+    "scripts/lookthrough/data/mixed-markets.json",
+    "references/mixed-etfs.md"
   ],
   "sourceVerification": {
     "qualifiedAdditions": [

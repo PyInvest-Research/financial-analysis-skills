@@ -12,7 +12,7 @@ from .fhtrust import SOURCE_URL as FH_SOURCE_URL, parse as parse_fhtrust
 from .ftft import SOURCE_URL as FTFT_SOURCE_URL, parse as parse_ftft
 from .yuanta import parse as parse_yuanta
 from . import (
-    ab, esun, fsitc, jpmorgan, kgi, mega, nomura, sinopac, tsit, union,
+    ab, esun, fsitc, jpmorgan, kgi, mega, mixed, nomura, sinopac, tsit, union,
 )
 
 
@@ -97,6 +97,11 @@ SUPPORTED_ETFS += (
 )
 
 SUPPORTED_ETFS += tuple(
+    SupportedEtf(symbol, issuer, False, "http", url)
+    for symbol, (issuer, url) in mixed.PRODUCTS.items()
+)
+
+SUPPORTED_ETFS += tuple(
     SupportedEtf(symbol, issuer, active, route, module.SOURCE_URL)
     for symbol, issuer, active, route, module in (
         ("00888", "sinopac", False, "official_only", sinopac),
@@ -150,6 +155,20 @@ PARSERS: dict[str, Parser] = {
         ("nomura", nomura), ("esun", esun), ("fsitc", fsitc),
         ("jpmorgan", jpmorgan), ("ab", ab), ("kgi", kgi), ("union", union))},
 }
+
+
+def _mixed_dispatch(legacy: Parser) -> Parser:
+    """Qualify only the four reviewed symbols before legacy issuer parsing."""
+    def parse(raw: bytes, etf: SupportedEtf, fetched_at: str) -> Snapshot:
+        """Preserve every existing source contract and parser unchanged."""
+        if etf.symbol in mixed.PRODUCTS:
+            return mixed.parse(raw, etf, fetched_at)
+        return legacy(raw, etf, fetched_at)
+    return parse
+
+
+for _issuer in ("mega", "kgi", "cathay"):
+    PARSERS[_issuer] = _mixed_dispatch(PARSERS[_issuer])
 
 
 def get_supported(symbol: str) -> SupportedEtf | None:
