@@ -16,8 +16,10 @@ class SchemaError(ValueError):
 class Holding:
     """Store a disclosed NAV weight and optional futures notional exposure.
 
-    NAV weights are fractions: cash/other allow [-1, 1], while stock/futures
-    allow [0, 1]. Futures exposure_weight is a separate signed notional
+    NAV weights are fractions: cash/other/derivative_nav allow [-1, 1], while
+    stock/futures allow [0, 1]. derivative_nav is a disclosed derivative book
+    valuation, never a notional/delta exposure; it enters other NAV once.
+    Futures exposure_weight is a separate signed notional
     fraction and may exceed those bounds. Missing weights remain None,
     including futures whose notional exposure cannot be established.
     Domain validation is performed separately before snapshots are used.
@@ -25,7 +27,7 @@ class Holding:
 
     code: str
     name: str
-    kind: Literal["stock", "futures", "cash", "other"]
+    kind: Literal["stock", "futures", "cash", "other", "derivative_nav"]
     weight: float | None
     exposure_weight: float | None = None
 
@@ -105,7 +107,8 @@ def _holding_from_dict(payload: dict[str, Any]) -> Holding:
     holding = Holding(**payload)
     if not isinstance(holding.code, str) or not isinstance(holding.name, str):
         raise SchemaError("Holding code and name must be strings")
-    if holding.kind not in ("stock", "futures", "cash", "other"):
+    if holding.kind not in (
+            "stock", "futures", "cash", "other", "derivative_nav"):
         raise SchemaError("Unknown holding kind")
     for key in ("weight", "exposure_weight"):
         value = getattr(holding, key)

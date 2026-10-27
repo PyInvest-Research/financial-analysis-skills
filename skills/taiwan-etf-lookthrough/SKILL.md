@@ -5,7 +5,21 @@ description: 依有來源與日期的台灣 ETF 完整持股快照，計算台�
 
 # 台灣 ETF 持股穿透
 
-本套件版本為 v1.0.0。內建 registry 對齊 2026-10-25 已觀察的四家投信 33 檔 eligible 名錄（含 0052、00405A、0050，完整名單見 references/data-sources.md），不是 10/26 live 名錄：富邦 11＋元大 10＋群益 7，共 28 檔 HTTP 自動候選；國泰 5 檔為 official_only 官網備援，本版本不排程發布這五檔。國泰 legacy 00878／00400A 與 modern 五份公開 DOM 的離線 adapter 可處理已核對官方來源；modern 股票代碼為明示衍生，沒有總 NAV 的非股票權重保留未知。28 檔 HTTP 的私有資料管線已通過一次 Actions 驗收；不保證每日穩定性，更新窗口仍暫定。PyInvest 提供通過驗證的持股 snapshot，公開 GitHub 套件與本站下載內容一致；使用時仍須核對索引與實際持股日。套件內附使用者核准的固定示範特例：原五檔共同日2026-10-22，00878只隨固定demo；daily五Cathay仍official_only，固定示範與每日來源分開處理。不得把合成案例當成真實持股或當期資料。
+v1.1.0：原四家33檔之外新增12個代表商品adapter；2026-10-27對歷史樣本
+合格的10檔做唯一一輪官方HTTPS實跑，8檔
+通過：復華00929、富蘭克林華美00905、台新00936、兆豐00932、玉山009803、
+第一金00728、摩根00401A、聯博00404A。永豐00888與野村00935的當次資產／
+NAV／PCF日期不符，停用排程並保留 agent 官方備援；凱基00915與聯邦009804
+亦由 agent 走官方備援，資格缺口仍須補證。發布名單合計45檔：36檔HTTP、
+9檔 `official_only`（原國泰5＋上述4）。原五家（中信、統一、大華銀、安聯、
+華南永昌）仍保留 agent 官方備援，未列自動registry。完整的36檔公開快照與
+14檔官方備援見[快照清單](references/snapshot-coverage.md)。06:30資料工作
+使用同一registry；17:00隨既有影片／資料自動化建置與部署。本機單次實跑
+不代表新的完整Actions批次已驗收、排程穩定或整家投信全商品支援。
+已知取得方法、離線 parser 範例及各家入口見
+[官方來源與 agent 備援](references/official-fallback.md)。
+
+已發布基底 v1.0.0 的歷史範圍為 2026-10-25 已觀察的四家投信 33 檔 eligible 名錄（含 0052、00405A、0050，完整名單見 references/data-sources.md），不是當期全市場名錄：富邦 11＋元大 10＋群益 7，共 28 檔 HTTP 自動候選；國泰 5 檔為 official_only 官網備援，不排程發布這五檔。國泰 legacy 00878／00400A 與 modern 五份公開 DOM 的離線 adapter 可處理已核對官方來源；modern 股票代碼為明示衍生，沒有總 NAV 的非股票權重保留未知。原 28 檔 HTTP 的私有資料管線已通過一次 Actions 驗收，不保證每日穩定性；每日 06:30 台北排程已定案，投信更新窗口尚未確認。已發布基底的公開 GitHub 與本站下載內容曾核對一致，本版同步發布新增來源，使用時仍須核對索引與實際持股日。套件內附使用者核准的固定示範特例：原五檔共同日2026-10-22，00878只隨固定demo；daily五Cathay仍official_only，固定示範與每日來源分開處理。不得把合成案例當成真實持股或當期資料。
 
 ## 開始使用
 
@@ -16,6 +30,9 @@ description: 依有來源與日期的台灣 ETF 完整持股快照，計算台�
 
 1. 確認部位、TWD 市值與估值日。市值必須是嚴格大於零的有限 numeric；拒絕 bool、string、NaN、Inf、零及負值。依 [schema.md](references/schema.md) 建立 portfolio JSON。
 2. 依序使用使用者提供且通過驗證的本機 snapshot/cache → 已發布 PyInvest snapshot → 官方完整檔或完整展開表格。公開資料未就緒時直接走官方備援；`run_lookthrough` 不會自行啟動瀏覽器或內建 parser 抓取官方頁，須先取得本機快照或以 `official_files` 傳入檔案。讀 [data-sources.md](references/data-sources.md) 核對身分、實際持股日、權重單位與 NAV 分母。日期須依已合格的來源合約取得；群益 date2 僅在 references 所列兩檔、顯式清單日回應及完整交叉驗證合約下採用。不得用未驗證的查詢框日期、PCF 日期或今天代替實際持股日。
+   新增來源先讀上述官方備援參考，使用對應 adapter 與已知官方路線；其他
+   未串接或未資格化商品按該參考的預算、來源紀錄及停止條件取得資料。agent 不因下載
+   成功直接跳過同一套驗證器，也不將來源未知值填零。
 3. 明確保留 unavailable／未穿透及原因，分母始終包含全部部位；不補零、不重分配、不放大已辨識部分，也不把 gap 叫現金。範圍外台灣 ETF（Q7）可由使用者／agent 取得官方完整檔，驗證身分、實際日期、單位與 NAV 後走同一 loader/validator；缺資料保留未穿透，不能杜撰零權重。國外成分 ETF 不在本版範圍，回報範圍限制並保留完整分母。
 4. 呼叫 `run_lookthrough`，只接受成功回傳的 `result.json`、`report.md`、`exposures.csv`。解釋、文章與影片的所有數字只能來自生成的 `result.json`；agent 不得手抄權重或自行拼出計算結果。CSV 的 `source_amount_twd` 才是可加總來源貢獻，重複的公司總額不能再加總。
 5. 依 [methodology.md](references/methodology.md) 解讀來源與估值日差異、涵蓋率、集中度與重疊，顯示警告及下列全部六句限制。

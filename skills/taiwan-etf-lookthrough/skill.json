@@ -1,7 +1,7 @@
 {
   "slug": "taiwan-etf-lookthrough",
   "name": "Taiwan ETF Lookthrough",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "summary": "以有來源與日期的台灣 ETF 持股快照，整理投資組合底層曝險與持股重疊。",
   "status": "published",
   "license": "MIT",
@@ -20,10 +20,13 @@
     "scripts/lookthrough/dates.py",
     "scripts/lookthrough/directory.py",
     "scripts/lookthrough/issuers/__init__.py",
+    "scripts/lookthrough/issuers/_assets.py",
     "scripts/lookthrough/issuers/capital.py",
     "scripts/lookthrough/issuers/cathay.py",
     "scripts/lookthrough/issuers/cathay_modern.py",
     "scripts/lookthrough/issuers/fubon.py",
+    "scripts/lookthrough/issuers/fhtrust.py",
+    "scripts/lookthrough/issuers/ftft.py",
     "scripts/lookthrough/issuers/registry.py",
     "scripts/lookthrough/issuers/yuanta.py",
     "scripts/lookthrough/loader.py",
@@ -41,6 +44,8 @@
     "references/methodology.md",
     "references/data-sources.md",
     "references/runtime-safety.md",
+    "references/official-fallback.md",
+    "references/snapshot-coverage.md",
     "demo/README.md",
     "demo/expected-result.json",
     "demo/exposures.csv",
@@ -54,6 +59,38 @@
     "demo/snapshots/0056.json",
     "demo/snapshots/006208.json",
     "demo/snapshots/00878.json",
-    "demo/snapshots/00919.json"
-  ]
+    "demo/snapshots/00919.json",
+    "scripts/lookthrough/issuers/_tables.py",
+    "scripts/lookthrough/issuers/_workbooks.py",
+    "scripts/lookthrough/issuers/ab.py",
+    "scripts/lookthrough/issuers/esun.py",
+    "scripts/lookthrough/issuers/fsitc.py",
+    "scripts/lookthrough/issuers/jpmorgan.py",
+    "scripts/lookthrough/issuers/kgi.py",
+    "scripts/lookthrough/issuers/mega.py",
+    "scripts/lookthrough/issuers/nomura.py",
+    "scripts/lookthrough/issuers/sinopac.py",
+    "scripts/lookthrough/issuers/tsit.py",
+    "scripts/lookthrough/issuers/union.py"
+  ],
+  "sourceVerification": {
+    "qualifiedAdditions": [
+      "00929",
+      "00905",
+      "00936",
+      "00932",
+      "009803",
+      "00728",
+      "00401A",
+      "00404A"
+    ],
+    "officialFallback": [
+      "00888",
+      "00935",
+      "00915",
+      "009804"
+    ],
+    "verifiedAt": "2026-10-27T08:15:47.659253+00:00",
+    "verification": "one local official HTTPS pass; 8 of 10 qualified; additional Actions acceptance remains pending"
+  }
 }

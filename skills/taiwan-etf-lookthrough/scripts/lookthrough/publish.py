@@ -19,7 +19,9 @@ from urllib.request import (
 from zoneinfo import ZoneInfo
 
 from .directory import CompanyDirectory
-from .issuers import capital
+from .issuers import capital, fhtrust, ftft
+from .issuers import ab, esun, fsitc, jpmorgan, mega, nomura, sinopac, tsit
+from .issuers._assets import asset_day, read_json
 from .issuers.registry import PARSERS, SUPPORTED_ETFS, SupportedEtf
 from .models import Snapshot, snapshot_from_dict, snapshot_to_dict
 from .validate import validate_snapshot
@@ -30,6 +32,10 @@ MAX_RESPONSE_BYTES = 10 * 1024 * 1024
 _HOSTS = frozenset({
     "websys.fsit.com.tw", "www.yuantaetfs.com", "www.cathaysite.com.tw",
     "www.capitalfund.com.tw", "etfapi.yuantaetfs.com",
+    "www.fhtrust.com.tw", "www.ftft.com.tw",
+    "sitc.sinopac.com", "www.tsit.com.tw", "www.megafunds.com.tw",
+    "www.nomurafunds.com.tw", "www.esunam.com", "www.fsitc.com.tw",
+    "am.jpmorgan.com", "webapi.alliancebernstein.com",
 })
 _SYMBOL = re.compile(r"[0-9A-Z]{4,6}")
 _DATED_FILE = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})\.json")
@@ -482,7 +488,7 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.0.0",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.1.0",
                  "Content-Type": "application/json"}, method="POST",
     )
     with opener.open(request, timeout=30) as response:
@@ -516,6 +522,132 @@ def _fetch_capital(etf: SupportedEtf) -> bytes:
     return raw
 
 
+class _NoSourceRedirect(_OfficialRedirect):
+    """Stop new source collectors before following any HTTP redirect."""
+
+    def redirect_request(self, req: Request, fp: Any, code: int, msg: str,
+                         headers: Any, newurl: str) -> Request | None:
+        """Require explicit route review rather than following metadata."""
+        raise ValueError("Source discovery redirects are forbidden")
+
+
+def _source_request(opener: Any, url: str, host: str,
+                    payload: dict | None = None) -> bytes:
+    """Read one exact qualified URL with verified TLS and fixed limits."""
+    _check_url(url, host)
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.1.0"}
+    data = None
+    if payload is not None:
+        data = json.dumps(payload, allow_nan=False).encode("utf-8")
+        headers["Content-Type"] = "application/json; charset=utf-8"
+    request = Request(url, data=data, headers=headers)
+    with opener.open(request, timeout=30) as response:
+        if response.geturl() != url:
+            raise ValueError("Source response URL changed")
+        raw = response.read(MAX_RESPONSE_BYTES + 1)
+        if len(raw) > MAX_RESPONSE_BYTES:
+            raise ValueError("Official response exceeds the 10MiB read cap")
+        return raw
+
+
+def _source_get(opener: Any, url: str, host: str) -> bytes:
+    """Read one exact qualified GET URL with fixed transport limits."""
+    return _source_request(opener, url, host)
+
+
+def _fetch_new_source(etf: SupportedEtf) -> bytes:
+    """Acquire two bounded responses with a source-derived current date."""
+    expected = (fhtrust.SOURCE_URL if etf.issuer == "fhtrust"
+                else ftft.SOURCE_URL)
+    symbol = "00929" if etf.issuer == "fhtrust" else "00905"
+    if etf.source_url != expected or etf.symbol != symbol or etf.is_active:
+        raise ValueError("Unqualified source request identity/URL")
+    host = _check_url(expected)
+    opener = build_opener(ProxyHandler({}), _NoSourceRedirect(host))
+    first = _source_get(opener, expected, host)
+    if etf.issuer == "fhtrust":
+        info = fhtrust.inspect_page(first)
+        workbook = _source_get(opener, info.download_url, host)
+        return fhtrust.capture(first, workbook)
+    day = ftft.latest_day(first)
+    raw = _source_get(opener, f"{ftft.SHARES_URL}?date={day:%Y%m%d}", host)
+    payload = read_json(raw)
+    if (not isinstance(payload, dict)
+            or asset_day(payload.get("AssetDate")) != day):
+        raise ValueError("FTFT requested date differs from returned assets")
+    return raw
+
+
+_EXPANSION = {
+    "sinopac": (sinopac, "00888", False),
+    "tsit": (tsit, "00936", False),
+    "mega": (mega, "00932", False),
+    "nomura": (nomura, "00935", False),
+    "esun": (esun, "009803", False),
+    "fsitc": (fsitc, "00728", False),
+    "jpmorgan": (jpmorgan, "00401A", True),
+    "ab": (ab, "00404A", True),
+}
+
+
+def _fetch_expansion(etf: SupportedEtf) -> bytes:
+    """Collect reviewed public routes without cookies, tokens or retries.
+
+    Every request has a fixed source host/path and a ten-MiB cap. All new
+    GET/POST redirects fail before following them. Response dates, never
+    the request clock, determine the snapshot holdings day.
+    """
+    module, symbol, active = _EXPANSION[etf.issuer]
+    if (etf.symbol != symbol or etf.is_active != active
+            or etf.source_url != module.SOURCE_URL):
+        raise ValueError("Unqualified expansion source identity/URL")
+    host = _check_url(etf.source_url)
+    opener = build_opener(ProxyHandler({}), _NoSourceRedirect(host))
+    if etf.issuer in ("sinopac", "tsit", "mega"):
+        return _source_get(opener, etf.source_url, host)
+    if etf.issuer == "fsitc":
+        return _source_request(opener, etf.source_url, host,
+                               {"pStrFundID": "D90", "pStrDate": ""})
+    if etf.issuer == "nomura":
+        assets = _source_request(opener, etf.source_url, host,
+                                 {"FundID": "00935", "SearchDate": None})
+        # The source UI falls back to the local day when selecting latest PCF.
+        # This is only a query parameter; CNavDt remains the holdings date.
+        publication = datetime.now(ZoneInfo("Asia/Taipei")).date().isoformat()
+        pcf = _source_request(opener, nomura.PCF_URL, host,
+                              {"Type": 1, "Keyword": "", "FundNo": "00935",
+                               "Date": publication})
+        return nomura.capture(assets, pcf)
+    if etf.issuer == "esun":
+        overview = _source_request(opener, esun.OVERVIEW_URL, host, {
+            "PageSize": 999, "PageIndex": 1, "SortColName": "",
+            "ETFInvestmentIDs": [], "ETFFundTypeIDs": [],
+            "ETFFundDividendIDs": [], "ETFInvestAreaIDs": [],
+            "IsDesc": False,
+        })
+        assets = _source_request(opener, etf.source_url, host,
+                                 {"FundID": "50"})
+        return esun.capture(assets, overview)
+    first = _source_get(opener, etf.source_url, host)
+    if etf.issuer == "jpmorgan":
+        day = jpmorgan.latest_day(first)
+        raw = _source_get(opener, jpmorgan.DOWNLOAD_URL +
+                          day.isoformat(), host)
+        if jpmorgan.parse(raw, etf, _utc_now()).holdings_date != day:
+            raise ValueError(
+                "JPMorgan requested/returned holdings day differs")
+        return raw
+    day = ab.holdings_day(first)
+    # A dated basket is the creation basket, with previous-day NAV.
+    # Only the latest basket was evidenced to disclose actual same-day NAV.
+    basket = _source_get(opener, ab.NAV_URL, host)
+    payload = read_json(basket)
+    if (not isinstance(payload, dict)
+            or payload.get("navAsOfDate") != day.isoformat()):
+        raise ValueError("AB requested/returned NAV day differs")
+    return ab.capture(first, basket)
+
+
 def fetch_official(etf: SupportedEtf) -> bytes:
     """Fetch an HTTP route with verified TLS, 30s timeout and 10MiB cap.
 
@@ -526,12 +658,16 @@ def fetch_official(etf: SupportedEtf) -> bytes:
     """
     if etf.route != "http":
         raise ValueError(f"Unsupported acquisition route: {etf.route}")
+    if etf.issuer in ("fhtrust", "ftft"):
+        return _fetch_new_source(etf)
+    if etf.issuer in _EXPANSION:
+        return _fetch_expansion(etf)
     host = _check_url(etf.source_url)
     if etf.issuer == "capital":
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.0.0",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.1.0",
     })
     with opener.open(request, timeout=30) as response:
         _check_url(response.geturl(), host)

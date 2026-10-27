@@ -18,11 +18,21 @@
 | Holding 欄位 | 型別／限制 |
 | --- | --- |
 | code, name | string，保留原證券代號與名稱 |
-| kind | `stock` / `futures` / `cash` / `other` |
+| kind | `stock` / `futures` / `cash` / `other` / `derivative_nav` |
 | weight | finite number / null；股票必須有值且在 `[0,1]`，期貨 NAV 同範圍，現金／其他可為 `[-1,1]`；非股票未知權重保留 null |
 | exposure_weight | finite number / null，預設 null；期貨獨立帶符號名目曝險，可超過 1，不得以 NAV 權重或保證金推算 |
 
 來源正數應付款的原值與經濟負號轉換分開留存。通用 loader 不依名稱翻號。stock/futures NAV 不允許負值；任何權重禁止 bool、string、NaN/Inf，不補零、不正規化。
+
+本地候選新增 `derivative_nav`：只用於有明確來源依據的衍生品帳面 NAV 貢獻，
+weight 必須為有限數值且在 `[-1,1]`，exposure_weight 必須 null。它進入
+`other_value` 並參與 gap 一次；同契約另外的 `futures` 行只記額外名目曝險，
+兩者不重複計算。原四種 kind 的序列化不變，固定歷史示範不改。
+
+摩根原檔明文說明期貨結算損益與選擇權 NAV，可用此類型；聯博尚無同等
+口徑證據，期貨／選擇權原生比例留於來源 capture 與名稱，canonical weight
+維持 null。選擇權沒有原生代碼時以原始名稱作內部識別，不冒充證券代號。
+舊版 Skill 不認得新類型時應拒絕該快照並更新套件，不丟列或猜測。
 
 ## Portfolio JSON
 

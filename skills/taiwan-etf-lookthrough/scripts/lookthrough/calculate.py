@@ -191,7 +191,13 @@ def compute_lookthrough(
                                 "金額保留於未分類差額")
                 continue
             amount = value * holding.weight
-            if holding.kind == "stock":
+            if holding.kind == "derivative_nav":
+                buckets["other"].append(amount)
+                warnings.append(
+                    f"{symbol}：{holding.name}（{holding.code}）已揭露 NAV 比重"
+                    f" {holding.weight:.6%} 計入其他資產；此為帳面評價，"
+                    "名目曝險未知，未穿透至個股")
+            elif holding.kind == "stock":
                 if not _record_security(sources, directory, symbol,
                                         holding.code, holding.name, amount):
                     buckets["unresolved"].append(amount)

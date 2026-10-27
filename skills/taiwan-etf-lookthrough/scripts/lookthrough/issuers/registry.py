@@ -8,7 +8,12 @@ from ..models import Snapshot
 from .capital import SOURCE_URL as CAPITAL_SOURCE_URL, parse as parse_capital
 from .cathay import parse as parse_cathay
 from .fubon import parse as parse_fubon
+from .fhtrust import SOURCE_URL as FH_SOURCE_URL, parse as parse_fhtrust
+from .ftft import SOURCE_URL as FTFT_SOURCE_URL, parse as parse_ftft
 from .yuanta import parse as parse_yuanta
+from . import (
+    ab, esun, fsitc, jpmorgan, kgi, mega, nomura, sinopac, tsit, union,
+)
 
 
 @dataclass(frozen=True)
@@ -16,7 +21,10 @@ class SupportedEtf:
     """Describe a verified route; is_active means active management."""
 
     symbol: str
-    issuer: Literal["yuanta", "fubon", "cathay", "capital"]
+    issuer: Literal[
+        "yuanta", "fubon", "cathay", "capital", "fhtrust", "ftft", "sinopac",
+        "tsit", "mega", "nomura", "esun", "fsitc", "jpmorgan", "ab",
+        "kgi", "union"]
     is_active: bool
     route: Literal["http", "playwright", "official_only"]
     source_url: str
@@ -88,6 +96,22 @@ SUPPORTED_ETFS += (
                  "ETF&Device=3&Platform=ETF&ticker=00940"),
 )
 
+SUPPORTED_ETFS += tuple(
+    SupportedEtf(symbol, issuer, active, route, module.SOURCE_URL)
+    for symbol, issuer, active, route, module in (
+        ("00888", "sinopac", False, "official_only", sinopac),
+        ("00936", "tsit", False, "http", tsit),
+        ("00932", "mega", False, "http", mega),
+        ("00935", "nomura", False, "official_only", nomura),
+        ("009803", "esun", False, "http", esun),
+        ("00728", "fsitc", False, "http", fsitc),
+        ("00401A", "jpmorgan", True, "http", jpmorgan),
+        ("00404A", "ab", True, "http", ab),
+        ("00915", "kgi", False, "official_only", kgi),
+        ("009804", "union", False, "official_only", union),
+    )
+)
+
 
 SUPPORTED_ETFS += tuple(
     SupportedEtf(symbol, "capital", active, "http", CAPITAL_SOURCE_URL)
@@ -111,10 +135,20 @@ SUPPORTED_ETFS += tuple(
     )
 )
 
+SUPPORTED_ETFS += (
+    SupportedEtf("00929", "fhtrust", False, "http", FH_SOURCE_URL),
+    SupportedEtf("00905", "ftft", False, "http", FTFT_SOURCE_URL),
+)
+
 Parser = Callable[[bytes, SupportedEtf, str], Snapshot]
 PARSERS: dict[str, Parser] = {
     "fubon": parse_fubon, "cathay": parse_cathay, "yuanta": parse_yuanta,
     "capital": parse_capital,
+    "fhtrust": parse_fhtrust, "ftft": parse_ftft,
+    **{name: module.parse for name, module in (
+        ("sinopac", sinopac), ("tsit", tsit), ("mega", mega),
+        ("nomura", nomura), ("esun", esun), ("fsitc", fsitc),
+        ("jpmorgan", jpmorgan), ("ab", ab), ("kgi", kgi), ("union", union))},
 }
 
 

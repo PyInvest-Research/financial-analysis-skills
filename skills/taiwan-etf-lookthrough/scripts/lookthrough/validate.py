@@ -50,8 +50,10 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
                       today: date) -> ValidationResult:
     """Check NAV weights, coverage, dates and mandatory source identity.
 
-    Cash/other NAV weights may be signed within [-1, 1]; stock/futures NAV
-    weights remain within [0, 1]. Missing nonstock NAV weights stay None.
+    Cash/other/derivative_nav NAV weights may be signed within [-1, 1];
+    stock/futures NAV weights remain within [0, 1]. derivative_nav requires
+    an explicit weight and cannot carry notional exposure. Missing other
+    nonstock NAV weights stay None.
     Futures notional exposure may be signed and exceed one; only its
     numeric finiteness is checked.
     Directly constructed models can contain invalid stock weights, which
@@ -62,11 +64,14 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     invalid_rows = []
     for i, holding in enumerate(s.holdings):
         weight = holding.weight
-        lower_bound = -1 if holding.kind in ("cash", "other") else 0
-        if ((weight is None and holding.kind == "stock")
+        lower_bound = (-1 if holding.kind in (
+            "cash", "other", "derivative_nav") else 0)
+        if ((weight is None and holding.kind in ("stock", "derivative_nav"))
                 or (weight is not None and (
                     not _finite_number(weight)
                     or not lower_bound <= weight <= 1))
+                or (holding.kind == "derivative_nav"
+                    and holding.exposure_weight is not None)
                 or (holding.exposure_weight is not None
                     and not _finite_number(holding.exposure_weight))):
             invalid_rows.append(i + 1)

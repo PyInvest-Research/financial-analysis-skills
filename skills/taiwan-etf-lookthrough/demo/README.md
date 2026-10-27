@@ -1,6 +1,6 @@
 # 固定歷史示範：原五檔＋直接2330
 
-這是使用者核准的**固定示範特例**，套件版本為 v1.0.0。五份共同官方持股日與假設估值日都是 **2026-10-22**；本次實際生成日為真實台北 **2026-10-26**。不等待五檔首次排程發布來決定固定示範日期，亦不把假設市值當使用者真實部位或即時估值。
+這是使用者核准的**固定示範特例**，本檔歷史產物由 v1.0.0 生成，現隨 v1.1.0 保留原bytes。五份共同官方持股日與假設估值日都是 **2026-10-22**；本次實際生成日為真實台北 **2026-10-26**。不等待五檔首次排程發布來決定固定示範日期，亦不把假設市值當使用者真實部位或即時估值。
 
 | 部位 | 假設TWD市值 |
 | --- | ---: |
@@ -43,7 +43,7 @@ outputs = run_lookthrough(
 
 本次實跑沒有傳歷史today，五份驗證均pass。之後日子改變，完整JSON的驗證age等內容可能不同；持股年齡超過30天會驗證失敗並保留未穿透，應誠實解釋為歷史資料已過期，不可回填新fetched_at、刪警告或把today鎖回歷史日期冒充新鮮。需要當期分析時另用合格新來源與新的市值／日期，不覆寫本固定示範。
 
-`tests/test_demo.py`的歷史重現**只在單元測試**明確使用2026-10-26驗證clock，完整JSON僅去最上層`generated_at`後比較，含來源、snapshot hash、validation／age、metrics／warnings皆不排除。這個test-only clock不是actual平台驗收；產品範例一律default today。
+`tests/test_demo.py`的歷史重現**只在單元測試**明確使用2026-10-26驗證clock，保留歷史expected檔，完整JSON僅正規化最上層`generated_at`與明確版本欄`code_version`後比較，金融數值、來源、snapshot hash、validation／age、metrics／warnings皆不排除；新版code_version必須等於實際執行程式版本。這個test-only clock不是actual平台驗收；產品範例一律default today。
 
 ChatGPT Web人類操作：使用者已回傳原draft的實跑PASS報告及相符hash，原始Web輸出未附；本次v1候選另作本機驗證，沒有宣稱新的Web實跑。自行上傳套件時，請對話先讀SKILL.md與本README；若環境可解壓與執行Python，依上例離線跑。無執行能力就回報，不心算expected；來源過期就保留未穿透與原因，不覆寫日期。
 

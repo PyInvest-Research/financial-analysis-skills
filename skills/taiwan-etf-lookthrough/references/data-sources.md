@@ -1,5 +1,74 @@
 # 已核對的持股來源
 
+## v1.1.0：2026-10-27實跑與發布範圍
+
+歷史樣本合格的10檔已做一次本機官方HTTPS實跑：16次順序請求均HTTP200，
+共1,033,584bytes、46.60秒，沒有重試或額外搜尋。復華00929、富蘭克林華美
+00905、台新00936、兆豐00932、玉山009803、第一金00728、摩根00401A、
+聯博00404A通過；玉山實際持股日2026-10-27，另外七檔仍為2026-10-22，
+保留原始日期與取得時間，不把HTTP200當成當日資料或完整性證明。
+
+永豐00888同頁資產日10/22、上方NAV日10/27；野村00935最新資產／NAV日
+10/27，當次PCF仍是10/22，NAV也不同。兩檔都被既有交叉驗證拒絕，
+目前轉為 official_only，由 agent 取同日且合格的官方完整檔；不追加抓取、
+不放寬日期或分母。凱基00915與聯邦009804亦維持 agent 官方備援及原資格
+停止條件。本輪這四檔均不加入自動發布，避免單檔不合格阻塞每日整批流程。
+
+本版registry共45檔，36 HTTP、9 official_only；資料工作依相同名單更新。
+公開快照／備援完整清單與更新流程見[snapshot-coverage.md](snapshot-coverage.md)。
+原五家取得受限來源仍由agent官方備援，未列自動registry。單一代表商品的
+資格不外推整家投信，單次本機成功亦不等同Actions或持續排程驗收。
+
+原生百分比來源採原始比例，不用 stocks-normalized 權重。HTML 完整列表、
+desktop/mobile 副本、來源分類總額／NAV、同日另一資產 API 與原生表頭等
+形成各家交叉證據，限制另見 source fixture 的 qualification/native-contract。
+這些證據不等於獨立審計；捨入界限無法完全排除極小或零權重的來源缺漏。
+沒有將缺資料補零，也不對無法證明的來源放寬驗證。
+
+兆豐採 018 原始產品頁的實際資產區，其股票原生合計為 97.79%，日期
+2026-10-22；不能沿用 019 PCF 的 97.75% 或公告日期 2026-10-27。
+第一金保留 31 筆包含零權重殘存部位，以 group1/5 核對；不使用未證明日期
+的 PCF NAV 重算。玉山使用成功的073 overview核對 FundNo 50／009803，
+不用失敗的072空回應作身分證據。
+
+摩根四張完整投資組合工作表明示 NAV、期貨 mark-to-market 與選擇權說明，
+帶負號帳面比重採 derivative_nav，原名目曝險仍未知。聯博只用無日期參數的
+最新 basket 取得同日 NAV；帶日期的申購籃子曾回前日 NAV，不使用，兩份
+日期不一致即停止，不回退或重試。聯博股票市值／同日
+AUM 與全部六位百分比吻合，但衍生品原比例口徑不明；保留未知與 gap，
+不能借用摩根說明。AB API 股數 1294499.9999999998 的浮點尾差只在股數
+驗證時容忍 1e-8 股；不改原檔、不調金額或權重。
+
+完整實作及驗收見 repository 的
+`research/etf-lookthrough-feasibility/ten-issuer-expansion-20261027/`；本次實跑
+原檔／TLS前檢／requests／results／receipt另見repository的
+`research/etf-lookthrough-feasibility/live-source-validation-20261027/`。
+備援範圍與每檔停止條件見 [official-fallback.md](official-fallback.md)。
+
+## 2026-10-27 本地擴充候選
+
+新增復華 00929 與富蘭克林華美 00905；完整取得與 agent 操作合約見
+[official-fallback.md](official-fallback.md)。目前 registry 是原四家 33 檔加上
+這兩檔（本段為前輪歷史範圍）；當時只做離線資格／取得流程測試，本次兩檔
+本機連線均通過，尚未公開發布或驗收排程機器。下文四家數量與Actions證據是
+原 v1.0.0 範圍，不延伸為新增兩家的線上成功證明。
+
+兩來源的 canonical 股票權重均使用原始官方市值除同回應／同日 NAV。
+復華 50 股逐列核對三位小數百分點，富蘭克林 142 股核對兩位小數百分點，
+每列均符合 `ROUND_HALF_UP`；股票金額合計與獨立股票分類總額一致。
+這是原始分母的來源交叉證據，不是將股票權重重新放大到 100%。
+
+復華頁面股票摘要 96.696%、XLSX 逐列合計 96.697%、原始金額／NAV
+96.69844609329698% 分別保留。富蘭克林逐列顯示合計 97.46%，精確
+金額／NAV 為 97.39487283937537%；不將顯示捨入累積誤認為缺少股票。
+復華其他資產合計產生負 gap，富蘭克林保留未解釋正 gap；不猜測來源會計
+原因、不補平、不把未知款項命名為現金。期貨名目曝險維持未知。
+
+僅有 2026-10-22 這一實際持股日的原檔驗證；測試會檢查可接受新的來源日期，
+不能以單日樣本宣稱未來格式穩定或整家投信全商品支援。原包來源、檔案 hash、
+逐列算術與名錄對照保存於 repository 的
+`research/etf-lookthrough-feasibility/issuer-expansion-20261027/` 及對應測試 fixture。
+
 本版本 registry 已逐一對齊 **2026-10-25 已保存觀察的33檔eligible名錄**：富邦11＋元大10＋群益7為28檔HTTP自動候選，國泰5檔為`official_only`官方備援。名錄依原生發行人、官方國內股票類型與foreign旗標／TPEx篩選交集分類，126個TWSE四家primary rows的include／exclude與paired shareclasses trace保留於repository的`research/etf-lookthrough-feasibility/catalog-observed-20261025/`；33含32TWSE＋TPEx006201，共5主動管理基金。這不是10/26 live refresh，亦不將歷史master37候選直接當現行名錄。
 
 `is_active`代表主動管理，與掛牌有效性無關。33檔名錄配置不等於33檔已自動發佈：28 HTTP已通過一次Actions端到端驗收，仍不保證每日穩定性；國泰五檔只官網備援，不呼叫publisher fetch、不建立latest。私有每日排程已獲批登錄，run40283575366已完成28 HTTP pass／5 official_only及資料commit1fa4dc9的單次端到端驗收；本站提供通過驗證的持股snapshot；更新窗口仍待觀察，日期以索引與各快照為準。原五檔固定示範已依使用者特例採本地共同日2026-10-22；此特例與每日發布分開處理。
