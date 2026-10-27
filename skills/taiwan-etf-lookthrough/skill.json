@@ -74,7 +74,8 @@
     "scripts/lookthrough/issuers/union.py",
     "scripts/lookthrough/issuers/mixed.py",
     "scripts/lookthrough/data/mixed-markets.json",
-    "references/mixed-etfs.md"
+    "references/mixed-etfs.md",
+    "scripts/lookthrough/mixed_contract.py"
   ],
   "sourceVerification": {
     "qualifiedAdditions": [

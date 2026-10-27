@@ -7,6 +7,7 @@ import math
 from typing import Literal
 
 from .directory import CompanyDirectory
+from .mixed_contract import qualifies_mixed
 from .models import Snapshot
 
 
@@ -61,7 +62,7 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     No network, input mutation or weight normalization is performed.
     """
     stocks = tuple(h for h in s.holdings if h.kind == "stock")
-    mixed = s.schema_version == "2"
+    mixed = qualifies_mixed(s)
     equities = tuple(h for h in s.holdings
                      if h.kind in ("stock", "foreign_stock"))
     invalid_rows = []
@@ -114,7 +115,7 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         "no_duplicate_security", "fail" if duplicates else "pass",
         f"Duplicate stock codes: {duplicates}",
     ))
-    if mixed or s.equity_evidence is not None or any(
+    if s.schema_version == "2" or s.equity_evidence is not None or any(
             h.kind == "foreign_stock" or h.market is not None
             for h in s.holdings):
         checks.append(_mixed_evidence(s, directory))
@@ -156,7 +157,7 @@ def _mixed_evidence(snapshot: Snapshot, directory: CompanyDirectory) -> Check:
     evidence = snapshot.equity_evidence
     equities = [h for h in snapshot.holdings
                 if h.kind in ("stock", "foreign_stock")]
-    valid = snapshot.schema_version == "2" and evidence is not None
+    valid = qualifies_mixed(snapshot) and evidence is not None
     if valid:
         valid = (evidence.complete is True
                  and type(evidence.stock_rows) is int

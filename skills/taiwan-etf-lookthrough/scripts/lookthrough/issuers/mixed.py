@@ -10,6 +10,7 @@ import re
 from typing import TYPE_CHECKING
 
 from ..directory import CompanyDirectory
+from ..mixed_contract import MARKETS as _MARKETS, PRODUCTS
 from ..models import EquityEvidence, Holding, Snapshot
 from ..validate import validate_snapshot
 from ._assets import MAX_RAW_BYTES, nav_number, number, read_json
@@ -20,16 +21,8 @@ if TYPE_CHECKING:
     from .registry import SupportedEtf
 
 
-PRODUCTS = {
-    '00982T': ('mega', 'https://www.megafunds.com.tw/MEGA/etf/'
-               'etf_product.aspx?id=22'),
-    '00981T': ('kgi', 'https://www.kgifund.com.tw/Fund/Detail?fundID=J022'),
-    '00980T': ('kgi', 'https://www.kgifund.com.tw/Fund/Detail?fundID=J021'),
-    '00735': ('cathay', 'https://www.cathaysite.com.tw/fund-details/EAW'),
-}
 API = 'https://cwapi.cathaysite.com.tw/api/ETF/'
 DATA = Path(__file__).parents[1] / 'data'
-_MARKETS = json.loads((DATA / 'mixed-markets.json').read_text())['products']
 _NAMES = {
     '00982T': '兆豐台美動能股債平衡ETF基金',
     '00981T': '凱基雙核收息債股平衡ETF基金',

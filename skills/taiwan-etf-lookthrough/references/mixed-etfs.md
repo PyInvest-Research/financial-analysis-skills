@@ -116,6 +116,8 @@ Path("snapshots/00735.json").write_text(
 
 `equity_evidence` 包含 `complete`、`total_nav_twd`、`stock_value_twd`、
 `stock_rows`、`taiwan_stock_value_twd`（未知為 null）與原始 `source_hashes`。
+所有入口（原始 parser、本機 JSON、公開快照）共用商品資格與完整
+`code/name/market` 集合核對；只有上述四檔可採混合型門檻。
 驗證全部股票列與聚合 NAV、市場、日期及顯示精度；低台股配置可合格，
 但不能全域放寬原純台股的 50%／前十大防漏規則。
 
