@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "etf_symbol": "ETFA",
+  "issuer": "Synthetic Issuer",
+  "is_active": false,
+  "holdings_date": "2026-10-22",
+  "fetched_at": "2026-10-23T00:00:00+00:00",
+  "source_url": "https://example.com/synthetic/holdings",
+  "source_kind": "pyinvest",
+  "holdings": [
+    {"code":"2330","name":"台積電","kind":"stock","weight":0.6,"exposure_weight":null},
+    {"code":"2317","name":"鴻海","kind":"stock","weight":0.35,"exposure_weight":null},
+    {"code":"TWD","name":"現金","kind":"cash","weight":0.05,"exposure_weight":null}
+  ]
+}

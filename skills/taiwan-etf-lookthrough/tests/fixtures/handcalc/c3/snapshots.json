@@ -1,0 +1,83 @@
+{
+  "ETFA": {
+    "schema_version": "1",
+    "etf_symbol": "ETFA",
+    "issuer": "Synthetic hand calculation",
+    "is_active": false,
+    "holdings_date": "2026-10-22",
+    "fetched_at": "2026-10-23T00:00:00+00:00",
+    "source_url": "https://example.com/synthetic/ETFA",
+    "source_kind": "official",
+    "holdings": [
+      {
+        "code": "2330",
+        "name": "台積電",
+        "kind": "stock",
+        "weight": 0.6,
+        "exposure_weight": null
+      },
+      {
+        "code": "2317",
+        "name": "鴻海",
+        "kind": "stock",
+        "weight": 0.2,
+        "exposure_weight": null
+      },
+      {
+        "code": "2454",
+        "name": "聯發科",
+        "kind": "stock",
+        "weight": 0.15,
+        "exposure_weight": null
+      },
+      {
+        "code": "TXFK6",
+        "name": "臺股期貨",
+        "kind": "futures",
+        "weight": null,
+        "exposure_weight": 0.03
+      },
+      {
+        "code": "TWD",
+        "name": "現金",
+        "kind": "cash",
+        "weight": 0.04,
+        "exposure_weight": null
+      }
+    ]
+  },
+  "ETFB": {
+    "schema_version": "1",
+    "etf_symbol": "ETFB",
+    "issuer": "Synthetic hand calculation",
+    "is_active": false,
+    "holdings_date": "2026-10-22",
+    "fetched_at": "2026-10-23T00:00:00+00:00",
+    "source_url": "https://example.com/synthetic/ETFB",
+    "source_kind": "official",
+    "holdings": [
+      {
+        "code": "2330",
+        "name": "台積電",
+        "kind": "stock",
+        "weight": 0.5,
+        "exposure_weight": null
+      },
+      {
+        "code": "2881",
+        "name": "富邦金",
+        "kind": "stock",
+        "weight": 0.3,
+        "exposure_weight": null
+      },
+      {
+        "code": "2882",
+        "name": "國泰金",
+        "kind": "stock",
+        "weight": 0.2,
+        "exposure_weight": null
+      }
+    ]
+  },
+  "ETFX": null
+}

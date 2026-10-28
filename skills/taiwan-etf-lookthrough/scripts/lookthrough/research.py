@@ -3,6 +3,9 @@
 import json
 from functools import lru_cache
 from pathlib import Path
+from datetime import date
+import math
+from urllib.parse import urlsplit
 
 from .models import Snapshot, snapshot_from_dict, snapshot_sha256
 
@@ -58,3 +61,32 @@ def bundled_snapshot(symbol: str) -> Snapshot | None:
     if not qualifies_research(snapshot):
         raise ValueError("Bundled research snapshot digest mismatch")
     return snapshot
+
+
+def historical_ratio(symbol: str) -> dict | None:
+    """Validate a dated reviewed NAV-ratio reference, including rounded zero.
+
+    This is an aggregate estimate, never evidence of complete stock rows.
+    No issuer/category average is substituted for a missing fund record.
+    """
+    record = research_record(symbol)
+    if not record or record.get("calculation_support") != "ratio_only":
+        return None
+    ratio = record.get("taiwan_NAV_ratio_pct")
+    if (type(ratio) not in (int, float) or not math.isfinite(ratio)
+            or not 0 <= ratio <= 100):
+        return None
+    try:
+        day = record["ratio_observation_date"]
+        if date.fromisoformat(day).isoformat() != day:
+            return None
+        url = record["official_entry_url"]
+        parsed = urlsplit(url)
+        if (parsed.scheme != "https" or parsed.hostname not in (
+                "www.sitca.org.tw", "www.megafunds.com.tw")
+                or parsed.username or parsed.password
+                or parsed.port not in (None, 443)):
+            return None
+    except (KeyError, ValueError, TypeError):
+        return None
+    return dict(date=day, share=ratio / 100, source_url=url)

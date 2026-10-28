@@ -9,6 +9,7 @@ from dataclasses import dataclass, replace
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Callable
+from zoneinfo import ZoneInfo
 
 from .calculate import compute_lookthrough
 from .dates import classify_dates, select_dates
@@ -21,7 +22,7 @@ from .report import build_result_json, write_outputs
 from .research import bundled_snapshot, qualifies_research
 from .sources import (
     PYINVEST_BASE_URL, SourceUnavailable, fetch_index,
-    fetch_pyinvest_snapshot, load_local_snapshot,
+    fetch_pyinvest_snapshot, load_local_snapshot, open_public_json,
 )
 from .validate import ValidationResult, validate_snapshot
 
@@ -61,6 +62,7 @@ def _local_candidates(
     """Isolate damaged files and reject ambiguous same-identity snapshots."""
     candidates: dict[str, dict[date, _Candidate]] = {}
     conflicted: set[tuple[str, date]] = set()
+    kept_paths: dict[tuple[str, date], str] = {}
     try:
         if not folder.is_dir():
             raise OSError('Snapshot directory does not exist')
@@ -86,10 +88,26 @@ def _local_candidates(
             if (symbol, day) in conflicted:
                 continue
             if previous is not None and previous != candidate:
-                del by_date[day]
-                conflicted.add((symbol, day))
-                raise ValueError(f'Conflicting snapshots for {day}')
+                if policy == 'strict':
+                    del by_date[day]
+                    conflicted.add((symbol, day))
+                    raise ValueError(f'Conflicting snapshots for {day}')
+                old = snapshot_to_dict(previous.snapshot)
+                new = snapshot_to_dict(candidate.snapshot)
+                old.pop('fetched_at')
+                new.pop('fetched_at')
+                newer = (datetime.fromisoformat(snapshot.fetched_at)
+                         > datetime.fromisoformat(
+                             previous.snapshot.fetched_at))
+                if old != new:
+                    discarded = (kept_paths[(symbol, day)]
+                                 if newer else path.name)
+                    warnings.append(f'{symbol}：同日內容不同，採最新抓取；'
+                                    f'已捨棄 {discarded}')
+                if not newer:
+                    continue
             by_date[day] = candidate
+            kept_paths[(symbol, day)] = path.name
         except ValueError as error:
             reasons[symbol].append(f'local {path.name}: {error}')
     for symbol in sorted(symbols):
@@ -131,6 +149,8 @@ def _remote_candidates(
 ) -> dict[str, dict[date, _Candidate]]:
     """Validate published candidates using an injectable transport."""
     candidates: dict[str, dict[date, _Candidate]] = {}
+    if opener is None and policy == 'annotated':
+        opener = open_public_json
     try:
         index = fetch_index(base_url=base_url, opener=opener)
     except SourceUnavailable as error:
@@ -173,10 +193,12 @@ def run_lookthrough(
     base_url: str = PYINVEST_BASE_URL,
     opener: Callable[[str], bytes] | None = None,
     validation_policy: str = "annotated",
+    ca_verified: bool = False,
 ) -> dict[str, Path]:
     """Write three report artifacts after local, PyInvest, official fallback.
 
-    Each requested ETF uses its first source with usable candidates. Local
+    Strict uses its first usable source. Annotated prefers current official
+    rows, then stale, fixed research and historical ratios. Local
     and published candidates align to their latest common usable date, or
     each latest date when none is common. Explicit official files keep their
     stated dates. Failed candidates never participate in date classification.
@@ -186,16 +208,20 @@ def run_lookthrough(
 
     Portfolio/schema/output errors propagate; per-source failures fall through
     without removing any portfolio value from the denominator. Live default
-    transport requires the runtime-safety.md CA preflight. Output I/O errors
+    strict transport requires the runtime-safety.md CA preflight. Annotated
+    public JSON retains default TLS, no redirects and a CA-audit warning.
+    Output I/O errors
     may leave partial artifacts; accept the mapping only on successful return.
     """
     if today is None:
-        today = date.today()
+        today = datetime.now(ZoneInfo('Asia/Taipei')).date()
     if type(today) is not date:
         raise ValueError('today must be a plain calendar date')
     if validation_policy not in ('strict', 'annotated'):
         raise ValueError('validation_policy must be strict or annotated')
-    portfolio = load_portfolio(portfolio_path)
+    if type(ca_verified) is not bool:
+        raise ValueError('ca_verified must be a boolean')
+    portfolio = load_portfolio(portfolio_path, policy=validation_policy)
     directory = CompanyDirectory.from_file(
         Path(__file__).resolve().parent / 'data' / 'company-directory.json')
     symbols = {p.symbol for p in portfolio.positions if p.kind == 'etf'}
@@ -204,19 +230,41 @@ def run_lookthrough(
     candidates = (_local_candidates(
         local_snapshot_dir, symbols, directory, today, reasons, warnings,
         validation_policy)
-                  if local_snapshot_dir is not None else {})
+        if local_snapshot_dir is not None else {})
     missing = {symbol for symbol in symbols if not candidates.get(symbol)}
+    if validation_policy == 'annotated':
+        missing |= {symbol for symbol in symbols
+                    if candidates.get(symbol) and all(
+                        _tier(c.snapshot, today) > 0
+                        for c in candidates[symbol].values())}
     if use_network and missing:
-        candidates.update(_remote_candidates(
+        if validation_policy == 'annotated' and not ca_verified:
+            warnings.append('TLS 信任庫未核對；僅讀 PyInvest 公開 JSON，'
+                            '仍使用預設憑證驗證、exact host、禁止轉址')
+        remote = _remote_candidates(
             missing, directory, today, reasons, base_url, opener,
-            validation_policy))
+            validation_policy)
+        for symbol, values in remote.items():
+            for day, candidate in values.items():
+                existing = candidates.setdefault(symbol, {}).get(day)
+                if (existing is None or _tier(candidate.snapshot, today)
+                        < _tier(existing.snapshot, today)):
+                    candidates[symbol][day] = candidate
+    if validation_policy == 'annotated':
+        candidates = {
+            symbol: {day: c for day, c in values.items()
+                     if _tier(c.snapshot, today) == min(
+                         _tier(v.snapshot, today) for v in values.values())}
+            for symbol, values in candidates.items() if values}
     available = {
         symbol: list(by_date) for symbol, by_date in candidates.items()
         if by_date
     }
     selected = {
         symbol: candidates[symbol][day]
-        for symbol, day in select_dates(available).items()
+        for symbol, day in select_dates(
+            available, max_rollback_weekdays=(
+                5 if validation_policy == 'annotated' else None)).items()
     }
     for symbol in sorted(symbols):
         if symbol in selected:
@@ -235,10 +283,15 @@ def run_lookthrough(
             path, columns, metadata = official_files[symbol]
             if type(metadata.get('holdings_date')) is not date:
                 raise ValueError('official holdings_date must be a plain date')
-            snapshot = load_official_file(path, columns, **metadata)
-            selected[symbol] = _candidate(
+            snapshot = load_official_file(path, columns,
+                                          policy=validation_policy, **metadata)
+            candidate = _candidate(
                 snapshot, symbol, directory, today, metadata['holdings_date'],
                 policy=validation_policy)
+            if (validation_policy == 'strict' or symbol not in selected
+                    or _tier(snapshot, today)
+                    <= _tier(selected[symbol].snapshot, today)):
+                selected[symbol] = candidate
         except (OSError, ValueError, TypeError, AttributeError) as error:
             reasons[symbol].append(f'official: {error}')
     for symbol in sorted(symbols - selected.keys()):
@@ -267,7 +320,8 @@ def run_lookthrough(
     joined_reasons = {symbol: '; '.join(details)
                       for symbol, details in reasons.items() if details}
     result = compute_lookthrough(portfolio, snapshots, validations, statuses,
-                                 directory, joined_reasons)
+                                 directory, joined_reasons,
+                                 policy=validation_policy)
     warnings.extend(f'{symbol}: {joined_reasons[symbol]}'
                     for symbol in sorted(selected) if symbol in joined_reasons)
     result = replace(result, warnings=(*result.warnings, *warnings))
@@ -275,3 +329,10 @@ def run_lookthrough(
     generated_at = datetime.now(timezone.utc).isoformat()
     return write_outputs(build_result_json(portfolio, result, metrics,
                                            generated_at), out_dir)
+
+
+def _tier(snapshot: Snapshot, today: date) -> int:
+    """Rank current official holdings before stale and fixed research data."""
+    if qualifies_research(snapshot):
+        return 2
+    return int((today - snapshot.holdings_date).days > 30)

@@ -5,7 +5,7 @@ Each skill includes instructions, references, and tools under the [MIT License](
 
 ## Taiwan ETF Lookthrough
 
-[Taiwan ETF Lookthrough v1.4.0](skills/taiwan-etf-lookthrough/SKILL.md) 依官方持股與帶日期的研究快照，計算台股公司曝險、產業及重疊。預設讓可用部分先算，明示來源、日期、估算與缺漏；沒有合適快照時由 agent 查安全官方來源。
+[Taiwan ETF Lookthrough v1.5.0](skills/taiwan-etf-lookthrough/SKILL.md) 依官方持股與帶日期的研究快照，計算台股公司曝險、產業及重疊。預設讓可用部分先算，明示來源、日期、估算與缺漏；沒有合適快照時由 agent 查安全官方來源。
 
 本版共 77 檔自動更新候選：原 40 檔、原研究商品 36 檔，再加入 00878。計算與每日發布都採可用部分先算、限制標注；來源失敗保留舊日資料。原研究副本仍附在套件中作離線歷史備援。其餘 66 檔歷史總比例與 009828 的 9 月底總比例僅供基金層級參考，不當作公司持股或當期資料。
 

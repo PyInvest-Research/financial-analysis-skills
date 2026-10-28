@@ -40,7 +40,9 @@ weight 必須為有限數值且在 `[-1,1]`，exposure_weight 必須 null。它�
 維持 null。選擇權沒有原生代碼時以原始名稱作內部識別，不冒充證券代號。
 舊版 Skill 不認得新類型時應拒絕該快照並更新套件，不丟列或猜測。
 
-## Portfolio JSON
+## Portfolio JSON（strict 原合約）
+
+annotated 的字串、零值、cash／other_asset 擴充見文末 v1.5.0。
 
 | 欄位 | 型別／限制 |
 | --- | --- |
@@ -97,3 +99,11 @@ Snapshot 可含 `quality_notes` 字串陣列；省略表示沒有額外原生 pa
 這些是官方逐列與總額等對帳差異，註記模式仍計算已知權重並在報告顯示。
 嚴格模式拒絕帶此註記的快照。未知市場的列以 other/null 保留，並將
 `equity_evidence.complete` 設為 false，不推論零台股或完整組合比率。
+
+
+## v1.5.0 annotated 擴充
+
+`run_lookthrough(..., validation_policy="annotated", ca_verified=False)` 預設開啟新行為。
+字串金額、零市值略過、cash／other_asset、預告日、來源退階與輸出新欄位的完整合約見
+[estimation-first.md](estimation-first.md)。原 strict 輸入與輸出欄位不變；
+Snapshot schema 仍是 1／2，原始檔與來源雜湊不變。

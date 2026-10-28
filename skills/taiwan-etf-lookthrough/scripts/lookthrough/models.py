@@ -1,6 +1,6 @@
 """Represent ETF snapshots and their deterministic JSON content identity."""
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import date, datetime, timedelta
 import hashlib
 import json
@@ -191,3 +191,22 @@ def snapshot_sha256(snapshot: Snapshot) -> str:
         separators=(",", ":"),
     )
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def merge_duplicate_holdings(
+        holdings: tuple[Holding, ...]) -> tuple[Holding, ...]:
+    """Combine equal named equities; any missing component stays unknown.
+
+    Different names remain separate; original snapshot bytes and hashes are
+    preserved because only calculation consumers use this derived tuple.
+    """
+    grouped: dict[tuple[str | None, str, str, str], list[Holding]] = {}
+    for index, holding in enumerate(holdings):
+        key = (holding.market, holding.code, holding.name,
+               holding.kind if holding.kind in ("stock", "foreign_stock")
+               else str(index))
+        grouped.setdefault(key, []).append(holding)
+    return tuple(replace(rows[0], weight=(
+        None if any(h.weight is None for h in rows)
+        else math.fsum(h.weight for h in rows)))
+        for rows in grouped.values())

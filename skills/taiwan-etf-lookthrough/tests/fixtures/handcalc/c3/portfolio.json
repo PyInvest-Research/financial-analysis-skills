@@ -1,0 +1,26 @@
+{
+  "currency": "TWD",
+  "valuation_date": "2026-10-22",
+  "positions": [
+    {
+      "symbol": "ETFA",
+      "kind": "etf",
+      "market_value": 400000
+    },
+    {
+      "symbol": "ETFB",
+      "kind": "etf",
+      "market_value": 400000
+    },
+    {
+      "symbol": "2330",
+      "kind": "stock",
+      "market_value": 200000
+    },
+    {
+      "symbol": "ETFX",
+      "kind": "etf",
+      "market_value": 100000
+    }
+  ]
+}

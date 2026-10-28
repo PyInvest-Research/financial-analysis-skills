@@ -9,7 +9,7 @@ from urllib.parse import urlsplit
 
 from .directory import CompanyDirectory
 from .mixed_contract import qualifies_mixed
-from .models import Snapshot
+from .models import Snapshot, merge_duplicate_holdings
 from .research import is_research_snapshot, qualifies_research
 from .refresh_contract import qualifies_refresh
 
@@ -96,6 +96,8 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         "weights_in_range", "fail" if invalid_rows else "pass",
         f"Invalid numeric/NAV weights at rows: {invalid_rows}",
     )]
+    if annotated and not s.holdings:
+        checks.append(Check("nonempty_source", "fail", "來源沒有任何資產列"))
 
     checked_stocks = equities if mixed or annotated else stocks
     valid_stock_weights = all(
@@ -135,9 +137,20 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     duplicates = sorted((code for code, count in counts.items() if count > 1),
                         key=str)
     checks.append(Check(
-        "no_duplicate_security", "fail" if duplicates else "pass",
-        f"Duplicate stock codes: {duplicates}",
+        "no_duplicate_security",
+        ("warn" if annotated else "fail") if duplicates else "pass",
+        f"Duplicate stock codes: {duplicates}" + (
+            "; 同市場同代號同名稱 N 列合併；缺權重保留未知；"
+            "同代號不同名稱保留原列各自計算"
+            if annotated and duplicates else ""),
     ))
+    if annotated and duplicates and not invalid_rows:
+        invalid_merged = any(
+            h.weight is not None and h.weight > 1
+            for h in merge_duplicate_holdings(checked_stocks))
+        if invalid_merged:
+            checks.append(Check("merged_weights_in_range", "fail",
+                                "同證券合併後的單列權重大於 1"))
     if s.schema_version == "2" or s.equity_evidence is not None or any(
             h.kind == "foreign_stock" or h.market is not None
             for h in s.holdings):
@@ -163,9 +176,11 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     checks.append(Check(
         "holdings_date_sane",
         ("pass" if age is not None and 0 <= age <= MAX_AGE_DAYS else
-         "warn" if annotated and age is not None and age > MAX_AGE_DAYS
+         "warn" if annotated and age is not None
          else "fail"),
-        f"Holdings calendar age in days: {age}",
+        ("預告持股日（PCF），非已實現持股；無預告天數上限。"
+         if annotated and age is not None and age < 0 else "")
+        + f"Holdings calendar age in days: {age}",
     ))
 
     unresolved = tuple(
@@ -205,8 +220,9 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         if not research and not mixed and not any(
                 h.kind == "stock" and _finite_number(h.weight)
                 for h in s.holdings):
-            checks.append(Check("usable_equity_rows", "fail",
-                                "沒有可計算台股列，亦無已審核的零台股證據"))
+            checks.append(Check("no_taiwan_rows_in_source", "warn",
+                                "提供的檔案中沒有可計算台股列；"
+                                "檔案完整性未驗證，不代表確認零台股"))
     if s.issuer == "yuanta" and s.etf_symbol in ("0055", "0056"):
         checks.append(Check(
             "NAV_denominator_qualification", "warn",
@@ -267,7 +283,7 @@ def _annotated_equity(snapshot: Snapshot,
     evidence = snapshot.equity_evidence
     equities = [h for h in snapshot.holdings
                 if h.kind in ("stock", "foreign_stock")]
-    valid = evidence is not None and bool(equities)
+    valid = evidence is not None
     if valid:
         valid = (type(evidence.complete) is bool
                  and type(evidence.stock_rows) is int

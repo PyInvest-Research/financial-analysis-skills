@@ -46,6 +46,31 @@ class _PyInvestRedirect(HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
+class _NoRedirect(HTTPRedirectHandler):
+    """Reject every redirect before sending a second request."""
+
+    def redirect_request(self, req: Request, fp: Any, code: int, msg: str,
+                         headers: Any, newurl: str) -> None:
+        """Refuse same-host and cross-host redirects alike."""
+        raise ValueError("PyInvest public JSON redirects are disabled")
+
+
+def open_public_json(url: str) -> bytes:
+    """Read exact-host public JSON with default TLS and no redirects.
+
+    This transport does not install code or disable certificate validation.
+    The caller records whether the actual TLS trust store was audited.
+    """
+    _check_pyinvest_url(url)
+    with build_opener(_NoRedirect()).open(url, timeout=20) as response:
+        if response.geturl() != url:
+            raise ValueError("Unexpected public JSON destination")
+        raw = response.read(10 * 1024 * 1024 + 1)
+        if len(raw) > 10 * 1024 * 1024:
+            raise ValueError("Public JSON exceeds size limit")
+        return raw
+
+
 def _open_url(url: str) -> bytes:
     """Read with verified default TLS and a twenty-second timeout.
 

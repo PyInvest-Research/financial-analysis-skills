@@ -7,7 +7,7 @@ from math import fsum
 
 from .calculate import LookthroughResult
 from .directory import CompanyDirectory
-from .models import Snapshot
+from .models import Snapshot, merge_duplicate_holdings
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,9 @@ def _issuer_weights(snapshot: Snapshot,
     Snapshots must otherwise have passed the shared snapshot validator.
     """
     weights: dict[str, list[float]] = {}
-    for holding in snapshot.holdings:
+    holdings = (merge_duplicate_holdings(snapshot.holdings)
+                if allow_partial else snapshot.holdings)
+    for holding in holdings:
         if holding.kind != "stock":
             continue
         if holding.weight is None:

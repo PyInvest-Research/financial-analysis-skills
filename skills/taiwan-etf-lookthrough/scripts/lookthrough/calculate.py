@@ -1,14 +1,16 @@
 """Compute offline issuer exposures without rescaling disclosed NAV weights."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from decimal import Decimal
 from math import fsum
 from typing import Literal
+import re
 
 from .dates import DateStatus
 from .directory import CompanyDirectory
-from .models import Snapshot
+from .models import Snapshot, merge_duplicate_holdings
 from .portfolio import Portfolio
+from .research import historical_ratio
 from .validate import ValidationResult
 
 
@@ -73,6 +75,10 @@ class LookthroughResult:
     positions: tuple[PositionStatus, ...]
     warnings: tuple[str, ...]
     foreign_stock_value: float = 0.0
+    provisional_stock_value: float = 0.0
+    provisional_companies: tuple[dict, ...] = ()
+    estimates: tuple[dict, ...] = ()
+    policy: str = "strict"
 
 
 def _record_security(
@@ -126,6 +132,7 @@ def compute_lookthrough(
     date_status: dict[str, DateStatus],
     directory: CompanyDirectory,
     reasons: dict[str, str],
+    *, policy: str = "strict",
 ) -> LookthroughResult:
     """Compute TWD exposures from validated snapshots entirely offline.
 
@@ -138,6 +145,9 @@ def compute_lookthrough(
     that contract's total unknown rather than reporting a partial amount.
     Inputs are not mutated and no network or file access is performed.
     """
+    if policy not in ("strict", "annotated"):
+        raise ValueError("policy must be strict or annotated")
+    annotated = policy == "annotated"
     total = fsum(p.market_value for p in portfolio.positions)
     sources: dict[str, list[SourceShare]] = {}
     buckets: dict[str, list[float]] = {
@@ -147,9 +157,20 @@ def compute_lookthrough(
     futures: dict[str, list[float | None]] = {}
     positions: list[PositionStatus] = []
     warnings = list(portfolio.warnings)
+    provisional: list[dict] = []
+    estimates: list[dict] = []
 
     for position in portfolio.positions:
         symbol, value = position.symbol, position.market_value
+        if position.kind in ("cash", "other_asset"):
+            is_cash = position.kind == "cash"
+            buckets["cash" if is_cash else "unprocessed"].append(value)
+            positions.append(PositionStatus(
+                symbol, position.kind, value,
+                "direct" if is_cash else "not_looked_through",
+                "現金部位" if is_cash else "非台股 ETF／股票，不穿透",
+                None, None, None))
+            continue
         if position.kind == "stock":
             resolved = _record_security(sources, directory, "direct",
                                         symbol, "", value)
@@ -176,7 +197,21 @@ def compute_lookthrough(
             "not_looked_through" if unavailable else "looked_through",
             reason, snapshot, validation, date_status.get(symbol)))
         if unavailable:
+            reference = historical_ratio(symbol) if annotated else None
+            if reference is not None:
+                estimates.append(dict(
+                    symbol=symbol, market_value=value, **reference,
+                    estimated_taiwan_equity_value=value * reference["share"],
+                    included_in_company_exposure=False,
+                    note="估算值以歷史總比例推得，不含個股；非當期持股。"
+                         "四捨五入零值不代表確認零台股。"))
+                warnings.append(f"{symbol}：採歷史總比例估算；"
+                                "不含個股，非當期持股，不代表確認零台股")
             continue
+
+        if annotated:
+            snapshot = replace(snapshot, holdings=merge_duplicate_holdings(
+                snapshot.holdings))
 
         for check in validation.checks:
             if check.status == "warn":
@@ -208,7 +243,19 @@ def compute_lookthrough(
             elif holding.kind == "stock":
                 if not _record_security(sources, directory, symbol,
                                         holding.code, holding.name, amount):
-                    buckets["unresolved"].append(amount)
+                    if (annotated and directory.get(holding.code) is None
+                            and re.fullmatch(r"\d{4,6}[A-Z]?", holding.code)
+                            and holding.name.strip()):
+                        provisional.append(dict(
+                            security_code=holding.code, name=holding.name,
+                            market=holding.market, source=symbol,
+                            industry_code="unknown", amount_twd=amount,
+                            share=amount / total if total else 0.0,
+                            directory_status="not_in_bundled_directory"))
+                        warnings.append(f"{symbol}：來源證券 {holding.code} "
+                                        "暫列；可執行 refresh_directory() 更新名錄")
+                    else:
+                        buckets["unresolved"].append(amount)
             else:
                 buckets[holding.kind].append(amount)
         gap = _gap(snapshot)
@@ -229,4 +276,6 @@ def compute_lookthrough(
         fsum(buckets["other"]), fsum(buckets["gap"]), futures_totals,
         fsum(buckets["unprocessed"]), tuple(positions), tuple(warnings),
         fsum(buckets["foreign_stock"]),
+        fsum(row["amount_twd"] for row in provisional), tuple(provisional),
+        tuple(estimates), policy,
     )

@@ -34,13 +34,18 @@ def _validate_dates(chosen: dict[str, date]) -> None:
             raise ValueError(f"Expected a plain date for {symbol}")
 
 
-def select_dates(available: dict[str, list[date]]) -> dict[str, date]:
+def select_dates(available: dict[str, list[date]], *,
+                 max_rollback_weekdays: int | None = None) -> dict[str, date]:
     """Use the latest common date, or each symbol's latest candidate.
 
     An empty mapping returns an empty mapping. Raises ValueError for an
     empty candidate list or malformed input; callers must first filter
     unavailable ETFs. Does not mutate the supplied candidates.
     """
+    if (max_rollback_weekdays is not None and (
+            type(max_rollback_weekdays) is not int
+            or max_rollback_weekdays < 0)):
+        raise ValueError("Rollback limit must be a nonnegative integer")
     if not isinstance(available, dict):
         raise ValueError("Expected a symbol/candidate-list dictionary")
     candidates: dict[str, set[date]] = {}
@@ -55,7 +60,10 @@ def select_dates(available: dict[str, list[date]]) -> dict[str, date]:
     common = set.intersection(*candidates.values())
     if common:
         latest = max(common)
-        return dict.fromkeys(candidates, latest)
+        if max_rollback_weekdays is None or all(
+                weekday_distance(latest, max(values)) <= max_rollback_weekdays
+                for values in candidates.values()):
+            return dict.fromkeys(candidates, latest)
     return {symbol: max(values) for symbol, values in candidates.items()}
 
 

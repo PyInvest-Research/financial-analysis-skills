@@ -1,0 +1,63 @@
+{
+  "schema_version": "1",
+  "as_of": "2026-10-25",
+  "sources": [
+    {
+      "market": "TWSE",
+      "url": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+      "sha256": "ad2f13eee00e1c118d7a89acccf38bcaca3fd3dd3ed35e9a0308888fbe6e8513",
+      "row_count": 1097,
+      "source_dates": [
+        "1151024"
+      ],
+      "fetched_at": "2026-10-25T14:22:03.758657+00:00"
+    },
+    {
+      "market": "TPEx",
+      "url": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O",
+      "sha256": "00d924c450bac6973506a5e2a57075f6cb95533d99da77be4307a2b8cd61d081",
+      "row_count": 894,
+      "source_dates": [
+        "1151025"
+      ],
+      "fetched_at": "2026-10-25T14:22:03.758657+00:00"
+    }
+  ],
+  "companies": [
+    {
+      "code": "2317",
+      "name": "鴻海",
+      "market": "TWSE",
+      "industry_code": "31",
+      "industry_name": "其他電子"
+    },
+    {
+      "code": "2330",
+      "name": "台積電",
+      "market": "TWSE",
+      "industry_code": "24",
+      "industry_name": "半導體業"
+    },
+    {
+      "code": "2454",
+      "name": "聯發科",
+      "market": "TWSE",
+      "industry_code": "24",
+      "industry_name": "半導體業"
+    },
+    {
+      "code": "2881",
+      "name": "富邦金",
+      "market": "TWSE",
+      "industry_code": "17",
+      "industry_name": "金融保險"
+    },
+    {
+      "code": "2882",
+      "name": "國泰金",
+      "market": "TWSE",
+      "industry_code": "17",
+      "industry_name": "金融保險"
+    }
+  ]
+}

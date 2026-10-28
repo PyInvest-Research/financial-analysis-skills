@@ -5,6 +5,15 @@ description: 依官方持股快照計算台股公司曝險、產業與重疊，�
 
 # 台灣 ETF 持股穿透
 
+v1.5.0：錯誤只影響所在的列或來源。預設 annotated 接受字串金額、略過零市值、
+完整保留現金與非台股資產分母。預告持股日不限天數但附註，採台北日期；
+同日快照採最新抓取，官方表格可逐列容錯及搜尋其他工作表，支援 CSV／XLSX／XLS。
+來源依當期 → 過期 → 固定研究 → 歷史比例退階；五種資料等級列在報告開頭。
+歷史總比例估算進摘要的「已辨識＋歷史比例估算涵蓋率」，與已辨識股票分開，
+不進公司／產業／集中度／重疊，也不抵減全額未穿透。名錄外股票另列暫列金額。
+strict 模式保留既有輸入、驗證、衝突拒絕及輸出欄位。
+詳見 [v1.5.0 行為與資料合約](references/estimation-first.md)。
+
 v1.4.0 將原有 36 檔研究商品接入每日官方更新，另加入 **00878**，
 合計 **77 檔自動更新候選**。原始研究快照仍保留在套件內作離線／取不到新資料時的備援；
 它們自己的持股日不會被更新時間覆寫。最新公開狀態見 [快照清單](references/snapshot-coverage.md)。
@@ -12,8 +21,8 @@ v1.4.0 將原有 36 檔研究商品接入每日官方更新，另加入 **00878*
 計算與每日發布都採「能算先算、限制標注」：部分持股、舊資料、缺權重、
 總額或四捨五入差異不再整檔拒絕；只計已知列，不補零、不重分配、不放大。
 新增股票若市場尚未確認，保留未知；只有完整市場名單才能確認指定日零台股。
-官方來源、HTTPS/TLS、商品身分、實際日期、單位、NaN／Inf、重複證券等
-仍需正確。`validation_policy="strict"` 保留給需要嚴格比較的使用者。
+官方來源、HTTPS/TLS、商品身分、實際日期、單位、NaN／Inf等
+仍需正確。重複證券及預告日期在 annotated 模式附註處理。`validation_policy="strict"` 保留給需要嚴格比較的使用者。
 原生 parser 的非致命對帳差異由 `source_quality.parse_annotated` 保留為
 `quality_notes`；直接呼叫 parser 仍可作嚴格診斷。
 
@@ -23,7 +32,7 @@ v1.4.0 將原有 36 檔研究商品接入每日官方更新，另加入 **00878*
 本機單輪成功不等於遠端 runner 或多日穩定驗證。
 
 v1.3.0 的 36 檔固定研究與 66 檔歷史總比例參考仍可用；009828 仍只有
-2026-09-30 總比例參考，不能拆成公司曝險、不能抵減未穿透金額。
+2026-09-30 總比例參考，不能拆成公司曝險、不能抵減未穿透金額；v1.5.0 另計歷史比例估算桶。
 沒有合適快照時，**agent 主動查安全官方來源**，先提供能取得的部分結果與限制。
 詳見 [研究資料與註記模式](references/research-and-annotations.md)。
 
@@ -63,12 +72,12 @@ NAV／PCF日期不符，停用排程並保留 agent 官方備援；凱基00915�
 ## 開始使用
 
 - ChatGPT Web：上傳套件 ZIP、portfolio JSON 及取得的官方完整檔／快照，請 AI 先讀 SKILL.md。僅在該對話環境能解壓縮並執行 Python 與套件依賴時運算；否則回報缺少執行能力，提供本機操作方法，不心算或編造輸出。下載套件不保證該對話平台具備解壓與執行能力。
-- 可連網 agent：在解壓後的 skill 目錄使用專案自己的 `.venv` 或 `/opt/homebrew/bin/uv run`，先依 [runtime-safety.md](references/runtime-safety.md) 核對 CA、官方 exact host 及每次 HTTPS redirect/TLS。不要全域安裝或同步整個使用者目錄。`package=false`，請設 `PYTHONPATH=scripts` 後 import；`run.py` 沒有 CLI wrapper。
+- 可連網 agent：在解壓後的 skill 目錄使用專案自己的 `.venv` 或 `/opt/homebrew/bin/uv run`，先依 [runtime-safety.md](references/runtime-safety.md) 區分安裝及公開 JSON。安裝須核對下載工具及 CA；公開 PyInvest JSON 在 CA 未核對時仍可讀並警告，使用預設 TLS、exact host、禁止轉址。不要全域安裝或同步整個使用者目錄。`package=false`，請設 `PYTHONPATH=scripts` 後 import；`run.py` 沒有 CLI wrapper。
 
 ## 工作方式
 
-1. 確認部位、TWD 市值與估值日。市值必須是嚴格大於零的有限 numeric；拒絕 bool、string、NaN、Inf、零及負值。依 [schema.md](references/schema.md) 建立 portfolio JSON。
-2. 先查使用者本機 snapshot/cache 與已發布 PyInvest snapshot；沒有合適資料時，agent 按 [official-fallback.md](references/official-fallback.md) 查投信官方持股頁或下載檔。優先完整資料，但可用的部分持股也能暫估。`run_lookthrough` 不會自行啟動瀏覽器或爬官網；agent 須先保存快照或透過 `official_files` 傳入官方 CSV/XLSX。有品質警告且明確傳入官方檔時，可用該檔替換 cache；都沒有時，程式可採用套件內帶日期的固定研究快照。舊資料不合用途時仍應查官方更新，不能把固定研究稱為當期快照。核對身分、實際持股日、百分比單位與權重分母；口徑有疑義時使用來源公布權重暫估並明說假設，不拿查詢日或今天冒充持股日。
+1. 確認部位、TWD 市值與估值日。annotated 接受有限非負 numeric 或字串金額（如 "100,000"）；零市值略過並記錄列號，拒絕 bool、NaN、Inf 及負值。現金與非台股資產須保留於完整分母。strict 仍只接受大於零 numeric 與原 kind／symbol 規則。依 [schema.md](references/schema.md) 建立 portfolio JSON。
+2. 先查使用者本機 snapshot/cache 與已發布 PyInvest snapshot；沒有合適資料時，agent 按 [official-fallback.md](references/official-fallback.md) 查投信官方持股頁或下載檔。優先完整資料，但可用的部分持股也能暫估。`run_lookthrough` 不會自行啟動瀏覽器或爬官網；agent 須先保存快照或透過 `official_files` 傳入官方 CSV/XLSX/XLS。官方檔讀不進來時，先嘗試欄名同義詞、header_row 與其他工作表，再請使用者另存 XLSX；BIFF XLS 已由固定版 xlrd 支援。有品質警告且明確傳入官方檔時，可用該檔替換 cache；都沒有時，程式可採用套件內帶日期的固定研究快照，再退到已核對的歷史總比例估算；都無資料才保留 unavailable 與取得建議。舊資料不合用途時仍應查官方更新，不能把固定研究稱為當期快照。核對身分、實際持股日、百分比單位與權重分母；口徑有疑義時使用來源公布權重暫估並明說假設，不拿查詢日或今天冒充持股日。
    新增來源先讀上述官方備援參考，使用對應 adapter 與已知官方路線；其他
    未串接或未資格化商品按該參考的預算、來源紀錄及停止條件取得資料。agent 不因下載
    成功直接跳過同一套驗證器，也不將來源未知值填零。
