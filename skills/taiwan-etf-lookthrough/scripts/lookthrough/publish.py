@@ -498,7 +498,7 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.2.0",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.2.1",
                  "Content-Type": "application/json"}, method="POST",
     )
     with opener.open(request, timeout=30) as response:
@@ -545,7 +545,7 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.2.0"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.2.1"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
@@ -679,7 +679,7 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.2.0",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.2.1",
     })
     with opener.open(request, timeout=30) as response:
         _check_url(response.geturl(), host)
@@ -723,16 +723,33 @@ def main(argv: list[str] | None = None) -> int:
 
     Run with scripts on PYTHONPATH, or from scripts/, for this package=false
     skill. Return 1 on required route failure, corrupt existing data or I/O
-    errors. A dry-run reads existing state and computes proposed changes in
+    errors. Explicit partial mode permits per-ETF failures only after all
+    writes finish and a fresh external completion report is saved. Fatal
+    errors still return 1. A dry-run computes proposed changes in
     memory; it creates no output directories, temporary snapshots or index.
     """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--symbols", nargs="+", help="Only reviewed symbols")
+    parser.add_argument("--allow-partial", action="store_true",
+                        help="Save valid updates despite per-ETF failures")
+    parser.add_argument("--run-report", type=Path,
+                        help="Fresh external JSON completion report path")
     args = parser.parse_args(argv)
     try:
         root = _safe_root(args.out)
+        report_path = None
+        if args.allow_partial and args.run_report is None:
+            raise ValueError("Partial publication requires a run report")
+        if args.run_report is not None:
+            if args.dry_run:
+                raise ValueError("A dry-run cannot emit a completion report")
+            report_path = Path(os.path.abspath(args.run_report))
+            _safe_root(report_path.parent)
+            if (report_path == root or root in report_path.parents
+                    or report_path.exists() or report_path.is_symlink()):
+                raise ValueError("Run report must be fresh and outside data")
         pins = _read_pins(root)
         directory = CompanyDirectory.from_file(
             Path(__file__).parent / "data" / "company-directory.json")
@@ -764,7 +781,20 @@ def main(argv: list[str] | None = None) -> int:
                                     if (root / row["symbol"]
                                         / f"{day}.json").is_file()]
                 _atomic_write(root / "index.json", _encoded(index))
-        return int(failed)
+        if report_path is not None:
+            counts = dict.fromkeys(sorted(_STATUSES), 0)
+            for _, status, _, _ in observations:
+                counts[status] += 1
+            _atomic_write(report_path, _encoded({
+                "completed": True, "partial": failed,
+                "generated_at": stamp, "counts": counts,
+                "failed_symbols": [symbol for symbol, status, _, _
+                                   in observations
+                                   if status in ("fail", "fetch_error")],
+                "index_sha256": hashlib.sha256(
+                    (root / "index.json").read_bytes()).hexdigest(),
+            }))
+        return int(failed and not args.allow_partial)
     except (OSError, ValueError) as error:
         print(f"Publication failed: {error}", file=sys.stderr)
         return 1

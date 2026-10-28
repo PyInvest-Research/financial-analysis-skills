@@ -52,10 +52,10 @@ def holdings_day(raw: bytes) -> date:
     return days.pop()
 
 
-def _percent(value: Any) -> Decimal:
+def _percent(value: Any, places: int = 6) -> Decimal:
     """Read native signed percentages without assigning economic meaning."""
     if not isinstance(value, str) or not re.fullmatch(
-            r"-?\d+(?:\.\d{1,6})?", value):
+            rf"-?\d+(?:\.\d{{1,{places}}})?", value):
         raise ValueError("Invalid AB disclosed percentage")
     result = Decimal(value)
     if not -100 <= result <= 100:
@@ -115,6 +115,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         if category not in _CATEGORIES or category in seen_groups:
             raise ValueError("Unknown/duplicate AB holdings category")
         seen_groups.add(category)
+        places = 8 if category == "holdings-section-futures" else 6
         rows = group.get("holdings")
         if not isinstance(rows, list) or len(rows) > 5000:
             raise ValueError("Invalid AB security collection")
@@ -133,7 +134,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
             seen.add(code)
             amount = number(row.get("holdingValue"), native=True)
             quantity = number(row.get("holdingShares"), native=True)
-            percent = _percent(row.get("holdingPerc"))
+            percent = _percent(row.get("holdingPerc"), places)
             value_total += amount
             percent_total += percent
             if category == "holdings-section-equity":
@@ -160,7 +161,8 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         summary = by_category[category]
         if (abs(value_total - number(summary.get("underlyingSecuritiesValue")))
                 > Decimal("0.01") or percent_total
-                != _percent(summary.get("percentageUnderlyingSecurities"))):
+                != _percent(summary.get("percentageUnderlyingSecurities"),
+                            places)):
             raise ValueError("Complete AB category total does not reconcile")
         if category == "holdings-section-equity" and not rows:
             raise ValueError("Empty AB equity disclosure")

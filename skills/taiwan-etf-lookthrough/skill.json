@@ -1,7 +1,7 @@
 {
   "slug": "taiwan-etf-lookthrough",
   "name": "Taiwan ETF Lookthrough",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "summary": "以有來源與日期的台灣 ETF 持股快照，整理投資組合底層曝險與持股重疊。",
   "status": "published",
   "license": "MIT",

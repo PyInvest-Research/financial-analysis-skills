@@ -37,8 +37,9 @@ def _percentage(text: str) -> Decimal:
 def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     """Require complete stock totals and NAV/current-assets reconciliation.
 
-    The investment panel's native stock percentages sum exactly to its
-    stock total. That total equals the complement of disclosed current
+    The investment panel's native stock percentages reconcile to its stock
+    total within the summed four-decimal display rounding bound. That total
+    equals the complement of disclosed current
     assets over same-date NAV at four decimals; the separately disclosed
     current-asset ratio must also match NAV at its two-decimal precision.
     Current assets remain a broad other bucket; futures NAV and notional
@@ -134,7 +135,9 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         holdings.append(
             Holding(code, row[1], "stock", float(percentage / 100)))
         seen.add(code)
-    if total != stock_total:
+    # Each stock and the independent aggregate can round by half a unit.
+    tolerance = Decimal(len(holdings) + 1) * Decimal("0.00005")
+    if abs(total - stock_total) > tolerance:
         raise ValueError("TSIT stock rows do not reconcile to stock total")
     holdings.append(Holding("current_assets", CURRENT_HEADER[0], "other",
                             float(current_amount / nav)))

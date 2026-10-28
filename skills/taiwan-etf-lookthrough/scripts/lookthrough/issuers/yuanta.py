@@ -156,6 +156,7 @@ CASH_LABELS = {
     ("1500", "現金", "CASH"): "cash",
     ("1200", "附買回債券", "RP"): "other",
     ("3300", "應付受益權單位買回款", "PAYABLES FOR UNITS REDEEMED"): "other",
+    ("3301", "應付申購預收款", "PAYABLES"): "other",
 }
 
 

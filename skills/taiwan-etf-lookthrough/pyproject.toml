@@ -1,6 +1,6 @@
 [project]
 name = "taiwan-etf-lookthrough"
-version = "1.2.0"
+version = "1.2.1"
 description = "Source-backed Taiwan ETF holdings snapshots and lookthrough"
 requires-python = ">=3.11"
 dependencies = ["openpyxl>=3.1.5,<4"]
