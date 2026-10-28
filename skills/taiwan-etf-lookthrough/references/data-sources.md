@@ -1,6 +1,10 @@
 # 已核對的持股來源
 
-v1.3.0 使用者報告預設註記模式；下列來源嚴格合約仍用於每日自動發布。
+v1.4.0 使用者報告與每日發布都採註記模式，77 檔接入官方自動更新，包含
+00878。完整清單見 [snapshot-coverage.md](snapshot-coverage.md)。
+下文保留歷次來源觀察與原嚴格合約作診斷依據，不代表目前每日更新範圍。
+透過 `parse_annotated` 取得的數值對帳差異會保留為 `quality_notes`；
+市場未知的新列保留未知，缺值不補零，仍拒絕錯身分、錯單位與非法數字。
 0055／0056 的公布權重可暫估，但 Summary.fundsize 與 PCF.totalav 的差異
 必須明示。新增研究資料及 agent 可用部分先算的流程見
 [research-and-annotations.md](research-and-annotations.md)。

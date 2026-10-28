@@ -116,7 +116,8 @@
   "researchVerification": {
     "archiveSha256": "9cec1aa22c609cfd0f0a4c839d46522bdfba05c8e8d8fd4b188ed4bffa187864",
     "fixedSnapshots": 36,
-    "automaticUpdate": false,
-    "validationPolicy": "annotated reports; strict daily publisher"
+    "automaticUpdate": true,
+    "historicalBundleImmutable": true,
+    "validationPolicy": "annotated reports and daily publication; preserve unknowns and source dates"
   }
 }

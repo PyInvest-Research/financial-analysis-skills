@@ -446,7 +446,8 @@ def prune(out_root: Path, pinned: set[tuple[str, str]],
                 day = _day(match[1])
                 value, _ = _read_snapshot(path, folder.name, day)
                 if validate_snapshot(value, directory,
-                                     value.holdings_date).status == "fail":
+                                     value.holdings_date,
+                                     policy="annotated").status == "fail":
                     continue
             except ValueError:
                 continue
@@ -465,7 +466,8 @@ def prune(out_root: Path, pinned: set[tuple[str, str]],
             continue
         value, _ = _read_snapshot(path, path.parent.name, path.stem)
         if validate_snapshot(value, directory,
-                             value.holdings_date).status == "fail":
+                             value.holdings_date,
+                             policy="annotated").status == "fail":
             continue
         path.unlink()
         deleted.append(path)
