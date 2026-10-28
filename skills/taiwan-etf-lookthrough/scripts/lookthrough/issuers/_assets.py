@@ -7,6 +7,9 @@ import re
 from typing import Any
 
 
+from ..source_quality import discrepancy
+
+
 MAX_RAW_BYTES = 10 * 1024 * 1024
 
 
@@ -78,7 +81,7 @@ def check_percentage(value: Any, amount: Decimal,
     rounded = (amount / nav * 100).quantize(
         Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP)
     if percent != rounded:
-        raise ValueError("Stock percentage disagrees with same-date NAV")
+        discrepancy("Stock percentage disagrees with same-date NAV")
 
 
 def asset_day(value: Any) -> date:

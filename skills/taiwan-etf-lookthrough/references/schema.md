@@ -90,3 +90,10 @@ foreign_stock_weights_complete。whole_portfolio_ratio_known 在部分資料或
 NAV 口徑保留時為 false。historical_ratio_references 只作歷史總比例參考，
 不進公司計算。research route 是固定研究快照，不會每日抓取或改寫日期。
 完整行為見 [research-and-annotations.md](research-and-annotations.md)。
+
+## v1.4.0 品質註記
+
+Snapshot 可含 `quality_notes` 字串陣列；省略表示沒有額外原生 parser 註記。
+這些是官方逐列與總額等對帳差異，註記模式仍計算已知權重並在報告顯示。
+嚴格模式拒絕帶此註記的快照。未知市場的列以 other/null 保留，並將
+`equity_evidence.complete` 設為 false，不推論零台股或完整組合比率。

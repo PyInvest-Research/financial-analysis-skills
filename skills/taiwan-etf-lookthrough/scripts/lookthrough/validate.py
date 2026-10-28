@@ -11,6 +11,7 @@ from .directory import CompanyDirectory
 from .mixed_contract import qualifies_mixed
 from .models import Snapshot
 from .research import is_research_snapshot, qualifies_research
+from .refresh_contract import qualifies_refresh
 
 
 MAX_STOCK_WEIGHT_SUM = 1.005
@@ -68,8 +69,9 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         raise ValueError("policy must be strict or annotated")
     annotated = policy == "annotated"
     research = qualifies_research(s)
+    refresh = qualifies_refresh(s)
     stocks = tuple(h for h in s.holdings if h.kind == "stock")
-    mixed = qualifies_mixed(s) or research
+    mixed = qualifies_mixed(s) or research or refresh
     equities = tuple(h for h in s.holdings
                      if h.kind in ("stock", "foreign_stock"))
     invalid_rows = []
@@ -77,7 +79,7 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         weight = holding.weight
         lower_bound = (-1 if holding.kind in (
             "cash", "other", "derivative_nav") else 0)
-        missing_allowed = (annotated or research
+        missing_allowed = (annotated or (research or refresh)
                            and holding.kind == "foreign_stock")
         if ((weight is None and holding.kind in (
                 "stock", "foreign_stock", "derivative_nav")
@@ -98,7 +100,7 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     checked_stocks = equities if mixed or annotated else stocks
     valid_stock_weights = all(
         _finite_number(h.weight) or h.weight is None and (
-            annotated or research)
+            annotated or research or refresh)
         for h in checked_stocks)
     stock_total = sum(
         h.weight for h in checked_stocks
@@ -110,6 +112,9 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
                               else MIN_STOCK_WEIGHT_SUM)):
         sum_status = "fail"
     elif not mixed and stock_total < WARN_STOCK_WEIGHT_SUM:
+        sum_status = "warn"
+    if (annotated and sum_status == "fail"
+            and stock_total is not None and _finite_number(stock_total)):
         sum_status = "warn"
     checks.append(Check("stock_weight_sum", sum_status,
                         f"Stock NAV weight total: {stock_total}"))
@@ -136,7 +141,9 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
     if s.schema_version == "2" or s.equity_evidence is not None or any(
             h.kind == "foreign_stock" or h.market is not None
             for h in s.holdings):
-        if research:
+        if refresh:
+            checks.append(_refresh_evidence(s))
+        elif research:
             checks.append(Check(
                 "research_equity_evidence", "warn",
                 "採用已審核的固定研究快照；保留原持股日，非每日更新。"
@@ -144,7 +151,10 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
         elif annotated and not qualifies_mixed(s):
             checks.append(_annotated_equity(s, directory))
         else:
-            checks.append(_mixed_evidence(s, directory))
+            evidence_check = _mixed_evidence(s, directory)
+            if annotated and evidence_check.status == "fail":
+                evidence_check = _annotated_equity(s, directory)
+            checks.append(evidence_check)
     if is_research_snapshot(s) and not research:
         checks.append(Check("research_content_hash", "fail",
                             "Research snapshot differs from reviewed content"))
@@ -202,9 +212,49 @@ def validate_snapshot(s: Snapshot, directory: CompanyDirectory,
             "NAV_denominator_qualification", "warn",
             "官方 FundWeights.Summary.fundsize 與 PCF.totalav 曾有差異；"
             "沿用官方公布權重暫估，不任選分母或重新放大。"))
+    if s.quality_notes:
+        checks.append(Check("source_quality_notes",
+                            "warn" if annotated else "fail",
+                            "官方逐列與總額／四捨五入核對有差異；保留逐列原值："
+                            + "; ".join(s.quality_notes)))
     severity = {"pass": 0, "warn": 1, "fail": 2}
     status = max((check.status for check in checks), key=severity.__getitem__)
     return ValidationResult(status, tuple(checks))
+
+
+def _refresh_evidence(snapshot: Snapshot) -> Check:
+    """Keep valuation gaps visible without discarding usable official rows."""
+    evidence = snapshot.equity_evidence
+    equities = [h for h in snapshot.holdings
+                if h.kind in ("stock", "foreign_stock")]
+    valid = (evidence is not None and type(evidence.complete) is bool
+             and type(evidence.stock_rows) is int
+             and evidence.stock_rows == len(equities)
+             and bool(evidence.source_hashes)
+             and evidence.total_nav_twd != 0
+             and all(v is None or _finite_number(v) and v >= 0 for v in (
+                 evidence.total_nav_twd, evidence.stock_value_twd,
+                 evidence.taiwan_stock_value_twd)))
+    if not valid:
+        return Check("refresh_equity_evidence", "fail",
+                     "Invalid refreshed official evidence structure")
+    partial = (not evidence.complete
+               or any(h.weight is None for h in equities
+                      if h.kind == "stock"))
+    mismatch = False
+    if (evidence.total_nav_twd and evidence.stock_value_twd is not None
+            and all(h.weight is not None for h in equities)):
+        mismatch = abs(sum(h.weight for h in equities)
+                       - evidence.stock_value_twd / evidence.total_nav_twd
+                       ) > len(equities) * .00005 + 1e-12
+    if partial:
+        return Check("refresh_partial_inventory", "warn",
+                     "部分市場／估值未知；只計算已知列，不推定完整或零台股")
+    if mismatch:
+        return Check("refresh_NAV_reconciliation", "warn",
+                     "逐股權重與官方股票總額有差異；保留原值，不重新放大")
+    return Check("refresh_equity_evidence", "pass",
+                 "官方日期與逐股資料；海外未知權重保持空值，非零權重")
 
 
 def _annotated_equity(snapshot: Snapshot,

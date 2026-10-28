@@ -17,6 +17,7 @@ from .mixed_contract import qualifies_mixed
 from .models import snapshot_sha256
 from .portfolio import Portfolio
 from .research import qualifies_research, research_record
+from .refresh_contract import qualifies_refresh
 
 
 OVERLAP_DISCLAIMER = "持股重疊不等於報酬相關，也不能單憑重疊判定分散失效。"
@@ -60,6 +61,10 @@ def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
                if record["fetched_at_basis"] == "research_package_assembly"
                else "取得時間沿用研究包記錄的官方請求時間。"))
         payload["research_qualification"] = record["qualification"]
+    elif snapshot and qualifies_refresh(snapshot):
+        payload["source_note"] = (
+            "自動取得官方揭露持股；依公布NAV權重或同日官方收盤價／基金NAV估值。"
+            "持股日不以下載日替代；無法估值或確認市場的列保留未知。")
     return payload
 
 
@@ -70,11 +75,13 @@ def _quality(position: PositionStatus) -> str:
     snapshot = position.snapshot
     warned = {c.name for c in position.validation.checks if c.status == "warn"}
     if (warned & {"stock_weight_sum", "not_top_n_only",
-                  "annotated_equity_evidence"}
+                  "annotated_equity_evidence", "refresh_partial_inventory",
+                  "source_quality_notes"}
             or any(h.weight is None for h in snapshot.holdings
                    if h.kind == "stock")):
         return "partial_estimate"
-    if "NAV_denominator_qualification" in warned:
+    if warned & {"NAV_denominator_qualification",
+                 "refresh_NAV_reconciliation"}:
         return "qualified_estimate"
     if qualifies_research(snapshot):
         return "fixed_research"
@@ -199,7 +206,12 @@ def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
         aggregate = (evidence.taiwan_stock_value_twd
                      if evidence and evidence.total_nav_twd
                      and (qualifies_mixed(snapshot)
-                          or qualifies_research(snapshot)) else None)
+                          or qualifies_research(snapshot)
+                          or qualifies_refresh(snapshot)
+                          and evidence.complete
+                          and _quality(position) not in (
+                              "partial_estimate", "qualified_estimate"))
+                     else None)
         ratio = (aggregate / evidence.total_nav_twd
                  if aggregate is not None else printed)
         basis = ("same_day_stock_value_over_fund_NAV"

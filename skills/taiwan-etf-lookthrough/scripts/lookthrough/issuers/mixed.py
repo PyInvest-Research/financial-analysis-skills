@@ -13,6 +13,7 @@ from ..directory import CompanyDirectory
 from ..mixed_contract import MARKETS as _MARKETS, PRODUCTS
 from ..models import EquityEvidence, Holding, Snapshot
 from ..validate import validate_snapshot
+from ..source_quality import annotated_active, discrepancy
 from ._assets import MAX_RAW_BYTES, nav_number, number, read_json
 from ._tables import by_id, has_class, one, read_html, rows
 from .mega import _desktop, _mobile, STOCK_HEADER
@@ -100,11 +101,21 @@ def _equities(
     """
     known, seen, holdings = _MARKETS[symbol], set(), []
     for code, name, shares, weight in records:
-        if code in seen or code not in known or known[code]['name'] != name:
-            raise ValueError(
-                'Duplicate, changed or unqualified mixed security')
+        if code in seen:
+            raise ValueError('Duplicate mixed security')
         seen.add(code)
-        identity = known[code]
+        if code in known and known[code]['name'] == name:
+            identity = known[code]
+        else:
+            discrepancy('Changed mixed security identity; partial inventory')
+            directory = CompanyDirectory.from_file(
+                DATA / 'company-directory.json')
+            company = directory.get(code)
+            if company is None or company.name != name:
+                holdings.append(Holding(code, name + ' [market unknown]',
+                                        'other', None))
+                continue
+            identity = dict(market=company.market, listing_date=None)
         listed = identity['listing_date']
         if listed is not None and date.fromisoformat(listed) > day:
             raise ValueError('Security listing postdates actual holdings')
@@ -116,7 +127,7 @@ def _equities(
         holdings.append(Holding(code, name, kind, float(_weight(weight)),
                                 market=market))
     if not holdings or seen != set(known):
-        raise ValueError('Incomplete or changed qualified mixed equity set')
+        discrepancy('Incomplete or changed qualified mixed equity set')
     return holdings
 
 
@@ -310,13 +321,17 @@ def parse(raw: bytes, etf: 'SupportedEtf', fetched_at: str) -> Snapshot:
         day, nav, stock_value, holdings, bodies = _kgi(raw, etf.symbol)
         taiwan_value = 0.0 if etf.symbol == '00980T' else float(stock_value)
     equities = [h for h in holdings if h.kind in ('stock', 'foreign_stock')]
+    complete = ({h.code for h in equities} == set(_MARKETS[etf.symbol])
+                and not any('[market unknown]' in h.name for h in holdings))
     evidence = EquityEvidence(
-        True, float(nav), float(stock_value), len(equities), taiwan_value,
+        complete, float(nav), float(stock_value), len(equities), taiwan_value,
         tuple(hashlib.sha256(body).hexdigest() for body in bodies))
     snapshot = Snapshot('2', etf.symbol, etf.issuer, False, day, fetched_at,
                         etf.source_url, 'official', tuple(holdings), evidence)
     directory = CompanyDirectory.from_file(DATA / 'company-directory.json')
-    result = validate_snapshot(snapshot, directory, day)
+    result = validate_snapshot(snapshot, directory, day,
+                               policy='annotated' if annotated_active()
+                               else 'strict')
     if result.status == 'fail':
         raise ValueError(
             'Mixed source equity completeness/NAV validation failed')

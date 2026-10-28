@@ -19,6 +19,7 @@ from ._assets import (
     MAX_RAW_BYTES, check_percentage, check_stock, nav_number, number,
     read_json,
 )
+from ..source_quality import discrepancy
 from ..models import Holding, Snapshot, snapshot_from_dict, snapshot_to_dict
 
 if TYPE_CHECKING:
@@ -292,7 +293,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
                                     float(amount / page.nav)))
         seen.add(code)
     if total != page.stock_total or futures_total != page.futures_total:
-        raise ValueError("Complete FH stock/futures totals do not reconcile")
+        discrepancy("Complete FH stock/futures totals do not reconcile")
     snapshot = Snapshot(
         "1", etf.symbol, etf.issuer, False, page.day, fetched_at,
         page.download_url, "agent_official", tuple(holdings))

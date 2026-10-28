@@ -9,6 +9,7 @@ import re
 from typing import Any, TYPE_CHECKING
 
 from ._assets import check_stock, nav_number, number, read_json
+from ..source_quality import discrepancy
 from ..models import Holding, Snapshot, snapshot_from_dict, snapshot_to_dict
 
 if TYPE_CHECKING:
@@ -158,7 +159,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     nav = nav_number(fund["Aum"])
     units, unit_nav = nav_number(fund["Units"]), nav_number(fund["Nav"])
     if abs(nav / units - unit_nav) > Decimal("0.005"):
-        raise ValueError("E.SUN AUM/units do not reconcile to rounded NAV")
+        discrepancy("E.SUN AUM/units do not reconcile to rounded NAV")
     _identity(overview, fund)
     tables = _tables(data)
     amounts: dict[str, Decimal] = {}
@@ -185,7 +186,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         total += percent
         holdings.append(Holding(code, name, "stock", float(percent / 100)))
     if abs(amounts["股票"] / nav * 100 - total) > len(seen) * Decimal("0.005"):
-        raise ValueError("E.SUN stocks fail aggregate NAV rounding bounds")
+        discrepancy("E.SUN stocks fail aggregate NAV rounding bounds")
     holdings.extend(Holding(label, label,
                             "cash" if label == "現金" else "other",
                             float(amount / nav))

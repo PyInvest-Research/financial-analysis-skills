@@ -69,6 +69,7 @@ class Snapshot:
     source_kind: Literal["pyinvest", "official", "agent_official"]
     holdings: tuple[Holding, ...]
     equity_evidence: EquityEvidence | None = None
+    quality_notes: tuple[str, ...] = ()
 
 
 def snapshot_to_dict(snapshot: Snapshot) -> dict[str, Any]:
@@ -79,6 +80,10 @@ def snapshot_to_dict(snapshot: Snapshot) -> dict[str, Any]:
                 for h in snapshot.holdings)):
         raise SchemaError("Mixed fields require snapshot schema 2")
     payload = asdict(snapshot)
+    if snapshot.quality_notes:
+        payload["quality_notes"] = list(snapshot.quality_notes)
+    else:
+        payload.pop("quality_notes")
     payload["holdings_date"] = snapshot.holdings_date.isoformat()
     payload["holdings"] = list(payload["holdings"])
     if snapshot.schema_version == "1":
@@ -114,6 +119,12 @@ def snapshot_from_dict(payload: dict[str, Any]) -> Snapshot:
         if not isinstance(payload["holdings"], list):
             raise SchemaError("holdings must be a JSON array")
         fields = dict(payload)
+        notes = fields.get("quality_notes", [])
+        if (not isinstance(notes, list) or len(notes) > 1000
+                or any(not isinstance(n, str) or not 0 < len(n) <= 500
+                       for n in notes)):
+            raise SchemaError("Invalid source quality notes")
+        fields["quality_notes"] = tuple(notes)
         holdings_date = date.fromisoformat(payload["holdings_date"])
         if holdings_date.isoformat() != payload["holdings_date"]:
             raise SchemaError("holdings_date must use YYYY-MM-DD")

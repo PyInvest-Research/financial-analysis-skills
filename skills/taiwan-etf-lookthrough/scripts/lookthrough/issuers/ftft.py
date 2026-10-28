@@ -8,6 +8,7 @@ from typing import Any, TYPE_CHECKING
 from ._assets import (
     asset_day, check_percentage, check_stock, nav_number, number, read_json,
 )
+from ..source_quality import discrepancy
 from ..models import Holding, Snapshot, snapshot_from_dict, snapshot_to_dict
 
 if TYPE_CHECKING:
@@ -107,7 +108,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         total += amount
         holdings.append(Holding(code, name, "stock", float(amount / nav)))
     if total != totals["股票"]:
-        raise ValueError("Complete FTFT stock total does not reconcile")
+        discrepancy("Complete FTFT stock total does not reconcile")
     futures = payload["Futs"]
     if not isinstance(futures, list) or len(futures) > 100:
         raise ValueError("Invalid FTFT futures collection")

@@ -5,6 +5,7 @@ from decimal import Decimal, ROUND_HALF_UP
 import re
 from typing import TYPE_CHECKING
 
+from ..source_quality import discrepancy
 from ..models import (
     Holding, Snapshot, snapshot_from_dict, snapshot_to_dict,
 )
@@ -173,7 +174,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     stock_percent = amounts["股票"] / nav * 100
     if stock_percent.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) != (
             stock_category):
-        raise ValueError("Mega stock category disagrees with NAV denominator")
+        discrepancy("Mega stock category disagrees with NAV denominator")
     allocation = by_id(root, "fund_asset_div")
     tabs = [node for node in allocation.find("div")
             if has_class(node, "fund-name")]

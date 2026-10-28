@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from ..models import Snapshot
+from ..refresh_contract import products as refresh_products
 from .capital import SOURCE_URL as CAPITAL_SOURCE_URL, parse as parse_capital
 from .cathay import parse as parse_cathay
 from .fubon import parse as parse_fubon
@@ -169,6 +170,31 @@ def _mixed_dispatch(legacy: Parser) -> Parser:
 
 for _issuer in ("mega", "kgi", "cathay"):
     PARSERS[_issuer] = _mixed_dispatch(PARSERS[_issuer])
+
+
+SUPPORTED_ETFS = tuple(row for row in SUPPORTED_ETFS
+                       if row.symbol not in refresh_products()) + tuple(
+    SupportedEtf(symbol, row["issuer"], row["is_active"], "http",
+                 row["source_url"])
+    for symbol, row in sorted(refresh_products().items())
+)
+
+
+def _refresh_dispatch(legacy: Parser) -> Parser:
+    """Route qualified expanding inventories without freezing stock sets."""
+    def parse(raw: bytes, etf: SupportedEtf, fetched_at: str) -> Snapshot:
+        """Preserve legacy parsers for all other existing products."""
+        if (etf.symbol in refresh_products() and etf.route == "http"
+                and etf.source_url == refresh_products()[etf.symbol][
+                    "source_url"]):
+            from ..refresh import parse as parse_refresh
+            return parse_refresh(raw, etf, fetched_at)
+        return legacy(raw, etf, fetched_at)
+    return parse
+
+
+for _issuer in {p["issuer"] for p in refresh_products().values()}:
+    PARSERS[_issuer] = _refresh_dispatch(PARSERS[_issuer])
 
 
 def get_supported(symbol: str) -> SupportedEtf | None:

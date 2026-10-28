@@ -8,6 +8,7 @@ import re
 from typing import TYPE_CHECKING, Literal
 
 from ..loader import parse_number
+from ..source_quality import discrepancy
 from ..models import (
     Holding, Snapshot, snapshot_from_dict, snapshot_to_dict,
 )
@@ -179,7 +180,7 @@ def _securities(
             exposure_weight=None,
         ))
     if sum(amounts, Decimal(0)) != total:
-        raise ValueError(f"{kind} amount total does not reconcile")
+        discrepancy(f"{kind} amount total does not reconcile")
     return holdings
 
 
@@ -228,7 +229,7 @@ def _repo_details(
         total += amount
         seen.add(row[0])
     if total != _number(summaries[0][1]):
-        raise ValueError("Repo detail does not reconcile with asset summary")
+        discrepancy("Repo detail does not reconcile with asset summary")
 
 
 def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:

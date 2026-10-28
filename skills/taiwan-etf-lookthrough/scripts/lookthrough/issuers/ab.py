@@ -10,6 +10,7 @@ from typing import Any, TYPE_CHECKING
 from ._assets import (
     check_percentage, check_stock, nav_number, number, read_json,
 )
+from ..source_quality import discrepancy
 from ..models import Holding, Snapshot, snapshot_from_dict, snapshot_to_dict
 
 if TYPE_CHECKING:
@@ -163,7 +164,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
                 > Decimal("0.01") or percent_total
                 != _percent(summary.get("percentageUnderlyingSecurities"),
                             places)):
-            raise ValueError("Complete AB category total does not reconcile")
+            discrepancy("Complete AB category total does not reconcile")
         if category == "holdings-section-equity" and not rows:
             raise ValueError("Empty AB equity disclosure")
     assets = other.get("allocationObjSecType")

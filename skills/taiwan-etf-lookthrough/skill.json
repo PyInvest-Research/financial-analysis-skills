@@ -1,8 +1,8 @@
 {
   "slug": "taiwan-etf-lookthrough",
   "name": "Taiwan ETF Lookthrough",
-  "version": "1.3.0",
-  "summary": "依官方與固定研究快照計算台股曝險；可用部分先算，明示來源、日期、估算與缺漏。",
+  "version": "1.4.0",
+  "summary": "77檔官方快照自動更新；可用資料先算，明示日期、估算、未知部位與品質警示。",
   "status": "published",
   "license": "MIT",
   "githubOwner": "PyInvest-Research",
@@ -83,7 +83,15 @@
     "demo/v1.3.0/expected-result.json",
     "demo/v1.3.0/report.md",
     "demo/v1.3.0/exposures.csv",
-    "demo/v1.3.0/generation-evidence.json"
+    "demo/v1.3.0/generation-evidence.json",
+    "scripts/lookthrough/refresh_workbooks.py",
+    "scripts/lookthrough/refresh_contract.py",
+    "scripts/lookthrough/refresh_snapshot.py",
+    "scripts/lookthrough/refresh_inventory.py",
+    "scripts/lookthrough/refresh.py",
+    "scripts/lookthrough/refresh_prices.py",
+    "scripts/lookthrough/data/refresh-products.json",
+    "scripts/lookthrough/source_quality.py"
   ],
   "sourceVerification": {
     "qualifiedAdditions": [

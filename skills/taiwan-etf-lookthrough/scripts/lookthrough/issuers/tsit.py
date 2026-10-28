@@ -5,6 +5,7 @@ from decimal import Decimal, ROUND_HALF_UP
 import re
 from typing import TYPE_CHECKING
 
+from ..source_quality import discrepancy
 from ..models import (
     Holding, Snapshot, snapshot_from_dict, snapshot_to_dict,
 )
@@ -111,7 +112,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     current_pct = current_amount / nav * 100
     if number(current[1][1]) != current_pct.quantize(
             Decimal("0.01"), rounding=ROUND_HALF_UP):
-        raise ValueError("TSIT current assets disagree with NAV denominator")
+        discrepancy("TSIT current assets disagree with NAV denominator")
     stock_rows = tables["stock"]
     if (len(stock_rows) < 3 or len(stock_rows[-1]) != 2
             or stock_rows[-1][0] != "股票合計"):
@@ -119,7 +120,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     stock_total = _percentage(stock_rows[-1][1])
     if stock_total != (100 - current_pct).quantize(
             Decimal("0.0001"), rounding=ROUND_HALF_UP):
-        raise ValueError("TSIT stock/current assets do not reconcile to NAV")
+        discrepancy("TSIT stock/current assets do not reconcile to NAV")
     holdings: list[Holding] = []
     seen: set[str] = set()
     total = Decimal(0)
@@ -138,7 +139,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     # Each stock and the independent aggregate can round by half a unit.
     tolerance = Decimal(len(holdings) + 1) * Decimal("0.00005")
     if abs(total - stock_total) > tolerance:
-        raise ValueError("TSIT stock rows do not reconcile to stock total")
+        discrepancy("TSIT stock rows do not reconcile to stock total")
     holdings.append(Holding("current_assets", CURRENT_HEADER[0], "other",
                             float(current_amount / nav)))
     futures = tables["futures"]
@@ -158,7 +159,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         seen_futures.add(row[0])
         holdings.append(Holding(row[0], row[0], "futures", None, None))
     if future_total != _percentage(futures[-1][1]):
-        raise ValueError("TSIT futures do not reconcile to source total")
+        discrepancy("TSIT futures do not reconcile to source total")
     snapshot = Snapshot("1", etf.symbol, etf.issuer, etf.is_active, day,
                         fetched_at, SOURCE_URL, "official", tuple(holdings))
     return snapshot_from_dict(snapshot_to_dict(snapshot))

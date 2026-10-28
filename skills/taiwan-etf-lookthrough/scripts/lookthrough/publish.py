@@ -27,6 +27,9 @@ from .issuers._assets import asset_day, read_json
 from .issuers.registry import PARSERS, SUPPORTED_ETFS, SupportedEtf
 from .models import Snapshot, snapshot_from_dict, snapshot_to_dict
 from .validate import validate_snapshot
+from .refresh import RefreshSession, acquire as acquire_refresh
+from .refresh_contract import products as refresh_products
+from .source_quality import parse_annotated
 
 
 RETENTION_DAILY = 30
@@ -45,6 +48,7 @@ _DATED_FILE = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})\.json")
 _ROUTES = frozenset({"http", "playwright", "official_only", "research"})
 _STATUSES = frozenset({"pass", "warn", "fail", "fetch_error", "official_only"})
 Saved = tuple[Snapshot, bytes]
+_refresh_session: RefreshSession | None = None
 
 
 def _symbol(value: Any) -> str:
@@ -207,7 +211,8 @@ def _existing(
             for value, _ in values:
                 # Validate financial data as-of day, allowing historical age.
                 result = validate_snapshot(value, directory,
-                                           value.holdings_date)
+                                           value.holdings_date,
+                                           policy="annotated")
                 if result.status == "fail":
                     raise ValueError(
                         f"Invalid historical snapshot in {folder}")
@@ -276,6 +281,9 @@ def _publish_all(
         selected: set[str] | None = None,
 ) -> dict:
     """Share real acquisition/validation between writing and read-only runs."""
+    global _refresh_session
+    if fetch is fetch_official:
+        _refresh_session = None
     root = _safe_root(out_root)
     _timestamp(fetched_at)
     rows = _read_index(root)
@@ -320,7 +328,7 @@ def _publish_all(
         observed_day: str | None = None
         stock_sum: float | None = None
         try:
-            parsed = PARSERS[etf.issuer](raw, etf, fetched_at)
+            parsed = parse_annotated(PARSERS[etf.issuer], raw, etf, fetched_at)
             value = snapshot_from_dict(snapshot_to_dict(parsed))
             if (value.etf_symbol != symbol or value.issuer != etf.issuer
                     or value.is_active != etf.is_active):
@@ -330,7 +338,8 @@ def _publish_all(
             weights = [h.weight for h in value.holdings if h.kind == "stock"]
             stock_sum = (sum(weights) if all(w is not None for w in weights)
                          else None)
-            result = validate_snapshot(value, directory, today)
+            result = validate_snapshot(value, directory, today,
+                                       policy="annotated")
             if result.status == "fail":
                 detail = "; ".join(f"{check.name}: {check.detail}"
                                    for check in result.checks
@@ -498,7 +507,7 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.3.0",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.4.0",
                  "Content-Type": "application/json"}, method="POST",
     )
     with opener.open(request, timeout=30) as response:
@@ -545,7 +554,7 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.3.0"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.4.0"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
@@ -666,8 +675,15 @@ def fetch_official(etf: SupportedEtf) -> bytes:
     browser state, script execution or TLS bypass is used. Browser routes
     fail explicitly until a verified transport exists.
     """
+    global _refresh_session
     if etf.route != "http":
         raise ValueError(f"Unsupported acquisition route: {etf.route}")
+    if etf.symbol in refresh_products():
+        if etf.source_url != refresh_products()[etf.symbol]["source_url"]:
+            raise ValueError("Unqualified refresh source URL")
+        if _refresh_session is None:
+            _refresh_session = RefreshSession()
+        return acquire_refresh(etf.symbol, _refresh_session)
     if etf.symbol in mixed.PRODUCTS:
         return _fetch_mixed(etf)
     if etf.issuer in ("fhtrust", "ftft"):
@@ -679,7 +695,7 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.3.0",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.4.0",
     })
     with opener.open(request, timeout=30) as response:
         _check_url(response.geturl(), host)
@@ -728,6 +744,8 @@ def main(argv: list[str] | None = None) -> int:
     errors still return 1. A dry-run computes proposed changes in
     memory; it creates no output directories, temporary snapshots or index.
     """
+    global _refresh_session
+    _refresh_session = None
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--dry-run", action="store_true")
