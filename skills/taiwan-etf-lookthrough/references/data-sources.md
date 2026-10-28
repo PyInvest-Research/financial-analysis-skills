@@ -1,5 +1,10 @@
 # 已核對的持股來源
 
+v1.3.0 使用者報告預設註記模式；下列來源嚴格合約仍用於每日自動發布。
+0055／0056 的公布權重可暫估，但 Summary.fundsize 與 PCF.totalav 的差異
+必須明示。新增研究資料及 agent 可用部分先算的流程見
+[research-and-annotations.md](research-and-annotations.md)。
+
 v1.2.0 已新增四檔混合／跨市場 ETF 的台股現貨部分，請先讀 [mixed-etfs.md](mixed-etfs.md)。下方原有來源合約仍適用各自商品，不能外推成整家投信支援。
 
 ## 2026-10-28 每日來源相容修正

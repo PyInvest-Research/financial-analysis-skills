@@ -37,7 +37,8 @@ class Metrics:
 
 
 def _issuer_weights(snapshot: Snapshot,
-                    directory: CompanyDirectory) -> dict[str, float]:
+                    directory: CompanyDirectory, *,
+                    allow_partial: bool = False) -> dict[str, float]:
     """Combine validated stock rows by name-backed issuer, excluding unknowns.
 
     A missing stock weight raises ValueError instead of filling it with zero.
@@ -48,6 +49,8 @@ def _issuer_weights(snapshot: Snapshot,
         if holding.kind != "stock":
             continue
         if holding.weight is None:
+            if allow_partial:
+                continue
             raise ValueError(f"Missing stock weight: {holding.code}")
         issuer = directory.resolve(holding.code, holding.name).issuer_code
         if issuer is not None:
@@ -104,7 +107,8 @@ def compute_metrics(result: LookthroughResult,
         effective = fsum(scaled) ** 2 / fsum(value ** 2 for value in scaled)
 
     weights = {
-        position.symbol: _issuer_weights(position.snapshot, directory)
+        position.symbol: _issuer_weights(position.snapshot, directory,
+                                         allow_partial=True)
         for position in result.positions
         if position.kind == "etf" and position.status == "looked_through"
         and position.snapshot is not None

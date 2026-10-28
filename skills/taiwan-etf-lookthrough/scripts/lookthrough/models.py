@@ -44,8 +44,8 @@ class EquityEvidence:
     """
 
     complete: bool
-    total_nav_twd: float
-    stock_value_twd: float
+    total_nav_twd: float | None
+    stock_value_twd: float | None
     stock_rows: int
     taiwan_stock_value_twd: float | None
     source_hashes: tuple[str, ...]
@@ -160,9 +160,11 @@ def _holding_from_dict(payload: dict[str, Any]) -> Holding:
             "stock", "foreign_stock", "futures", "cash", "other",
             "derivative_nav"):
         raise SchemaError("Unknown holding kind")
-    if holding.market not in (None, "TWSE", "TPEx", "KOSPI", "KOSDAQ",
-                              "NASDAQ"):
-        raise SchemaError("Unknown verified listing market")
+    if holding.market is not None and (
+            not isinstance(holding.market, str)
+            or not 1 <= len(holding.market) <= 80
+            or any(ord(char) < 32 for char in holding.market)):
+        raise SchemaError("Invalid listing market label")
     for key in ("weight", "exposure_weight"):
         value = getattr(holding, key)
         if value is not None and (

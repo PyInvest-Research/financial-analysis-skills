@@ -13,8 +13,10 @@ from .calculate import LookthroughResult, PositionStatus
 from .dates import PASSIVE_TOLERANCE_WEEKDAYS
 from .issuers.cathay_modern import SOURCE_NOTE, SOURCE_URLS
 from .metrics import Metrics
+from .mixed_contract import qualifies_mixed
 from .models import snapshot_sha256
 from .portfolio import Portfolio
+from .research import qualifies_research, research_record
 
 
 OVERLAP_DISCLAIMER = "持股重疊不等於報酬相關，也不能單憑重疊判定分散失效。"
@@ -48,8 +50,37 @@ def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
         "validation_status": (position.validation.status
                               if position.validation else None),
         "date_status": position.date_status,
+        "result_quality": _quality(position),
     }
+    if snapshot and qualifies_research(snapshot):
+        record = research_record(snapshot.etf_symbol)
+        payload["source_note"] = (
+            "固定研究快照，非每日更新；沿用研究方已審核的官方資料與原持股日。"
+            + ("取得時間欄記錄研究包組裝時間，並非新的官方下載時間。"
+               if record["fetched_at_basis"] == "research_package_assembly"
+               else "取得時間沿用研究包記錄的官方請求時間。"))
+        payload["research_qualification"] = record["qualification"]
     return payload
+
+
+def _quality(position: PositionStatus) -> str:
+    """Distinguish partial/qualified estimates from validated dated rows."""
+    if position.status == "not_looked_through" or not position.validation:
+        return "unavailable"
+    snapshot = position.snapshot
+    warned = {c.name for c in position.validation.checks if c.status == "warn"}
+    if (warned & {"stock_weight_sum", "not_top_n_only",
+                  "annotated_equity_evidence"}
+            or any(h.weight is None for h in snapshot.holdings
+                   if h.kind == "stock")):
+        return "partial_estimate"
+    if "NAV_denominator_qualification" in warned:
+        return "qualified_estimate"
+    if qualifies_research(snapshot):
+        return "fixed_research"
+    if "holdings_date_sane" in warned:
+        return "historical_estimate"
+    return "validated_dated"
 
 
 def build_result_json(
@@ -123,7 +154,32 @@ def build_result_json(
     if any(p.snapshot and p.snapshot.schema_version == "2"
            for p in result.positions):
         payload["taiwan_equity"] = _taiwan_equity(result)
+    references = _historical_ratios(result)
+    if references:
+        payload["historical_ratio_references"] = references
     return payload
+
+
+def _historical_ratios(result: LookthroughResult) -> list[dict[str, Any]]:
+    """Show dated aggregate references without modifying company exposure."""
+    references = []
+    for position in result.positions:
+        if position.kind != "etf" or position.status != "not_looked_through":
+            continue
+        record = research_record(position.symbol)
+        if (not record or record["calculation_support"] != "ratio_only"
+                or record.get("taiwan_NAV_ratio_pct") is None):
+            continue
+        ratio = record["taiwan_NAV_ratio_pct"] / 100
+        references.append(dict(
+            symbol=position.symbol, date=record["ratio_observation_date"],
+            share=ratio, illustrative_value_twd=position.market_value * ratio,
+            source_url=record["official_entry_url"],
+            included_in_company_exposure=False,
+            note="歷史基金層級比例參考，非逐股或當期持股；不抵減未穿透金額。"
+                 "顯示 0.00% 亦不能證明完整零台股。",
+        ))
+    return references
 
 
 def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
@@ -138,10 +194,12 @@ def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
             continue
         snapshot = position.snapshot
         printed = fsum(h.weight for h in snapshot.holdings
-                       if h.kind == "stock")
+                       if h.kind == "stock" and h.weight is not None)
         evidence = snapshot.equity_evidence
         aggregate = (evidence.taiwan_stock_value_twd
-                     if evidence else None)
+                     if evidence and evidence.total_nav_twd
+                     and (qualifies_mixed(snapshot)
+                          or qualifies_research(snapshot)) else None)
         ratio = (aggregate / evidence.total_nav_twd
                  if aggregate is not None else printed)
         basis = ("same_day_stock_value_over_fund_NAV"
@@ -150,6 +208,7 @@ def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
         display_values.append(position.market_value * printed)
         metadata.append(dict(symbol=position.symbol, share=ratio,
                              displayed_share=printed, basis=basis,
+                             result_quality=_quality(position),
                              snapshot_schema=snapshot.schema_version))
     amount = fsum(values)
     displayed = fsum(display_values)
@@ -158,10 +217,19 @@ def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
         "scope": "Taiwan-listed spot equities; derivatives excluded",
         "allocation_value_twd": amount,
         "confirmed_allocation_share": amount / total if total else 0.0,
-        "whole_portfolio_ratio_known": result.not_looked_through_value == 0,
+        "whole_portfolio_ratio_known": (
+            result.not_looked_through_value == 0
+            and all(_quality(p) not in (
+                "partial_estimate", "qualified_estimate")
+                    for p in result.positions if p.kind == "etf")),
         "displayed_stock_value_twd": displayed,
         "aggregate_minus_displayed_twd": amount - displayed,
         "foreign_stock_value_twd": result.foreign_stock_value,
+        "foreign_stock_weights_complete": all(
+            p.status != "not_looked_through"
+            and all(h.weight is not None for h in p.snapshot.holdings
+                    if h.kind == "foreign_stock")
+            for p in result.positions if p.kind == "etf"),
         "processed_position_share": (
             (total - result.not_looked_through_value) / total if total else 0),
         "per_etf": metadata,
@@ -221,6 +289,19 @@ def render_report_md(result_json: dict[str, Any]) -> str:
     ])
     summary.extend(f"{_cell(row['symbol'])}：{_cell(row['source_note'])}"
                    for row in snapshots if row.get("source_note"))
+    quality_labels = {
+        "unavailable": "缺資料，待 agent 查官方來源",
+        "partial_estimate": "部分持股暫估，不能代表完整曝險",
+        "qualified_estimate": "權重口徑有保留，沿用官方公布值暫估",
+        "fixed_research": "固定日期研究結果，非每日更新",
+        "historical_estimate": "舊持股暫估，待官方更新",
+        "validated_dated": "通過檢查的指定日資料",
+    }
+    summary.extend(f"{_cell(row['symbol'])}："
+                   f"{quality_labels[row['result_quality']]}。"
+                   for row in snapshots
+                   if row.get("result_quality", "validated_dated")
+                   != "validated_dated")
     coverage = [("總市值", "total_value"),
                 ("已辨識股票", "identified_stock_value"),
                 ("未辨識", "unresolved_value"), ("現金", "cash_value"),
@@ -234,13 +315,25 @@ def render_report_md(result_json: dict[str, Any]) -> str:
                          f"{totals[key] / total if total else 0:.2%}"]
                         for label, key in coverage])]
     mixed = result_json.get("taiwan_equity")
+    references = result_json.get("historical_ratio_references", [])
+    if references:
+        sections.append("## 歷史總比例參考（不計入逐股曝險）\n\n" + _table(
+            ("ETF", "資料日", "台股總比例", "套用輸入市值的參考金額", "官方入口"),
+            [[r["symbol"], r["date"], f"{r['share']:.4%}",
+              _amount(r["illustrative_value_twd"]), r["source_url"]]
+             for r in references])
+            + "\n\n這是歷史基金層級比例，不能拆成公司或稱為當期配置。"
+            "未穿透金額完整保留，顯示 0.00% 不能證明零台股。")
     if mixed:
         sections.append("## 台股現貨配置與資料可用範圍\n\n" + _table(
             ("項目", "數值"), [
-                ["已確認台股現貨配置占完整組合",
+                ["已計算台股現貨配置占完整組合（依揭露日估計）",
                  f"{mixed['confirmed_allocation_share']:.4%}"],
-                ["海外股票顯示權重估計金額（TWD）",
-                 _amount(mixed['foreign_stock_value_twd'])],
+                ["海外股票已知權重估計金額（TWD）",
+                 _amount(mixed['foreign_stock_value_twd'])
+                 + ("（海外權重不完整，未知不等於零）"
+                    if not mixed.get('foreign_stock_weights_complete', True)
+                    else "")],
                 ["已處理部位市值比例",
                  f"{mixed['processed_position_share']:.2%}"],
                 ["聚合市值與逐股顯示權重的差額（TWD）",
@@ -248,7 +341,7 @@ def render_report_md(result_json: dict[str, Any]) -> str:
             ]) + "\n\n台股配置比率與資料完整程度不同；已處理部位不代表"
             "已涵蓋全部資產與衍生品風險。海外股票另列，不併入台股公司、"
             "產業、重疊或有效持股數。\n\n"
-            + ("仍有未穿透部位，全組合實際台股比率未知。\n\n"
+            + ("仍有未穿透、部分資料或口徑保留，全組合實際台股比率未知。\n\n"
                if not mixed['whole_portfolio_ratio_known'] else "")
             + _table(("ETF", "台股占整檔 NAV", "逐股顯示加總", "計算基礎"), [
                 [r["symbol"], f"{r['share']:.6%}",
@@ -300,7 +393,8 @@ def render_report_md(result_json: dict[str, Any]) -> str:
     concentration += "\n\n" + _table(("ETF A", "ETF B", "持股重疊"), [
         [p["symbol_a"], p["symbol_b"], f"{p['share']:.2%}"]
         for p in metrics["overlaps"]])
-    concentration += "\n\n重疊以各 ETF 揭露之原始股票權重計算，排除未辨識證券，不重新放大。"
+    concentration += ("\n\n重疊以各 ETF 揭露之原始股票權重計算，排除未辨識證券，不重新放大。"
+                      "若有部分資料，重疊與有效持股數只描述已算到的公司部分。")
     if totals["futures"]:
         concentration += "\n\n期貨額外曝險（不計入總市值分桶）\n\n" + _table(
             ("期貨代號", "額外曝險估計（TWD）"), [

@@ -1,0 +1,31 @@
+{
+  "code_version": "1.3.0",
+  "generated_at": "2026-10-28T05:27:34.291529+00:00",
+  "runtime_date_taipei": "2026-10-28",
+  "today_argument_supplied": false,
+  "run_count": 1,
+  "use_network": false,
+  "network_attempts": [],
+  "elapsed_seconds": 0.01377749998937361,
+  "inputs_sha256": {
+    "portfolio.json": "f09eca81c01ee98b6d2b25d1f1447f39d97faf855cfa518ae3c7f645e7b602fb",
+    "0050.json": "e428fdac0751c6b23639fe7e53e62617e10e4f8928676cad6cf047d6c66ce263",
+    "0056.json": "a4951148747569f0687af20be9478587624f86e699298aa7a15a701395411212",
+    "006208.json": "2375af7fd043be81a18eb897bf01faa087dc42197828df25e16481254c16fbc8",
+    "00878.json": "2db9b1bc5f845f8db5dd8fd2b842359d57ae05cac36d290c7c8c385a041f6697",
+    "00919.json": "b67e49923f1a5b4a0abc4aff30d18100fd207dc7199a953f950d112e0229d1fb"
+  },
+  "inputs_unchanged": true,
+  "unchanged_financial_fields": [
+    "totals",
+    "companies",
+    "industries",
+    "metrics"
+  ],
+  "previous_expected_sha256": "8d479fb4082f871c4af1e3537894a96ba79829f4aa7ca228af723c475c782160",
+  "outputs_sha256": {
+    "report.md": "4865fff1b54b45d2edbf193907a70223a86dc9beacf09730119a369245a3a3d8",
+    "exposures.csv": "affef5d8a6a3d029b592087146c43727ddc3d5cc987aded217262d20f7cd5cda",
+    "expected-result.json": "ab06a8e120294ac6c7c9028a771891712ebac410c20db3d4be742d5d8109afdb"
+  }
+}

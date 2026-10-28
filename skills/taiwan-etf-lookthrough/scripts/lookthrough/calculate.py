@@ -181,6 +181,15 @@ def compute_lookthrough(
         for check in validation.checks:
             if check.status == "warn":
                 warnings.append(f"{symbol}：{check.name}：{check.detail}")
+        missing_weights = sum(h.weight is None and h.kind != "futures"
+                              for h in snapshot.holdings)
+        if missing_weights:
+            sample = ", ".join(h.code for h in snapshot.holdings
+                               if h.weight is None and h.kind != "futures")
+            if len(sample) > 160:
+                sample = sample[:160] + "…"
+            warnings.append(f"{symbol}：{missing_weights} 列權重缺漏，"
+                            f"金額保留於未分類差額；未知不等於零（{sample}）")
         for holding in snapshot.holdings:
             if holding.kind == "futures":
                 exposure = holding.exposure_weight
@@ -188,8 +197,6 @@ def compute_lookthrough(
                     None if exposure is None else value * exposure)
                 continue
             if holding.weight is None:
-                warnings.append(f"{symbol}：{holding.code} 權重缺漏，"
-                                "金額保留於未分類差額")
                 continue
             amount = value * holding.weight
             if holding.kind == "derivative_nav":

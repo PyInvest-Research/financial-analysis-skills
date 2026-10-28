@@ -1,0 +1,2798 @@
+{
+  "code_version": "1.3.0",
+  "companies": [
+    {
+      "amount_twd": 384951.7099907112,
+      "industry_code": "24",
+      "issuer_code": "2330",
+      "name": "台積電",
+      "occurrences": 3,
+      "share": 0.3849517099907112,
+      "sources": [
+        {
+          "amount_twd": 170999.99999999997,
+          "security_code": "2330",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 113951.70999071124,
+          "security_code": "2330",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 100000.0,
+          "security_code": "2330",
+          "source": "direct"
+        }
+      ]
+    },
+    {
+      "amount_twd": 39315.17479571628,
+      "industry_code": "17",
+      "issuer_code": "2891",
+      "name": "中信金",
+      "occurrences": 5,
+      "share": 0.03931517479571628,
+      "sources": [
+        {
+          "amount_twd": 3900.0,
+          "security_code": "2891",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 6090.0,
+          "security_code": "2891",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2587.4747957162813,
+          "security_code": "2891",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 15615.0,
+          "security_code": "2891",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 11122.7,
+          "security_code": "2891",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 35152.38667210618,
+      "industry_code": "24",
+      "issuer_code": "2454",
+      "name": "聯發科",
+      "occurrences": 4,
+      "share": 0.03515238667210618,
+      "sources": [
+        {
+          "amount_twd": 17310.0,
+          "security_code": "2454",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1650.0,
+          "security_code": "2454",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 11527.386672106175,
+          "security_code": "2454",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 4665.0,
+          "security_code": "2454",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 32271.023761756594,
+      "industry_code": "25",
+      "issuer_code": "2382",
+      "name": "廣達",
+      "occurrences": 5,
+      "share": 0.03227102376175659,
+      "sources": [
+        {
+          "amount_twd": 2490.0,
+          "security_code": "2382",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 5100.0,
+          "security_code": "2382",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1661.823761756594,
+          "security_code": "2382",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 13035.0,
+          "security_code": "2382",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 9984.2,
+          "security_code": "2382",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 27618.63568394584,
+      "industry_code": "17",
+      "issuer_code": "2882",
+      "name": "國泰金",
+      "occurrences": 4,
+      "share": 0.02761863568394584,
+      "sources": [
+        {
+          "amount_twd": 3180.0,
+          "security_code": "2882",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 2113.7356839458375,
+          "security_code": "2882",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 9704.999999999998,
+          "security_code": "2882",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 12619.900000000001,
+          "security_code": "2882",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 26614.3832941097,
+      "industry_code": "17",
+      "issuer_code": "2881",
+      "name": "富邦金",
+      "occurrences": 4,
+      "share": 0.0266143832941097,
+      "sources": [
+        {
+          "amount_twd": 3870.0,
+          "security_code": "2881",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 2581.483294109698,
+          "security_code": "2881",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 4770.0,
+          "security_code": "2881",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 15392.900000000001,
+          "security_code": "2881",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 23430.73712561525,
+      "industry_code": "25",
+      "issuer_code": "2357",
+      "name": "華碩",
+      "occurrences": 5,
+      "share": 0.02343073712561525,
+      "sources": [
+        {
+          "amount_twd": 1860.0,
+          "security_code": "2357",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 6105.0,
+          "security_code": "2357",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1246.7371256152494,
+          "security_code": "2357",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 8415.0,
+          "security_code": "2357",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 5804.0,
+          "security_code": "2357",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 23042.17392961597,
+      "industry_code": "17",
+      "issuer_code": "2887",
+      "name": "台新新光金",
+      "occurrences": 5,
+      "share": 0.02304217392961597,
+      "sources": [
+        {
+          "amount_twd": 2879.9999999999995,
+          "security_code": "2887",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3975.0,
+          "security_code": "2887",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1926.5739296159677,
+          "security_code": "2887",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 5730.0,
+          "security_code": "2887",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 8530.6,
+          "security_code": "2887",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 21600.291951216135,
+      "industry_code": "03",
+      "issuer_code": "1303",
+      "name": "南亞",
+      "occurrences": 3,
+      "share": 0.021600291951216134,
+      "sources": [
+        {
+          "amount_twd": 4350.0,
+          "security_code": "1303",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 14354.999999999998,
+          "security_code": "1303",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2895.2919512161375,
+          "security_code": "1303",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 17676.803267685842,
+      "industry_code": "31",
+      "issuer_code": "2317",
+      "name": "鴻海",
+      "occurrences": 3,
+      "share": 0.017676803267685844,
+      "sources": [
+        {
+          "amount_twd": 8760.0,
+          "security_code": "2317",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3075.0,
+          "security_code": "2317",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 5841.803267685844,
+          "security_code": "2317",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 17056.26811231572,
+      "industry_code": "15",
+      "issuer_code": "2603",
+      "name": "長榮",
+      "occurrences": 5,
+      "share": 0.01705626811231572,
+      "sources": [
+        {
+          "amount_twd": 840.0,
+          "security_code": "2603",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 4755.0,
+          "security_code": "2603",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 551.4681123157209,
+          "security_code": "2603",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 6600.0,
+          "security_code": "2603",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 4309.8,
+          "security_code": "2603",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 16477.05727469574,
+      "industry_code": "24",
+      "issuer_code": "3711",
+      "name": "日月光投控",
+      "occurrences": 4,
+      "share": 0.01647705727469574,
+      "sources": [
+        {
+          "amount_twd": 6360.0,
+          "security_code": "3711",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1950.0,
+          "security_code": "3711",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 4237.0572746957405,
+          "security_code": "3711",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3930.0,
+          "security_code": "3711",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 15068.555830174433,
+      "industry_code": "24",
+      "issuer_code": "2303",
+      "name": "聯電",
+      "occurrences": 4,
+      "share": 0.015068555830174434,
+      "sources": [
+        {
+          "amount_twd": 4290.0,
+          "security_code": "2303",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 2550.0,
+          "security_code": "2303",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2858.5558301744327,
+          "security_code": "2303",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 5370.0,
+          "security_code": "2303",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 14701.965246868705,
+      "industry_code": "28",
+      "issuer_code": "2308",
+      "name": "台達電",
+      "occurrences": 2,
+      "share": 0.014701965246868705,
+      "sources": [
+        {
+          "amount_twd": 8820.0,
+          "security_code": "2308",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 5881.9652468687045,
+          "security_code": "2308",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 13976.987157862435,
+      "industry_code": "17",
+      "issuer_code": "2880",
+      "name": "華南金",
+      "occurrences": 4,
+      "share": 0.013976987157862435,
+      "sources": [
+        {
+          "amount_twd": 1380.0,
+          "security_code": "2880",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 6600.0,
+          "security_code": "2880",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 911.9871578624346,
+          "security_code": "2880",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 5085.0,
+          "security_code": "2880",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 13169.002732250872,
+      "industry_code": "17",
+      "issuer_code": "2886",
+      "name": "兆豐金",
+      "occurrences": 4,
+      "share": 0.013169002732250872,
+      "sources": [
+        {
+          "amount_twd": 1920.0,
+          "security_code": "2886",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 5579.999999999999,
+          "security_code": "2886",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1274.0027322508727,
+          "security_code": "2886",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 4395.0,
+          "security_code": "2886",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 12440.568259575031,
+      "industry_code": "17",
+      "issuer_code": "2883",
+      "name": "凱基金",
+      "occurrences": 4,
+      "share": 0.01244056825957503,
+      "sources": [
+        {
+          "amount_twd": 1739.9999999999998,
+          "security_code": "2883",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 4290.0,
+          "security_code": "2883",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1160.8682595750324,
+          "security_code": "2883",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 5249.7,
+          "security_code": "2883",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 11935.253974748051,
+      "industry_code": "25",
+      "issuer_code": "3231",
+      "name": "緯創",
+      "occurrences": 4,
+      "share": 0.011935253974748051,
+      "sources": [
+        {
+          "amount_twd": 1680.0,
+          "security_code": "3231",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 5520.0,
+          "security_code": "3231",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1120.2539747480505,
+          "security_code": "3231",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3615.0,
+          "security_code": "3231",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 11746.17993714677,
+      "industry_code": "17",
+      "issuer_code": "2885",
+      "name": "元大金",
+      "occurrences": 4,
+      "share": 0.011746179937146769,
+      "sources": [
+        {
+          "amount_twd": 2430.0,
+          "security_code": "2885",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3885.0,
+          "security_code": "2885",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1621.1799371467691,
+          "security_code": "2885",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3810.0,
+          "security_code": "2885",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 11231.9,
+      "industry_code": "24",
+      "issuer_code": "2379",
+      "name": "瑞昱",
+      "occurrences": 3,
+      "share": 0.0112319,
+      "sources": [
+        {
+          "amount_twd": 3435.0,
+          "security_code": "2379",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 4830.0,
+          "security_code": "2379",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 2966.9,
+          "security_code": "2379",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 10646.9,
+      "industry_code": "24",
+      "issuer_code": "3034",
+      "name": "聯詠",
+      "occurrences": 3,
+      "share": 0.010646899999999999,
+      "sources": [
+        {
+          "amount_twd": 3015.0,
+          "security_code": "3034",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 4260.0,
+          "security_code": "3034",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 3371.9,
+          "security_code": "3034",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 9540.797114611629,
+      "industry_code": "25",
+      "issuer_code": "2301",
+      "name": "光寶科",
+      "occurrences": 4,
+      "share": 0.00954079711461163,
+      "sources": [
+        {
+          "amount_twd": 1470.0,
+          "security_code": "2301",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3375.0,
+          "security_code": "2301",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 975.7971146116297,
+          "security_code": "2301",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3720.0,
+          "security_code": "2301",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 9401.575789570728,
+      "industry_code": "17",
+      "issuer_code": "2890",
+      "name": "永豐金",
+      "occurrences": 3,
+      "share": 0.009401575789570729,
+      "sources": [
+        {
+          "amount_twd": 1800.0,
+          "security_code": "2890",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 6375.000000000001,
+          "security_code": "2890",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1226.575789570727,
+          "security_code": "2890",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 9213.07388853378,
+      "industry_code": "02",
+      "issuer_code": "1216",
+      "name": "統一",
+      "occurrences": 4,
+      "share": 0.00921307388853378,
+      "sources": [
+        {
+          "amount_twd": 1170.0,
+          "security_code": "1216",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3750.0,
+          "security_code": "1216",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 768.0738885337798,
+          "security_code": "1216",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3525.0,
+          "security_code": "1216",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 8302.009147197687,
+      "industry_code": "27",
+      "issuer_code": "3045",
+      "name": "台灣大",
+      "occurrences": 4,
+      "share": 0.008302009147197687,
+      "sources": [
+        {
+          "amount_twd": 540.0,
+          "security_code": "3045",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3450.0,
+          "security_code": "3045",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 367.0091471976864,
+          "security_code": "3045",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3945.0,
+          "security_code": "3045",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 8228.333674475121,
+      "industry_code": "27",
+      "issuer_code": "4904",
+      "name": "遠傳",
+      "occurrences": 4,
+      "share": 0.00822833367447512,
+      "sources": [
+        {
+          "amount_twd": 600.0,
+          "security_code": "4904",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 3465.0,
+          "security_code": "4904",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 398.3336744751206,
+          "security_code": "4904",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3765.0,
+          "security_code": "4904",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 8032.627335409131,
+      "industry_code": "17",
+      "issuer_code": "2884",
+      "name": "玉山金",
+      "occurrences": 3,
+      "share": 0.008032627335409132,
+      "sources": [
+        {
+          "amount_twd": 2340.0,
+          "security_code": "2884",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 4140.0,
+          "security_code": "2884",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1552.627335409131,
+          "security_code": "2884",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 7762.695443511886,
+      "industry_code": "24",
+      "issuer_code": "2408",
+      "name": "南亞科",
+      "occurrences": 3,
+      "share": 0.007762695443511886,
+      "sources": [
+        {
+          "amount_twd": 1560.0,
+          "security_code": "2408",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 5160.0,
+          "security_code": "2408",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1042.6954435118864,
+          "security_code": "2408",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 7248.2849651421,
+      "industry_code": "24",
+      "issuer_code": "2344",
+      "name": "華邦電",
+      "occurrences": 3,
+      "share": 0.007248284965142101,
+      "sources": [
+        {
+          "amount_twd": 1410.0,
+          "security_code": "2344",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 4905.0,
+          "security_code": "2344",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 933.2849651421006,
+          "security_code": "2344",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 7197.232341712332,
+      "industry_code": "28",
+      "issuer_code": "2383",
+      "name": "台光電",
+      "occurrences": 2,
+      "share": 0.007197232341712332,
+      "sources": [
+        {
+          "amount_twd": 4320.0,
+          "security_code": "2383",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 2877.232341712331,
+          "security_code": "2383",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 6994.763328354304,
+      "industry_code": "28",
+      "issuer_code": "3037",
+      "name": "欣興",
+      "occurrences": 2,
+      "share": 0.006994763328354304,
+      "sources": [
+        {
+          "amount_twd": 4200.0,
+          "security_code": "3037",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 2794.763328354303,
+          "security_code": "3037",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 6502.111318350475,
+      "industry_code": "27",
+      "issuer_code": "2412",
+      "name": "中華電",
+      "occurrences": 3,
+      "share": 0.006502111318350475,
+      "sources": [
+        {
+          "amount_twd": 1770.0,
+          "security_code": "2412",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1177.1113183504744,
+          "security_code": "2412",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3555.0,
+          "security_code": "2412",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 6229.0,
+      "industry_code": "15",
+      "issuer_code": "2618",
+      "name": "長榮航",
+      "occurrences": 3,
+      "share": 0.006229,
+      "sources": [
+        {
+          "amount_twd": 1920.0,
+          "security_code": "2618",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2595.0,
+          "security_code": "2618",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 1714.0,
+          "security_code": "2618",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 5959.410949442318,
+      "industry_code": "28",
+      "issuer_code": "4958",
+      "name": "臻鼎-KY",
+      "occurrences": 3,
+      "share": 0.005959410949442318,
+      "sources": [
+        {
+          "amount_twd": 1320.0,
+          "security_code": "4958",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 874.4109494423185,
+          "security_code": "4958",
+          "source": "006208"
+        },
+        {
+          "amount_twd": 3765.0,
+          "security_code": "4958",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 5310.0,
+      "industry_code": "17",
+      "issuer_code": "5876",
+      "name": "上海商銀",
+      "occurrences": 2,
+      "share": 0.00531,
+      "sources": [
+        {
+          "amount_twd": 2190.0,
+          "security_code": "5876",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 3120.0,
+          "security_code": "5876",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 4904.782630850913,
+      "industry_code": "25",
+      "issuer_code": "3017",
+      "name": "奇鋐",
+      "occurrences": 2,
+      "share": 0.004904782630850913,
+      "sources": [
+        {
+          "amount_twd": 2940.0,
+          "security_code": "3017",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1964.7826308509127,
+          "security_code": "3017",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 4800.0,
+      "industry_code": "25",
+      "issuer_code": "2376",
+      "name": "技嘉",
+      "occurrences": 2,
+      "share": 0.0048,
+      "sources": [
+        {
+          "amount_twd": 1995.0,
+          "security_code": "2376",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2805.0,
+          "security_code": "2376",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 4667.7,
+      "industry_code": "25",
+      "issuer_code": "4938",
+      "name": "和碩",
+      "occurrences": 2,
+      "share": 0.0046676999999999995,
+      "sources": [
+        {
+          "amount_twd": 2340.0,
+          "security_code": "4938",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2327.7,
+          "security_code": "4938",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 4350.0,
+      "industry_code": "25",
+      "issuer_code": "2356",
+      "name": "英業達",
+      "occurrences": 2,
+      "share": 0.00435,
+      "sources": [
+        {
+          "amount_twd": 1755.0,
+          "security_code": "2356",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 2595.0,
+          "security_code": "2356",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 4296.855708772824,
+      "industry_code": "27",
+      "issuer_code": "2345",
+      "name": "智邦",
+      "occurrences": 2,
+      "share": 0.004296855708772824,
+      "sources": [
+        {
+          "amount_twd": 2580.0,
+          "security_code": "2345",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1716.8557087728238,
+          "security_code": "2345",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 3899.0497187156393,
+      "industry_code": "28",
+      "issuer_code": "2327",
+      "name": "國巨*",
+      "occurrences": 2,
+      "share": 0.0038990497187156394,
+      "sources": [
+        {
+          "amount_twd": 2340.0,
+          "security_code": "2327",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1559.0497187156393,
+          "security_code": "2327",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 3615.0,
+      "industry_code": "24",
+      "issuer_code": "5347",
+      "name": "世界",
+      "occurrences": 1,
+      "share": 0.003615,
+      "sources": [
+        {
+          "amount_twd": 3615.0,
+          "security_code": "5347",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 3554.6776537655905,
+      "industry_code": "31",
+      "issuer_code": "2360",
+      "name": "致茂",
+      "occurrences": 2,
+      "share": 0.0035546776537655907,
+      "sources": [
+        {
+          "amount_twd": 2130.0,
+          "security_code": "2360",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1424.6776537655903,
+          "security_code": "2360",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 3486.5,
+      "industry_code": "20",
+      "issuer_code": "5871",
+      "name": "中租-KY",
+      "occurrences": 2,
+      "share": 0.0034865,
+      "sources": [
+        {
+          "amount_twd": 2145.0,
+          "security_code": "5871",
+          "source": "00878"
+        },
+        {
+          "amount_twd": 1341.5,
+          "security_code": "5871",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 3030.2055600745825,
+      "industry_code": "24",
+      "issuer_code": "2449",
+      "name": "京元電子",
+      "occurrences": 3,
+      "share": 0.0030302055600745824,
+      "sources": [
+        {
+          "amount_twd": 869.9999999999999,
+          "security_code": "2449",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1575.0,
+          "security_code": "2449",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 585.2055600745828,
+          "security_code": "2449",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2989.618903475713,
+      "industry_code": "24",
+      "issuer_code": "3443",
+      "name": "創意",
+      "occurrences": 2,
+      "share": 0.002989618903475713,
+      "sources": [
+        {
+          "amount_twd": 1800.0,
+          "security_code": "3443",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1189.618903475713,
+          "security_code": "3443",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2841.6017756437086,
+      "industry_code": "26",
+      "issuer_code": "3008",
+      "name": "大立光",
+      "occurrences": 2,
+      "share": 0.0028416017756437086,
+      "sources": [
+        {
+          "amount_twd": 1710.0,
+          "security_code": "3008",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1131.6017756437088,
+          "security_code": "3008",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2793.402192060643,
+      "industry_code": "25",
+      "issuer_code": "6669",
+      "name": "緯穎",
+      "occurrences": 2,
+      "share": 0.002793402192060643,
+      "sources": [
+        {
+          "amount_twd": 1680.0,
+          "security_code": "6669",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1113.4021920606426,
+          "security_code": "6669",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2715.0,
+      "industry_code": "18",
+      "issuer_code": "2912",
+      "name": "統一超",
+      "occurrences": 1,
+      "share": 0.002715,
+      "sources": [
+        {
+          "amount_twd": 2715.0,
+          "security_code": "2912",
+          "source": "00878"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2638.3835642615895,
+      "industry_code": "28",
+      "issuer_code": "2059",
+      "name": "川湖",
+      "occurrences": 2,
+      "share": 0.0026383835642615895,
+      "sources": [
+        {
+          "amount_twd": 1590.0,
+          "security_code": "2059",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1048.3835642615898,
+          "security_code": "2059",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2591.5638523673056,
+      "industry_code": "28",
+      "issuer_code": "3653",
+      "name": "健策",
+      "occurrences": 2,
+      "share": 0.0025915638523673055,
+      "sources": [
+        {
+          "amount_twd": 1560.0,
+          "security_code": "3653",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 1031.5638523673056,
+          "security_code": "3653",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2490.0,
+      "industry_code": "28",
+      "issuer_code": "3044",
+      "name": "健鼎",
+      "occurrences": 1,
+      "share": 0.00249,
+      "sources": [
+        {
+          "amount_twd": 2490.0,
+          "security_code": "3044",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2478.8999999999996,
+      "industry_code": "29",
+      "issuer_code": "2347",
+      "name": "聯強",
+      "occurrences": 2,
+      "share": 0.0024788999999999996,
+      "sources": [
+        {
+          "amount_twd": 1439.9999999999998,
+          "security_code": "2347",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 1038.9,
+          "security_code": "2347",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2325.0,
+      "industry_code": "29",
+      "issuer_code": "3036",
+      "name": "文曄",
+      "occurrences": 1,
+      "share": 0.002325,
+      "sources": [
+        {
+          "amount_twd": 2325.0,
+          "security_code": "3036",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 2306.206096247841,
+      "industry_code": "17",
+      "issuer_code": "2892",
+      "name": "第一金",
+      "occurrences": 2,
+      "share": 0.0023062060962478407,
+      "sources": [
+        {
+          "amount_twd": 1380.0,
+          "security_code": "2892",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 926.2060962478408,
+          "security_code": "2892",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1897.9530117888276,
+      "industry_code": "28",
+      "issuer_code": "2368",
+      "name": "金像電",
+      "occurrences": 2,
+      "share": 0.0018979530117888275,
+      "sources": [
+        {
+          "amount_twd": 1140.0,
+          "security_code": "2368",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 757.9530117888274,
+          "security_code": "2368",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1789.9928047302678,
+      "industry_code": "22",
+      "issuer_code": "6446",
+      "name": "藥華藥",
+      "occurrences": 2,
+      "share": 0.001789992804730268,
+      "sources": [
+        {
+          "amount_twd": 1080.0,
+          "security_code": "6446",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 709.9928047302677,
+          "security_code": "6446",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1723.5,
+      "industry_code": "31",
+      "issuer_code": "2474",
+      "name": "可成",
+      "occurrences": 2,
+      "share": 0.0017235,
+      "sources": [
+        {
+          "amount_twd": 915.0000000000001,
+          "security_code": "2474",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 808.5,
+          "security_code": "2474",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1644.4943086136334,
+      "industry_code": "31",
+      "issuer_code": "3665",
+      "name": "貿聯-KY",
+      "occurrences": 2,
+      "share": 0.0016444943086136334,
+      "sources": [
+        {
+          "amount_twd": 990.0,
+          "security_code": "3665",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 654.4943086136334,
+          "security_code": "3665",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1575.0,
+      "industry_code": "29",
+      "issuer_code": "3702",
+      "name": "大聯大",
+      "occurrences": 1,
+      "share": 0.001575,
+      "sources": [
+        {
+          "amount_twd": 1575.0,
+          "security_code": "3702",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1560.0,
+      "industry_code": "24",
+      "issuer_code": "6239",
+      "name": "力成",
+      "occurrences": 1,
+      "share": 0.00156,
+      "sources": [
+        {
+          "amount_twd": 1560.0,
+          "security_code": "6239",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1557.8,
+      "industry_code": "32",
+      "issuer_code": "3293",
+      "name": "鈊象",
+      "occurrences": 1,
+      "share": 0.0015578,
+      "sources": [
+        {
+          "amount_twd": 1557.8,
+          "security_code": "3293",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1548.9653977096677,
+      "industry_code": "28",
+      "issuer_code": "8046",
+      "name": "南電",
+      "occurrences": 2,
+      "share": 0.0015489653977096677,
+      "sources": [
+        {
+          "amount_twd": 930.0,
+          "security_code": "8046",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 618.9653977096676,
+          "security_code": "8046",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1503.1332257101508,
+      "industry_code": "25",
+      "issuer_code": "2395",
+      "name": "研華",
+      "occurrences": 2,
+      "share": 0.0015031332257101507,
+      "sources": [
+        {
+          "amount_twd": 900.0,
+          "security_code": "2395",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 603.1332257101507,
+          "security_code": "2395",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1490.8671253388968,
+      "industry_code": "17",
+      "issuer_code": "5880",
+      "name": "合庫金",
+      "occurrences": 2,
+      "share": 0.001490867125338897,
+      "sources": [
+        {
+          "amount_twd": 900.0,
+          "security_code": "5880",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 590.8671253388968,
+          "security_code": "5880",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1481.3,
+      "industry_code": "11",
+      "issuer_code": "2105",
+      "name": "正新",
+      "occurrences": 2,
+      "share": 0.0014812999999999998,
+      "sources": [
+        {
+          "amount_twd": 869.9999999999999,
+          "security_code": "2105",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 611.3000000000001,
+          "security_code": "2105",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1455.3478177027796,
+      "industry_code": "24",
+      "issuer_code": "7769",
+      "name": "鴻勁",
+      "occurrences": 2,
+      "share": 0.0014553478177027797,
+      "sources": [
+        {
+          "amount_twd": 869.9999999999999,
+          "security_code": "7769",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 585.3478177027796,
+          "security_code": "7769",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1380.0,
+      "industry_code": "25",
+      "issuer_code": "2324",
+      "name": "仁寶",
+      "occurrences": 1,
+      "share": 0.00138,
+      "sources": [
+        {
+          "amount_twd": 1380.0,
+          "security_code": "2324",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1184.5,
+      "industry_code": "28",
+      "issuer_code": "2385",
+      "name": "群光",
+      "occurrences": 2,
+      "share": 0.0011845,
+      "sources": [
+        {
+          "amount_twd": 600.0,
+          "security_code": "2385",
+          "source": "0056"
+        },
+        {
+          "amount_twd": 584.5,
+          "security_code": "2385",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1170.0,
+      "industry_code": "25",
+      "issuer_code": "2377",
+      "name": "微星",
+      "occurrences": 1,
+      "share": 0.00117,
+      "sources": [
+        {
+          "amount_twd": 1170.0,
+          "security_code": "2377",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1050.0,
+      "industry_code": "01",
+      "issuer_code": "1102",
+      "name": "亞泥",
+      "occurrences": 1,
+      "share": 0.00105,
+      "sources": [
+        {
+          "amount_twd": 1050.0,
+          "security_code": "1102",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 1005.0,
+      "industry_code": "10",
+      "issuer_code": "2027",
+      "name": "大成鋼",
+      "occurrences": 1,
+      "share": 0.001005,
+      "sources": [
+        {
+          "amount_twd": 1005.0,
+          "security_code": "2027",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 968.4,
+      "industry_code": "04",
+      "issuer_code": "1402",
+      "name": "遠東新",
+      "occurrences": 1,
+      "share": 0.0009684,
+      "sources": [
+        {
+          "amount_twd": 968.4,
+          "security_code": "1402",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 945.0,
+      "industry_code": "27",
+      "issuer_code": "6285",
+      "name": "啟碁",
+      "occurrences": 1,
+      "share": 0.000945,
+      "sources": [
+        {
+          "amount_twd": 945.0,
+          "security_code": "6285",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 925.1999999999999,
+      "industry_code": "17",
+      "issuer_code": "2855",
+      "name": "統一證",
+      "occurrences": 1,
+      "share": 0.0009251999999999999,
+      "sources": [
+        {
+          "amount_twd": 925.1999999999999,
+          "security_code": "2855",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 825.0,
+      "industry_code": "25",
+      "issuer_code": "2353",
+      "name": "宏碁",
+      "occurrences": 1,
+      "share": 0.000825,
+      "sources": [
+        {
+          "amount_twd": 825.0,
+          "security_code": "2353",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 697.8,
+      "industry_code": "14",
+      "issuer_code": "5522",
+      "name": "遠雄",
+      "occurrences": 1,
+      "share": 0.0006977999999999999,
+      "sources": [
+        {
+          "amount_twd": 697.8,
+          "security_code": "5522",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 675.0,
+      "industry_code": "05",
+      "issuer_code": "1513",
+      "name": "中興電",
+      "occurrences": 1,
+      "share": 0.000675,
+      "sources": [
+        {
+          "amount_twd": 675.0,
+          "security_code": "1513",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 675.0,
+      "industry_code": "25",
+      "issuer_code": "3005",
+      "name": "神基",
+      "occurrences": 1,
+      "share": 0.000675,
+      "sources": [
+        {
+          "amount_twd": 675.0,
+          "security_code": "3005",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 601.5999999999999,
+      "industry_code": "14",
+      "issuer_code": "2504",
+      "name": "國產",
+      "occurrences": 1,
+      "share": 0.0006015999999999999,
+      "sources": [
+        {
+          "amount_twd": 601.5999999999999,
+          "security_code": "2504",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 600.0,
+      "industry_code": "28",
+      "issuer_code": "3023",
+      "name": "信邦",
+      "occurrences": 1,
+      "share": 0.0006,
+      "sources": [
+        {
+          "amount_twd": 600.0,
+          "security_code": "3023",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 598.601208790143,
+      "industry_code": "23",
+      "issuer_code": "6505",
+      "name": "台塑化",
+      "occurrences": 2,
+      "share": 0.000598601208790143,
+      "sources": [
+        {
+          "amount_twd": 359.99999999999994,
+          "security_code": "6505",
+          "source": "0050"
+        },
+        {
+          "amount_twd": 238.60120879014303,
+          "security_code": "6505",
+          "source": "006208"
+        }
+      ]
+    },
+    {
+      "amount_twd": 562.6,
+      "industry_code": "15",
+      "issuer_code": "2637",
+      "name": "慧洋-KY",
+      "occurrences": 1,
+      "share": 0.0005626,
+      "sources": [
+        {
+          "amount_twd": 562.6,
+          "security_code": "2637",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 525.0,
+      "industry_code": "37",
+      "issuer_code": "9904",
+      "name": "寶成",
+      "occurrences": 1,
+      "share": 0.000525,
+      "sources": [
+        {
+          "amount_twd": 525.0,
+          "security_code": "9904",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 514.1,
+      "industry_code": "14",
+      "issuer_code": "2542",
+      "name": "興富發",
+      "occurrences": 1,
+      "share": 0.0005141,
+      "sources": [
+        {
+          "amount_twd": 514.1,
+          "security_code": "2542",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 495.5,
+      "industry_code": "36",
+      "issuer_code": "8454",
+      "name": "富邦媒",
+      "occurrences": 1,
+      "share": 0.0004955,
+      "sources": [
+        {
+          "amount_twd": 495.5,
+          "security_code": "8454",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 494.8,
+      "industry_code": "25",
+      "issuer_code": "6121",
+      "name": "新普",
+      "occurrences": 1,
+      "share": 0.0004948,
+      "sources": [
+        {
+          "amount_twd": 494.8,
+          "security_code": "6121",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 479.99999999999994,
+      "industry_code": "04",
+      "issuer_code": "1477",
+      "name": "聚陽",
+      "occurrences": 1,
+      "share": 0.00047999999999999996,
+      "sources": [
+        {
+          "amount_twd": 479.99999999999994,
+          "security_code": "1477",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 468.1,
+      "industry_code": "15",
+      "issuer_code": "2606",
+      "name": "裕民",
+      "occurrences": 1,
+      "share": 0.00046810000000000005,
+      "sources": [
+        {
+          "amount_twd": 468.1,
+          "security_code": "2606",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 420.0,
+      "industry_code": "15",
+      "issuer_code": "2645",
+      "name": "長榮航太",
+      "occurrences": 1,
+      "share": 0.00042,
+      "sources": [
+        {
+          "amount_twd": 420.0,
+          "security_code": "2645",
+          "source": "0056"
+        }
+      ]
+    },
+    {
+      "amount_twd": 399.9,
+      "industry_code": "29",
+      "issuer_code": "8112",
+      "name": "至上",
+      "occurrences": 1,
+      "share": 0.00039989999999999996,
+      "sources": [
+        {
+          "amount_twd": 399.9,
+          "security_code": "8112",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 399.6,
+      "industry_code": "37",
+      "issuer_code": "9910",
+      "name": "豐泰",
+      "occurrences": 1,
+      "share": 0.0003996,
+      "sources": [
+        {
+          "amount_twd": 399.6,
+          "security_code": "9910",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 388.3,
+      "industry_code": "14",
+      "issuer_code": "2597",
+      "name": "潤弘",
+      "occurrences": 1,
+      "share": 0.0003883,
+      "sources": [
+        {
+          "amount_twd": 388.3,
+          "security_code": "2597",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 383.5,
+      "industry_code": "20",
+      "issuer_code": "9941",
+      "name": "裕融",
+      "occurrences": 1,
+      "share": 0.0003835,
+      "sources": [
+        {
+          "amount_twd": 383.5,
+          "security_code": "9941",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 366.7,
+      "industry_code": "12",
+      "issuer_code": "1319",
+      "name": "東陽",
+      "occurrences": 1,
+      "share": 0.00036669999999999997,
+      "sources": [
+        {
+          "amount_twd": 366.7,
+          "security_code": "1319",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 349.3,
+      "industry_code": "37",
+      "issuer_code": "6670",
+      "name": "復盛應用",
+      "occurrences": 1,
+      "share": 0.00034930000000000003,
+      "sources": [
+        {
+          "amount_twd": 349.3,
+          "security_code": "6670",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 339.5,
+      "industry_code": "02",
+      "issuer_code": "1210",
+      "name": "大成",
+      "occurrences": 1,
+      "share": 0.0003395,
+      "sources": [
+        {
+          "amount_twd": 339.5,
+          "security_code": "1210",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 327.5,
+      "industry_code": "24",
+      "issuer_code": "2458",
+      "name": "義隆",
+      "occurrences": 1,
+      "share": 0.0003275,
+      "sources": [
+        {
+          "amount_twd": 327.5,
+          "security_code": "2458",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 311.20000000000005,
+      "industry_code": "37",
+      "issuer_code": "6890",
+      "name": "來億-KY",
+      "occurrences": 1,
+      "share": 0.00031120000000000003,
+      "sources": [
+        {
+          "amount_twd": 311.20000000000005,
+          "security_code": "6890",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 302.3,
+      "industry_code": "21",
+      "issuer_code": "4763",
+      "name": "材料*-KY",
+      "occurrences": 1,
+      "share": 0.00030230000000000003,
+      "sources": [
+        {
+          "amount_twd": 302.3,
+          "security_code": "4763",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 293.2,
+      "industry_code": "28",
+      "issuer_code": "4915",
+      "name": "致伸",
+      "occurrences": 1,
+      "share": 0.00029319999999999997,
+      "sources": [
+        {
+          "amount_twd": 293.2,
+          "security_code": "4915",
+          "source": "00919"
+        }
+      ]
+    },
+    {
+      "amount_twd": 262.0,
+      "industry_code": "10",
+      "issuer_code": "2211",
+      "name": "長榮鋼",
+      "occurrences": 1,
+      "share": 0.000262,
+      "sources": [
+        {
+          "amount_twd": 262.0,
+          "security_code": "2211",
+          "source": "00919"
+        }
+      ]
+    }
+  ],
+  "currency": "TWD",
+  "generated_at": "2026-10-28T05:27:34.291529+00:00",
+  "industries": [
+    {
+      "amount_twd": 501517.1624575946,
+      "industry_code": "24",
+      "industry_name": "半導體業",
+      "share": 0.5015171624575946
+    },
+    {
+      "amount_twd": 195389.58213678948,
+      "industry_code": "17",
+      "industry_name": "金融保險",
+      "share": 0.19538958213678947
+    },
+    {
+      "amount_twd": 104741.63002535324,
+      "industry_code": "25",
+      "industry_name": "電腦及週邊設備業",
+      "share": 0.10474163002535324
+    },
+    {
+      "amount_twd": 51996.98741122069,
+      "industry_code": "28",
+      "industry_name": "電子零組件業",
+      "share": 0.05199698741122069
+    },
+    {
+      "amount_twd": 28274.309848796107,
+      "industry_code": "27",
+      "industry_name": "通信網路業",
+      "share": 0.028274309848796107
+    },
+    {
+      "amount_twd": 24735.96811231572,
+      "industry_code": "15",
+      "industry_name": "航運業",
+      "share": 0.02473596811231572
+    },
+    {
+      "amount_twd": 24599.475230065065,
+      "industry_code": "31",
+      "industry_name": "其他電子",
+      "share": 0.024599475230065067
+    },
+    {
+      "amount_twd": 21600.291951216135,
+      "industry_code": "03",
+      "industry_name": "塑膠工業",
+      "share": 0.021600291951216134
+    },
+    {
+      "amount_twd": 9552.57388853378,
+      "industry_code": "02",
+      "industry_name": "食品工業",
+      "share": 0.00955257388853378
+    },
+    {
+      "amount_twd": 6778.799999999999,
+      "industry_code": "29",
+      "industry_name": "電子通路業",
+      "share": 0.006778799999999999
+    },
+    {
+      "amount_twd": 3870.0,
+      "industry_code": "20",
+      "industry_name": "其他",
+      "share": 0.00387
+    },
+    {
+      "amount_twd": 2841.6017756437086,
+      "industry_code": "26",
+      "industry_name": "光電業",
+      "share": 0.0028416017756437086
+    },
+    {
+      "amount_twd": 2715.0,
+      "industry_code": "18",
+      "industry_name": "貿易百貨",
+      "share": 0.002715
+    },
+    {
+      "amount_twd": 2201.7999999999997,
+      "industry_code": "14",
+      "industry_name": "建材營造",
+      "share": 0.0022018
+    },
+    {
+      "amount_twd": 1789.9928047302678,
+      "industry_code": "22",
+      "industry_name": "生技醫療業",
+      "share": 0.001789992804730268
+    },
+    {
+      "amount_twd": 1585.1000000000001,
+      "industry_code": "37",
+      "industry_name": "運動休閒",
+      "share": 0.0015851
+    },
+    {
+      "amount_twd": 1557.8,
+      "industry_code": "32",
+      "industry_name": "文化創意業",
+      "share": 0.0015578
+    },
+    {
+      "amount_twd": 1481.3,
+      "industry_code": "11",
+      "industry_name": "橡膠工業",
+      "share": 0.0014812999999999998
+    },
+    {
+      "amount_twd": 1448.3999999999999,
+      "industry_code": "04",
+      "industry_name": "紡織纖維",
+      "share": 0.0014483999999999999
+    },
+    {
+      "amount_twd": 1267.0,
+      "industry_code": "10",
+      "industry_name": "鋼鐵工業",
+      "share": 0.001267
+    },
+    {
+      "amount_twd": 1050.0,
+      "industry_code": "01",
+      "industry_name": "水泥工業",
+      "share": 0.00105
+    },
+    {
+      "amount_twd": 675.0,
+      "industry_code": "05",
+      "industry_name": "電機機械",
+      "share": 0.000675
+    },
+    {
+      "amount_twd": 598.601208790143,
+      "industry_code": "23",
+      "industry_name": "油電燃氣業",
+      "share": 0.000598601208790143
+    },
+    {
+      "amount_twd": 495.5,
+      "industry_code": "36",
+      "industry_name": "數位雲端",
+      "share": 0.0004955
+    },
+    {
+      "amount_twd": 366.7,
+      "industry_code": "12",
+      "industry_name": "汽車工業",
+      "share": 0.00036669999999999997
+    },
+    {
+      "amount_twd": 302.3,
+      "industry_code": "21",
+      "industry_name": "化學工業",
+      "share": 0.00030230000000000003
+    }
+  ],
+  "input_sha256": "f09eca81c01ee98b6d2b25d1f1447f39d97faf855cfa518ae3c7f645e7b602fb",
+  "limitations": [
+    "持股重疊不等於報酬相關，也不能單憑重疊判定分散失效。",
+    "有效持股數只衡量已辨識股票曝險的權重集中度，不是風險或相關性指標。",
+    "曝險為依揭露持股權重估計的配置，不是即時或精確的底層資產金額。",
+    "主動式：持股可能每日大幅變動，結果僅代表該持股日。",
+    "期貨部位會額外帶來市場（含成分股）曝險，本版未拆解至個股。",
+    "本報告為資料整理與計算，不構成投資建議。"
+  ],
+  "metrics": {
+    "effective_holdings": 6.226629840147553,
+    "overlaps": [
+      {
+        "share": 0.1829,
+        "symbol_a": "0050",
+        "symbol_b": "0056"
+      },
+      {
+        "share": 0.9965082734464746,
+        "symbol_a": "0050",
+        "symbol_b": "006208"
+      },
+      {
+        "share": 0.1776,
+        "symbol_a": "0050",
+        "symbol_b": "00878"
+      },
+      {
+        "share": 0.0692,
+        "symbol_a": "0050",
+        "symbol_b": "00919"
+      },
+      {
+        "share": 0.18282910243260095,
+        "symbol_a": "0056",
+        "symbol_b": "006208"
+      },
+      {
+        "share": 0.5147,
+        "symbol_a": "0056",
+        "symbol_b": "00878"
+      },
+      {
+        "share": 0.299,
+        "symbol_a": "0056",
+        "symbol_b": "00919"
+      },
+      {
+        "share": 0.1773653485128233,
+        "symbol_a": "006208",
+        "symbol_b": "00878"
+      },
+      {
+        "share": 0.06915082481325191,
+        "symbol_a": "006208",
+        "symbol_b": "00919"
+      },
+      {
+        "share": 0.513522,
+        "symbol_a": "00878",
+        "symbol_b": "00919"
+      }
+    ],
+    "top10_share": 0.631673320472479,
+    "top5_share": 0.5193089309042361
+  },
+  "positions": [
+    {
+      "date_status": "common",
+      "kind": "etf",
+      "market_value": 300000.0,
+      "reason": null,
+      "snapshot": {
+        "date_status": "common",
+        "fetched_at": "2026-10-25T17:31:44.456607+00:00",
+        "holdings_date": "2026-10-22",
+        "is_active": false,
+        "issuer": "yuanta",
+        "result_quality": "validated_dated",
+        "snapshot_sha256": "fe1fd550553ababc125a3d3820df30acbde2b0e3ed00500482243bb9b71e6374",
+        "source_kind": "agent_official",
+        "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0050%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0050",
+        "symbol": "0050",
+        "validation_status": "pass"
+      },
+      "status": "looked_through",
+      "symbol": "0050",
+      "validation": {
+        "checks": [
+          {
+            "detail": "Invalid numeric/NAV weights at rows: []",
+            "name": "weights_in_range",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock NAV weight total: 0.9976999999999999",
+            "name": "stock_weight_sum",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock rows: 50; NAV weight total: 0.9976999999999999",
+            "name": "not_top_n_only",
+            "status": "pass"
+          },
+          {
+            "detail": "Duplicate stock codes: []",
+            "name": "no_duplicate_security",
+            "status": "pass"
+          },
+          {
+            "detail": "Holdings calendar age in days: 6",
+            "name": "holdings_date_sane",
+            "status": "pass"
+          },
+          {
+            "detail": "Unresolved stock rows: 0; known NAV weight total: 0; invalid weights fail numeric checks separately",
+            "name": "resolvable_securities",
+            "status": "pass"
+          },
+          {
+            "detail": "Missing required fields: []",
+            "name": "required_fields",
+            "status": "pass"
+          },
+          {
+            "detail": "來源須為 HTTPS；官網身分由取得資料的 agent 核對",
+            "name": "source_https",
+            "status": "pass"
+          }
+        ],
+        "status": "pass"
+      }
+    },
+    {
+      "date_status": "common",
+      "kind": "etf",
+      "market_value": 200000.0,
+      "reason": null,
+      "snapshot": {
+        "date_status": "common",
+        "fetched_at": "2026-10-26T01:59:23.367326+00:00",
+        "holdings_date": "2026-10-22",
+        "is_active": false,
+        "issuer": "fubon",
+        "result_quality": "validated_dated",
+        "snapshot_sha256": "0aec1d8dc94f92b708f39f60628385428540e08a5e616c1e896c774248187532",
+        "source_kind": "official",
+        "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?lan=TW&stkId=006208",
+        "symbol": "006208",
+        "validation_status": "pass"
+      },
+      "status": "looked_through",
+      "symbol": "006208",
+      "validation": {
+        "checks": [
+          {
+            "detail": "Invalid numeric/NAV weights at rows: []",
+            "name": "weights_in_range",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock NAV weight total: 0.996949884255245",
+            "name": "stock_weight_sum",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock rows: 50; NAV weight total: 0.996949884255245",
+            "name": "not_top_n_only",
+            "status": "pass"
+          },
+          {
+            "detail": "Duplicate stock codes: []",
+            "name": "no_duplicate_security",
+            "status": "pass"
+          },
+          {
+            "detail": "Holdings calendar age in days: 6",
+            "name": "holdings_date_sane",
+            "status": "pass"
+          },
+          {
+            "detail": "Unresolved stock rows: 0; known NAV weight total: 0; invalid weights fail numeric checks separately",
+            "name": "resolvable_securities",
+            "status": "pass"
+          },
+          {
+            "detail": "Missing required fields: []",
+            "name": "required_fields",
+            "status": "pass"
+          },
+          {
+            "detail": "來源須為 HTTPS；官網身分由取得資料的 agent 核對",
+            "name": "source_https",
+            "status": "pass"
+          }
+        ],
+        "status": "pass"
+      }
+    },
+    {
+      "date_status": "common",
+      "kind": "etf",
+      "market_value": 150000.0,
+      "reason": null,
+      "snapshot": {
+        "date_status": "common",
+        "fetched_at": "2026-10-25T17:31:47.680916+00:00",
+        "holdings_date": "2026-10-22",
+        "is_active": false,
+        "issuer": "yuanta",
+        "result_quality": "qualified_estimate",
+        "snapshot_sha256": "e3e2ac3c239365f0353af8b63faa46defc07cc6b66d363b4528c01f14b4cdac6",
+        "source_kind": "agent_official",
+        "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0056%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0056",
+        "symbol": "0056",
+        "validation_status": "warn"
+      },
+      "status": "looked_through",
+      "symbol": "0056",
+      "validation": {
+        "checks": [
+          {
+            "detail": "Invalid numeric/NAV weights at rows: []",
+            "name": "weights_in_range",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock NAV weight total: 0.9958",
+            "name": "stock_weight_sum",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock rows: 50; NAV weight total: 0.9958",
+            "name": "not_top_n_only",
+            "status": "pass"
+          },
+          {
+            "detail": "Duplicate stock codes: []",
+            "name": "no_duplicate_security",
+            "status": "pass"
+          },
+          {
+            "detail": "Holdings calendar age in days: 6",
+            "name": "holdings_date_sane",
+            "status": "pass"
+          },
+          {
+            "detail": "Unresolved stock rows: 0; known NAV weight total: 0; invalid weights fail numeric checks separately",
+            "name": "resolvable_securities",
+            "status": "pass"
+          },
+          {
+            "detail": "Missing required fields: []",
+            "name": "required_fields",
+            "status": "pass"
+          },
+          {
+            "detail": "來源須為 HTTPS；官網身分由取得資料的 agent 核對",
+            "name": "source_https",
+            "status": "pass"
+          },
+          {
+            "detail": "官方 FundWeights.Summary.fundsize 與 PCF.totalav 曾有差異；沿用官方公布權重暫估，不任選分母或重新放大。",
+            "name": "NAV_denominator_qualification",
+            "status": "warn"
+          }
+        ],
+        "status": "warn"
+      }
+    },
+    {
+      "date_status": "common",
+      "kind": "etf",
+      "market_value": 150000.0,
+      "reason": null,
+      "snapshot": {
+        "date_status": "common",
+        "fetched_at": "2026-10-25T18:15:27.356Z",
+        "holdings_date": "2026-10-22",
+        "is_active": false,
+        "issuer": "cathay",
+        "result_quality": "validated_dated",
+        "snapshot_sha256": "e5f8ccee0d0b0343924604d0d97fcc30a7eaa3c7aac4187bedcf9b11b715992b",
+        "source_kind": "agent_official",
+        "source_url": "https://www.cathaysite.com.tw/ETF/detail/ECN?tab=etf3",
+        "symbol": "00878",
+        "validation_status": "pass"
+      },
+      "status": "looked_through",
+      "symbol": "00878",
+      "validation": {
+        "checks": [
+          {
+            "detail": "Invalid numeric/NAV weights at rows: []",
+            "name": "weights_in_range",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock NAV weight total: 0.9712999999999999",
+            "name": "stock_weight_sum",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock rows: 29; NAV weight total: 0.9712999999999999",
+            "name": "not_top_n_only",
+            "status": "pass"
+          },
+          {
+            "detail": "Duplicate stock codes: []",
+            "name": "no_duplicate_security",
+            "status": "pass"
+          },
+          {
+            "detail": "Holdings calendar age in days: 6",
+            "name": "holdings_date_sane",
+            "status": "pass"
+          },
+          {
+            "detail": "Unresolved stock rows: 0; known NAV weight total: 0; invalid weights fail numeric checks separately",
+            "name": "resolvable_securities",
+            "status": "pass"
+          },
+          {
+            "detail": "Missing required fields: []",
+            "name": "required_fields",
+            "status": "pass"
+          },
+          {
+            "detail": "來源須為 HTTPS；官網身分由取得資料的 agent 核對",
+            "name": "source_https",
+            "status": "pass"
+          }
+        ],
+        "status": "pass"
+      }
+    },
+    {
+      "date_status": "common",
+      "kind": "etf",
+      "market_value": 100000.0,
+      "reason": null,
+      "snapshot": {
+        "date_status": "common",
+        "fetched_at": "2026-10-26T03:38:05.652132+00:00",
+        "holdings_date": "2026-10-22",
+        "is_active": false,
+        "issuer": "capital",
+        "result_quality": "validated_dated",
+        "snapshot_sha256": "1a94d3df21a2adf997e7097ccff5edb89d495632305677b64309a9632a2aea56",
+        "source_kind": "agent_official",
+        "source_url": "https://www.capitalfund.com.tw/CFWeb/api/etf/buyback",
+        "symbol": "00919",
+        "validation_status": "pass"
+      },
+      "status": "looked_through",
+      "symbol": "00919",
+      "validation": {
+        "checks": [
+          {
+            "detail": "Invalid numeric/NAV weights at rows: []",
+            "name": "weights_in_range",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock NAV weight total: 0.996679",
+            "name": "stock_weight_sum",
+            "status": "pass"
+          },
+          {
+            "detail": "Stock rows: 40; NAV weight total: 0.996679",
+            "name": "not_top_n_only",
+            "status": "pass"
+          },
+          {
+            "detail": "Duplicate stock codes: []",
+            "name": "no_duplicate_security",
+            "status": "pass"
+          },
+          {
+            "detail": "Holdings calendar age in days: 6",
+            "name": "holdings_date_sane",
+            "status": "pass"
+          },
+          {
+            "detail": "Unresolved stock rows: 0; known NAV weight total: 0; invalid weights fail numeric checks separately",
+            "name": "resolvable_securities",
+            "status": "pass"
+          },
+          {
+            "detail": "Missing required fields: []",
+            "name": "required_fields",
+            "status": "pass"
+          },
+          {
+            "detail": "來源須為 HTTPS；官網身分由取得資料的 agent 核對",
+            "name": "source_https",
+            "status": "pass"
+          }
+        ],
+        "status": "pass"
+      }
+    },
+    {
+      "date_status": null,
+      "kind": "stock",
+      "market_value": 100000.0,
+      "reason": null,
+      "snapshot": null,
+      "status": "direct",
+      "symbol": "2330",
+      "validation": null
+    }
+  ],
+  "schema_version": "1",
+  "snapshots": [
+    {
+      "date_status": "common",
+      "fetched_at": "2026-10-25T17:31:44.456607+00:00",
+      "holdings_date": "2026-10-22",
+      "is_active": false,
+      "issuer": "yuanta",
+      "result_quality": "validated_dated",
+      "snapshot_sha256": "fe1fd550553ababc125a3d3820df30acbde2b0e3ed00500482243bb9b71e6374",
+      "source_kind": "agent_official",
+      "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0050%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0050",
+      "symbol": "0050",
+      "validation_status": "pass"
+    },
+    {
+      "date_status": "common",
+      "fetched_at": "2026-10-26T01:59:23.367326+00:00",
+      "holdings_date": "2026-10-22",
+      "is_active": false,
+      "issuer": "fubon",
+      "result_quality": "validated_dated",
+      "snapshot_sha256": "0aec1d8dc94f92b708f39f60628385428540e08a5e616c1e896c774248187532",
+      "source_kind": "official",
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?lan=TW&stkId=006208",
+      "symbol": "006208",
+      "validation_status": "pass"
+    },
+    {
+      "date_status": "common",
+      "fetched_at": "2026-10-25T17:31:47.680916+00:00",
+      "holdings_date": "2026-10-22",
+      "is_active": false,
+      "issuer": "yuanta",
+      "result_quality": "qualified_estimate",
+      "snapshot_sha256": "e3e2ac3c239365f0353af8b63faa46defc07cc6b66d363b4528c01f14b4cdac6",
+      "source_kind": "agent_official",
+      "source_url": "https://etfapi.yuantaetfs.com/ectranslation/api/bridge?APIType=ETFAPI&CompanyName=YUANTAFUNDS&PageName=%2Fproduct%2Fdetail%2F0056%2Fratio&DeviceId=null&FuncId=PCF%2FDaily&AppName=ETF&Device=3&Platform=ETF&ticker=0056",
+      "symbol": "0056",
+      "validation_status": "warn"
+    },
+    {
+      "date_status": "common",
+      "fetched_at": "2026-10-25T18:15:27.356Z",
+      "holdings_date": "2026-10-22",
+      "is_active": false,
+      "issuer": "cathay",
+      "result_quality": "validated_dated",
+      "snapshot_sha256": "e5f8ccee0d0b0343924604d0d97fcc30a7eaa3c7aac4187bedcf9b11b715992b",
+      "source_kind": "agent_official",
+      "source_url": "https://www.cathaysite.com.tw/ETF/detail/ECN?tab=etf3",
+      "symbol": "00878",
+      "validation_status": "pass"
+    },
+    {
+      "date_status": "common",
+      "fetched_at": "2026-10-26T03:38:05.652132+00:00",
+      "holdings_date": "2026-10-22",
+      "is_active": false,
+      "issuer": "capital",
+      "result_quality": "validated_dated",
+      "snapshot_sha256": "1a94d3df21a2adf997e7097ccff5edb89d495632305677b64309a9632a2aea56",
+      "source_kind": "agent_official",
+      "source_url": "https://www.capitalfund.com.tw/CFWeb/api/etf/buyback",
+      "symbol": "00919",
+      "validation_status": "pass"
+    }
+  ],
+  "totals": {
+    "cash_value": 3351.994619240979,
+    "coverage": 0.9934328768510489,
+    "futures": [
+      {
+        "amount_twd": null,
+        "security_code": "NYF"
+      },
+      {
+        "amount_twd": null,
+        "security_code": "TX"
+      },
+      {
+        "amount_twd": null,
+        "security_code": "TX202611"
+      },
+      {
+        "amount_twd": null,
+        "security_code": "WTXX6F"
+      }
+    ],
+    "identified_stock_value": 993432.8768510489,
+    "not_looked_through_value": 0.0,
+    "other_value": 1939.7605263205364,
+    "total_value": 1000000.0,
+    "unclassified_gap_value": 1320.0,
+    "unresolved_value": 0.0
+  },
+  "valuation_date": "2026-10-22",
+  "warnings": [
+    "0056：NAV_denominator_qualification：官方 FundWeights.Summary.fundsize 與 PCF.totalav 曾有差異；沿用官方公布權重暫估，不任選分母或重新放大。"
+  ]
+}

@@ -76,6 +76,17 @@ Snapshot metadata 欄位為 `symbol` string；`holdings_date`, `issuer`, `fetche
 
 ## 發布 index 與 pins（格式合約，尚無公開資料）
 
-`index.json`：`schema_version: "1"`、`generated_at` UTC timestamp、`etfs` array。每筆有 `symbol`, `issuer` string、`is_active` boolean、`route`（`http` / `playwright` / `official_only`）、`latest_date` ISO date / null、`dates` ISO date array、`last_status`（`pass` / `warn` / `fail` / `fetch_error` / `official_only` / null）、`last_error` string / null、`last_attempt_at` UTC timestamp / null、`source_url` string / null；可有 `revised_at` UTC timestamp / null。`official_only` 的 latest_date 必須 null；dates 與本機 dated snapshots 一致。候選來源不能自行標成 official_only 或加入支援名單。
+`index.json`：`schema_version: "1"`、`generated_at` UTC timestamp、`etfs` array。每筆有 `symbol`, `issuer` string、`is_active` boolean、`route`（`http` / `playwright` / `official_only` / `research`）、`latest_date` ISO date / null、`dates` ISO date array、`last_status`（`pass` / `warn` / `fail` / `fetch_error` / `official_only` / null）、`last_error` string / null、`last_attempt_at` UTC timestamp / null、`source_url` string / null；可有 `revised_at` UTC timestamp / null。`official_only` 的 latest_date 必須 null；dates 與本機 dated snapshots 一致。候選來源不能自行標成 official_only 或加入支援名單。
 
 歷史檔位於 `{symbol}/{YYYY-MM-DD}.json`，最新為 `{symbol}/latest.json`。`pinned.json` 格式是 `{"pinned": [["0052", "2026-10-22"]]}`：每筆恰為 symbol、ISO date 字串的一對，**不是** symbol-to-date dictionary。此例只說明格式，不表示建立過 pin 或滿足五檔示範。
+
+## v1.3.0 註記與研究擴充
+
+schema 2 的 total_nav_twd、stock_value_twd 亦可為 null；缺值不等於零。
+market 保留官方或研究已核對的市場標籤，不再只限原四檔市場。
+研究內容以原包與 canonical SHA 綁定；新資料需 v1.3.0。
+Snapshot metadata 新增 result_quality 與研究來源說明；taiwan_equity 新增
+foreign_stock_weights_complete。whole_portfolio_ratio_known 在部分資料或
+NAV 口徑保留時為 false。historical_ratio_references 只作歷史總比例參考，
+不進公司計算。research route 是固定研究快照，不會每日抓取或改寫日期。
+完整行為見 [research-and-annotations.md](research-and-annotations.md)。

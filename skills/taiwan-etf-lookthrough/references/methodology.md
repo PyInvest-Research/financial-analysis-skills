@@ -10,7 +10,7 @@ v1.2.0 已新增四檔混合／跨市場 ETF 的台股現貨部分，請先讀 [
 
 正規權重代表經濟上的 NAV 貢獻，來源原始欄位和值屬證據，不得改動。若官方欄位明示以正絕對值列示應付款，必須另做明確記錄的來源專屬負債轉換，於來源脈絡／研究保留原欄位、原值、經濟符號與轉換理由。通用 loader 不按名稱猜測翻號，也不靜默修改既有研究 fixture。
 
-合成回歸案例使用股票 `0.95`、現金 `-0.02`、其他 `-0.03`，搭配 `100000` 部位市值，得到股票 `95000`、現金 `-2000`、其他 `-3000`、未分類差額 `10000`；涵蓋率維持 `0.95`，JSON 與 Markdown 保留負號。這是核心合約的合成回歸案例；富邦來源專屬應付款轉換已在 parser 實作，來源證據見 data-sources.md。完整真實資料與平台驗收仍待完成，套件仍為草稿且未發布。
+合成回歸案例使用股票 `0.95`、現金 `-0.02`、其他 `-0.03`，搭配 `100000` 部位市值，得到股票 `95000`、現金 `-2000`、其他 `-3000`、未分類差額 `10000`；涵蓋率維持 `0.95`，JSON 與 Markdown 保留負號。這是核心合約的合成回歸案例；富邦來源專屬應付款轉換已在 parser 實作，來源證據見 data-sources.md。這是歷史設計說明；目前版本與發布範圍見 SKILL.md。
 
 ## 官方來源與資料日期
 
@@ -70,7 +70,7 @@ TPEx 特有 `32`（文化創意業）、`33`（農業科技業）補自 [櫃買�
 
 兩檔 ETF 各自先合併普通股／特別股發行人，再以原始揭露 NAV fraction 計算 `overlap(A,B) = sum(min(w_Ai, w_Bi))`；排除未知證券與非股票，不重放大。只列有成功穿透的 ETF 配對。
 
-本機與 PyInvest 候選選最新共同持股日；沒有共同日才用各自最新日。明確官方檔保留實際日期。`classify_dates(..., tolerance=5)` 以最新選定持股日為參考，被動型預設容忍五個平日，主動式容忍零天；週一至週五近似交易日，不扣假日。此 tolerance 可由直接呼叫函式設定，`run_lookthrough` 使用預設值。另有獨立 validator `MAX_AGE_DAYS=30`，相對執行日超過 30 個日曆日拒絕，也拒絕未來日期。兩種日期檢查不可混同為相對估值日的限制。
+本機與 PyInvest 候選選最新共同持股日；沒有共同日才用各自最新日。明確官方檔保留實際日期。`classify_dates(..., tolerance=5)` 以最新選定持股日為參考，被動型預設容忍五個平日，主動式容忍零天；週一至週五近似交易日，不扣假日。此 tolerance 可由直接呼叫函式設定，`run_lookthrough` 使用預設值。另有獨立 validator `MAX_AGE_DAYS=30`，strict 相對執行日超過 30 個日曆日拒絕；annotated 改為歷史暫估警告。未來日期兩種模式都拒絕。兩種日期檢查不可混同為相對估值日的限制。
 
 保留原始持股日與估值日差異、UTC 擷取時間、來源及快照雜湊。來源失敗後若備援成功，仍把失敗原因留在 warnings；所有來源失敗時保留整個未穿透部位與 reason。不得用新估值日改寫舊快照。
 
@@ -79,6 +79,13 @@ TPEx 特有 `32`（文化創意業）、`33`（農業科技業）補自 [櫃買�
 
 使用者核准原五檔＋直接2330、假設TWD總額1000000、共同官方日2026-10-22的固定示範特例。00878只隨skill/demo，國泰daily五檔仍official_only；public pinned.json僅為五個日期保留政策，不能當每日持股已發布。這不等待五檔首次排程發布，也不代表Task24對外發布批准。
 
-本次expected-result由既有run以真實台北2026-10-26、default today離線生成一次，source/snapshot bytes與原fetched stamps不變。root的2330事前獨立來源式與預期在首次demo run前保存；只有generated_at可在完整JSON比較中排除，provenance、snapshot hash、validation age、metrics與warnings皆不可刪。單元測試為歷史fixture可明示test-only固定驗證clock；產品範例不能使用此clock，日後過期就如實回報未穿透／原因。
+本次expected-result由既有run以真實台北2026-10-26、default today離線生成一次，source/snapshot bytes與原fetched stamps不變。root的2330事前獨立來源式與預期在首次demo run前保存；只有generated_at可在完整JSON比較中排除，provenance、snapshot hash、validation age、metrics與warnings皆不可刪。單元測試為歷史fixture可明示test-only固定驗證clock；產品範例不能使用此clock，日後過期以註記模式明示歷史暫估；strict 則回報未穿透。
 
 原生披露比例與amount/NAV是不同精度口徑。此demo的00878 native97.13%與同頁股票amount/NAV97.111452727684...%差0.0185472723157...百分點，保留而不rescale；既有逐ETF小gap裁0後桶合計比1m多44.631996610434726 TWD，保留而不補帳。NYF、TX、TX202611、WTXX6F四個原始代號列的期貨amount未知，不當0，也未標準化成四個已知獨立合約曝險。來源語境、原始完整研究證據及六句限制見demo/README.md與demo/report.md。
+
+## v1.3.0 部分資料
+
+預設使用 annotated；股票缺權重、低於 50%／90%、前十大或歷史資料可
+部分計算並列出警告。NaN、錯單位、重複、未來日期、來源／內容完整性
+錯誤仍拒絕。指標只描述已計算部分，完整分母及未知差額不變。
+研究與 NAV 口徑限制見 [research-and-annotations.md](research-and-annotations.md)。

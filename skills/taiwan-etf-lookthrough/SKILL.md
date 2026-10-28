@@ -5,9 +5,22 @@ description: 依官方持股快照計算台股公司曝險、產業與重疊，�
 
 # 台灣 ETF 持股穿透
 
+v1.3.0 新增 **36 檔固定研究快照**（27 檔逐股台股＋9 檔指定日零台股），
+連同原有 40 檔共 **76 檔可用快照**。新增資料的持股日為 2026-10-21～27，
+沿用使用者交付並接受的研究審核；沒有新增每日抓取路線。
+預設 `validation_policy="annotated"`：部分持股、低涵蓋率、較舊資料或
+口徑待確認時，先算可用列並標注；未知權重仍未知，完整組合分母不變。
+0055／0056 沿用官方公布權重，但明示 NAV 分母差異的保留意見。
+另附 66 檔歷史總比例參考及 009828 的 2026-09-30 總比例；這些不能拆成
+公司曝險、不能抵減未穿透金額。請先讀 [研究資料與註記模式](references/research-and-annotations.md)。
+沒有合適快照時，**agent 主動查安全官方來源**；不要只列出不支援就結束，
+也不要要求使用者先準備完美資料。官網的可用部分可以帶限制計算。
+
+以下 v1.0～1.2 段落是歷史版本紀錄；現行名單與計算模式以上述 v1.3.0 為準。
+
 v1.2.1 修正聯博期貨欄位精度、元大應付申購預收款及台新顯示四捨五入
 對帳；排程只發布合格候選，來源失敗保留舊快照並在提交後告警。
-沒有放寬股票完整性、持股日期或 NAV 分母規則。
+該版尚未加入 v1.3.0 的使用者註記計算模式。
 
 v1.2.0 新增 00982T、00981T、00735、00980T 的混合／跨市場 ETF
 台股現貨分析。2026-10-27 本機一輪官方 HTTPS 取得四檔全部通過，
@@ -44,11 +57,11 @@ NAV／PCF日期不符，停用排程並保留 agent 官方備援；凱基00915�
 ## 工作方式
 
 1. 確認部位、TWD 市值與估值日。市值必須是嚴格大於零的有限 numeric；拒絕 bool、string、NaN、Inf、零及負值。依 [schema.md](references/schema.md) 建立 portfolio JSON。
-2. 依序使用使用者提供且通過驗證的本機 snapshot/cache → 已發布 PyInvest snapshot → 官方完整檔或完整展開表格。公開資料未就緒時直接走官方備援；`run_lookthrough` 不會自行啟動瀏覽器或內建 parser 抓取官方頁，須先取得本機快照或以 `official_files` 傳入檔案。讀 [data-sources.md](references/data-sources.md) 核對身分、實際持股日、權重單位與 NAV 分母。日期須依已合格的來源合約取得；群益 date2 僅在 references 所列兩檔、顯式清單日回應及完整交叉驗證合約下採用。不得用未驗證的查詢框日期、PCF 日期或今天代替實際持股日。
+2. 先查使用者本機 snapshot/cache 與已發布 PyInvest snapshot；沒有合適資料時，agent 按 [official-fallback.md](references/official-fallback.md) 查投信官方持股頁或下載檔。優先完整資料，但可用的部分持股也能暫估。`run_lookthrough` 不會自行啟動瀏覽器或爬官網；agent 須先保存快照或透過 `official_files` 傳入官方 CSV/XLSX。有品質警告且明確傳入官方檔時，可用該檔替換 cache；都沒有時，程式可採用套件內帶日期的固定研究快照。舊資料不合用途時仍應查官方更新，不能把固定研究稱為當期快照。核對身分、實際持股日、百分比單位與權重分母；口徑有疑義時使用來源公布權重暫估並明說假設，不拿查詢日或今天冒充持股日。
    新增來源先讀上述官方備援參考，使用對應 adapter 與已知官方路線；其他
    未串接或未資格化商品按該參考的預算、來源紀錄及停止條件取得資料。agent 不因下載
    成功直接跳過同一套驗證器，也不將來源未知值填零。
-3. 明確保留 unavailable／未穿透及原因，分母始終包含全部部位；不補零、不重分配、不放大已辨識部分，也不把 gap 叫現金。範圍外台灣 ETF（Q7）可由使用者／agent 取得官方完整檔，驗證身分、實際日期、單位與 NAV 後走同一 loader/validator；缺資料保留未穿透，不能杜撰零權重。國外成分 ETF 僅新增四檔有官方市場證據的台股現貨範圍；先按 mixed-etfs.md 的 parser 產生 schema 2 快照。其他商品仍需來源資格化，不能用通用 CSV 分類器猜測海外市場，或將缺資料填為零。海外股票不計入台股公司集中度與重疊。
+3. 保留 unavailable／未穿透及原因，分母包含全部部位；不補零、不重分配、不放大已辨識部分，也不把 gap 叫現金。預設註記模式容許部分持股、缺權重與超過 30 日的歷史資料，報告必須標出來源、日期、部分／暫估狀態及未知金額；`validation_policy="strict"` 可恢復原嚴格門檻。國外成分 ETF 只計已確認 TWSE／TPEx 股票，其他市場另列；不要用代號外觀猜市場，不遞迴 ETF。只有完整名單支持時才說指定日零台股；沒有資料絕不等於零。
 4. 呼叫 `run_lookthrough`，只接受成功回傳的 `result.json`、`report.md`、`exposures.csv`。解釋、文章與影片的所有數字只能來自生成的 `result.json`；agent 不得手抄權重或自行拼出計算結果。CSV 的 `source_amount_twd` 才是可加總來源貢獻，重複的公司總額不能再加總。
 5. 依 [methodology.md](references/methodology.md) 解讀來源與估值日差異、涵蓋率、集中度與重疊，顯示警告及下列全部六句限制。
 
@@ -90,7 +103,7 @@ outputs = run_lookthrough(
 
 [demo/README.md](demo/README.md)提供原五檔0050／006208／0056／00878／00919＋直接2330、假設TWD總額1000000的固定示範特例。portfolio與五canonical snapshots原bytes／fetched stamps不變，估值與共同官方持股日2026-10-22；expected-result.json由實際離線run生成，不是每日新資料。00878是固定skill demo唯一例外，不seed國泰daily index/latest/dated snapshot；public pinned.json只有五個日期保留對，並非持股已發布。
 
-按demo README呼叫同一run_lookthrough、local_snapshot_dir=Path("demo/snapshots")、use_network=False，**不傳today**；日後過期須誠實保留未穿透及原因，不以歷史clock冒充當期資料。歷史單元測試的clock僅test-only。demo報告明示假設市值、四筆未知期貨、44.631996610434726 TWD桶殘差與Cathay原生比例／同頁NAV aggregate精度差異，不能補帳或rescale。ChatGPT Web的使用者自行上傳／操作說明亦見demo README；本地附件不代表新Web平台驗收或對外發布。
+按 demo README 呼叫同一 run_lookthrough、local_snapshot_dir=Path("demo/snapshots")、use_network=False，**不傳 today**。註記模式會保留舊資料並明示歷史暫估；strict 模式會拒絕超齡資料。不得以歷史 clock 冒充當期資料；歷史單元測試的 clock 僅 test-only。demo 保留假設市值、四筆未知期貨、44.631996610434726 TWD 桶殘差與 Cathay 原生比例精度差異，不補帳或 rescale。套件更新不代表新 ChatGPT Web 平台驗收。
 
 ## 每份報告固定限制
 

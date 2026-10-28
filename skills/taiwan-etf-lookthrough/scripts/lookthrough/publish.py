@@ -42,7 +42,7 @@ _HOSTS = frozenset({
 })
 _SYMBOL = re.compile(r"[0-9A-Z]{4,6}")
 _DATED_FILE = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2})\.json")
-_ROUTES = frozenset({"http", "playwright", "official_only"})
+_ROUTES = frozenset({"http", "playwright", "official_only", "research"})
 _STATUSES = frozenset({"pass", "warn", "fail", "fetch_error", "official_only"})
 Saved = tuple[Snapshot, bytes]
 
@@ -498,7 +498,7 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.2.1",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.3.0",
                  "Content-Type": "application/json"}, method="POST",
     )
     with opener.open(request, timeout=30) as response:
@@ -545,7 +545,7 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.2.1"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.3.0"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
@@ -679,7 +679,7 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.2.1",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.3.0",
     })
     with opener.open(request, timeout=30) as response:
         _check_url(response.geturl(), host)
