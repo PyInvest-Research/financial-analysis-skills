@@ -80,7 +80,7 @@ class RefreshSession:
         self.requests += 1
         body = urlencode(form).encode() if form is not None else None
         request = Request(url, data=body, headers={
-            "User-Agent": "PyInvest-ETF-Lookthrough/1.4.0",
+            "User-Agent": "PyInvest-ETF-Lookthrough/1.5.0",
             **({"Content-Type": "application/x-www-form-urlencoded"}
                if body is not None else {}),
         })
