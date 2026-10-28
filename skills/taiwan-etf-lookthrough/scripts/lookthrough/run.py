@@ -235,7 +235,7 @@ def run_lookthrough(
     if validation_policy == 'annotated':
         missing |= {symbol for symbol in symbols
                     if candidates.get(symbol) and all(
-                        _tier(c.snapshot, today) > 0
+                        _rank(c, today) > (0, 0)
                         for c in candidates[symbol].values())}
     if use_network and missing:
         if validation_policy == 'annotated' and not ca_verified:
@@ -247,14 +247,14 @@ def run_lookthrough(
         for symbol, values in remote.items():
             for day, candidate in values.items():
                 existing = candidates.setdefault(symbol, {}).get(day)
-                if (existing is None or _tier(candidate.snapshot, today)
-                        < _tier(existing.snapshot, today)):
+                if (existing is None or validation_policy == 'annotated'
+                        and _rank(candidate, today) < _rank(existing, today)):
                     candidates[symbol][day] = candidate
     if validation_policy == 'annotated':
         candidates = {
             symbol: {day: c for day, c in values.items()
-                     if _tier(c.snapshot, today) == min(
-                         _tier(v.snapshot, today) for v in values.values())}
+                     if _rank(c, today) == min(
+                         _rank(v, today) for v in values.values())}
             for symbol, values in candidates.items() if values}
     available = {
         symbol: list(by_date) for symbol, by_date in candidates.items()
@@ -289,8 +289,8 @@ def run_lookthrough(
                 snapshot, symbol, directory, today, metadata['holdings_date'],
                 policy=validation_policy)
             if (validation_policy == 'strict' or symbol not in selected
-                    or _tier(snapshot, today)
-                    <= _tier(selected[symbol].snapshot, today)):
+                    or _rank(candidate, today)
+                    <= _rank(selected[symbol], today)):
                 selected[symbol] = candidate
         except (OSError, ValueError, TypeError, AttributeError) as error:
             reasons[symbol].append(f'official: {error}')
@@ -336,3 +336,23 @@ def _tier(snapshot: Snapshot, today: date) -> int:
     if qualifies_research(snapshot):
         return 2
     return int((today - snapshot.holdings_date).days > 30)
+
+
+def _rank(candidate: _Candidate, today: date) -> tuple[int, int]:
+    """Prefer fuller evidence within a date tier, never by exposure size.
+
+    Incomplete local sources still trigger acquisition. Explicit incomplete
+    inventories and missing weights also matter when schema-2 validation
+    permits a low Taiwan allocation without a stock-total warning.
+    """
+    snapshot = candidate.snapshot
+    evidence = snapshot.equity_evidence
+    incomplete = (
+        evidence is not None and not evidence.complete
+        or any(h.weight is None for h in snapshot.holdings
+               if h.kind in ('stock', 'foreign_stock'))
+        or any(c.status == 'warn' and c.name in (
+            'stock_weight_sum', 'not_top_n_only', 'partial_equity_weights',
+            'refresh_partial_inventory', 'no_taiwan_rows_in_source')
+               for c in candidate.validation.checks))
+    return _tier(snapshot, today), int(incomplete)

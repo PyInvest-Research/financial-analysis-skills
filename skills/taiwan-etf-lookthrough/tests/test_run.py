@@ -75,7 +75,8 @@ class RunTests(unittest.TestCase):
     def run_case(self, **kwargs: Any) -> dict[str, Any]:
         """Run and read all outputs, defaulting to an entirely offline run."""
         options = {'today': TODAY, 'use_network': False, **kwargs}
-        paths = run_lookthrough(FIX / 'portfolio.json', self.root / 'out',
+        portfolio_path = options.pop('portfolio_path', FIX / 'portfolio.json')
+        paths = run_lookthrough(portfolio_path, self.root / 'out',
                                 **options)
         self.assertEqual(set(paths), {'result.json', 'report.md',
                                       'exposures.csv'})
@@ -177,6 +178,76 @@ class RunTests(unittest.TestCase):
                       use_network=True, opener=opener,
                       official_files=self.official(etf_symbol='ETFB'))
         opener.assert_not_called()
+
+    def annotated_portfolio(self) -> Path:
+        """Keep an actual ETF identifier in annotated integration tests."""
+        self.payload['etf_symbol'] = '0050'
+        payload = json.loads((FIX / 'portfolio.json').read_text())
+        payload['positions'][0]['symbol'] = '0050'
+        path = self.root / 'annotated-portfolio.json'
+        path.write_text(json.dumps(payload))
+        return path
+
+    def test_partial_local_upgrades_from_published_holdings(self) -> None:
+        """Recent partial rows must not suppress fuller published sources."""
+        portfolio = self.annotated_portfolio()
+        local = deepcopy(self.payload)
+        local['holdings'] = local['holdings'][:1]
+        folder = self.write_local(local)
+        for day in ['2026-10-21', '2026-10-22', '2026-10-23']:
+            with self.subTest(day=day):
+                self.index['etfs'] = [{'symbol': '0050', 'dates': [day]}]
+                self.remote[f'0050/{day}.json'] = {
+                    **self.payload, 'holdings_date': day}
+                result = self.run_case(
+                    validation_policy='annotated', portfolio_path=portfolio,
+                    local_snapshot_dir=folder,
+                    use_network=True, opener=self.opener)
+                self.assertEqual(result['totals']['coverage'], .95)
+                self.assertEqual(result['snapshots'][0]['holdings_date'], day)
+        self.assertEqual(json.loads((folder / '0.json').read_text()), local)
+
+    def test_partial_local_survives_remote_failure(self) -> None:
+        """Failed acquisition retains known rows, denominator and reason."""
+        portfolio = self.annotated_portfolio()
+        local = deepcopy(self.payload)
+        local['holdings'] = local['holdings'][:1]
+        folder = self.write_local(local)
+        result = self.run_case(
+            validation_policy='annotated', portfolio_path=portfolio,
+            local_snapshot_dir=folder,
+            use_network=True, opener=self.opener)
+        self.assertTrue(self.urls)
+        self.assertEqual(result['totals']['coverage'], .6)
+        self.assertEqual(result['totals']['total_value'], 100000)
+        self.assertIn('no available dates', ' '.join(result['warnings']))
+
+    def test_complete_annotated_local_avoids_network(self) -> None:
+        """Complete usable local holdings preserve the inexpensive path."""
+        portfolio = self.annotated_portfolio()
+        folder = self.write_local(self.payload)
+        opener = MagicMock(side_effect=AssertionError('network forbidden'))
+        self.run_case(validation_policy='annotated', portfolio_path=portfolio,
+                      local_snapshot_dir=folder,
+                      use_network=True, opener=opener)
+        opener.assert_not_called()
+
+    def test_current_partial_precedes_stale_complete_remote(self) -> None:
+        """Completeness does not silently reverse the documented date tier."""
+        portfolio = self.annotated_portfolio()
+        local = deepcopy(self.payload)
+        local['holdings'] = local['holdings'][:1]
+        folder = self.write_local(local)
+        day = '2026-09-01'
+        self.index['etfs'] = [{'symbol': '0050', 'dates': [day]}]
+        self.remote[f'0050/{day}.json'] = {
+            **self.payload, 'holdings_date': day}
+        result = self.run_case(
+            validation_policy='annotated', portfolio_path=portfolio,
+            local_snapshot_dir=folder,
+            use_network=True, opener=self.opener)
+        self.assertTrue(any(url.endswith(f'/{day}.json') for url in self.urls))
+        self.assertEqual(result['totals']['coverage'], .6)
 
     def test_invalid_local_falls_through(self) -> None:
         """Malformed, invalid-weight and wrong-ETF local files never win."""
