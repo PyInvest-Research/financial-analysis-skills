@@ -83,8 +83,8 @@ v1.4.0 的每日 publisher 同樣明確採用 annotated，總額、四捨五入�
 
 ## 每日更新與資源
 
-v1.4.0 已將上述 36 檔與 00878 接入每日 collector；registry 合計
-77 檔 HTTP 候選＋8 檔 official_only。套件中的歷史研究副本仍固定不變，
+現行公開快照與官方備援數量、商品名單及資料時間統一見
+[snapshot-coverage.md](snapshot-coverage.md)。套件中的歷史研究副本仍固定不變，
 每日快照另以官方實際持股日發布。新來源失敗時保留前次快照與錯誤狀態，
 agent 可依官方備援流程取得資料，不能把抓取時間當成持股日。
 

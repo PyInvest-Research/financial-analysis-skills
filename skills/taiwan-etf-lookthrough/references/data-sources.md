@@ -1,7 +1,7 @@
 # 已核對的持股來源
 
-v1.4.0 使用者報告與每日發布都採註記模式，77 檔接入官方自動更新，包含
-00878。完整清單見 [snapshot-coverage.md](snapshot-coverage.md)。
+使用者報告與每日發布採註記模式。公開快照與官方備援數量、商品名單及
+資料時間統一見 [snapshot-coverage.md](snapshot-coverage.md)。
 下文保留歷次來源觀察與原嚴格合約作診斷依據，不代表目前每日更新範圍。
 透過 `parse_annotated` 取得的數值對帳差異會保留為 `quality_notes`；
 市場未知的新列保留未知，缺值不補零，仍拒絕錯身分、錯單位與非法數字。
