@@ -142,7 +142,5 @@ Path("snapshots/00735.json").write_text(
 
 ## 更新流程
 
-每日 06:30 台北的同一 workflow 先跑離線 `test_mixed_*.py`，再執行
-同一 publisher。registry 為 49 檔：40 HTTP＋9 official_only；新增四檔
-合計正常路徑 7 GET，沒有官網重試或名錄每日重抓。原其他流程與 17:00
-本機部署依賴仍保留。網站／Skill 下載更新不等於已跑過新整批 Actions。
+每日更新。當期涵蓋範圍見 [snapshot-coverage.md](snapshot-coverage.md)，
+各檔實際持股日與狀態以公開索引及快照為準。
