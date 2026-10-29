@@ -192,7 +192,7 @@ def _fetch(url: str) -> tuple[bytes, str]:
     """
     _check_official_url(url)
     request = Request(url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.1",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.4",
     })
     opener = build_opener(_OfficialRedirect())
     with opener.open(request, timeout=45) as response:

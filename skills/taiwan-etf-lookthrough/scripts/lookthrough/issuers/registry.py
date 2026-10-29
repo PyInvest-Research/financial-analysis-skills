@@ -109,6 +109,8 @@ SUPPORTED_ETFS += tuple(
         ("00936", "tsit", False, "http", tsit),
         ("00932", "mega", False, "http", mega),
         ("00935", "nomura", False, "official_only", nomura),
+        ("00944", "nomura", False, "http", nomura),
+        ("00980A", "nomura", True, "http", nomura),
         ("009803", "esun", False, "http", esun),
         ("00728", "fsitc", False, "http", fsitc),
         ("00401A", "jpmorgan", True, "http", jpmorgan),

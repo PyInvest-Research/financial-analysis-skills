@@ -41,6 +41,7 @@ class Inventory:
     stocks: list[SecurityRow]
     stock_total: Decimal | None = None
     assets: list[Holding] = field(default_factory=list)
+    quality_notes: tuple[str, ...] = ()
 
 
 def _match(pattern: str, text: str) -> re.Match:

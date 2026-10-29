@@ -1,13 +1,14 @@
 {
   "slug": "taiwan-etf-lookthrough",
   "name": "Taiwan ETF Lookthrough",
-  "version": "1.5.1",
+  "version": "1.5.4",
   "summary": "逐列容錯與來源退階；五級資料品質、完整組合分母、獨立歷史比例估算。",
   "status": "published",
   "license": "MIT",
   "githubOwner": "PyInvest-Research",
   "githubUrl": "https://github.com/PyInvest-Research/financial-analysis-skills/tree/main/skills/taiwan-etf-lookthrough",
   "files": [
+    "scripts/lookthrough/transport_evidence.py",
     "SKILL.md",
     "CHANGELOG.md",
     "agents/openai.yaml",
@@ -90,6 +91,7 @@
     "scripts/lookthrough/refresh_snapshot.py",
     "scripts/lookthrough/refresh_inventory.py",
     "scripts/lookthrough/refresh.py",
+    "scripts/lookthrough/refresh_fh.py",
     "scripts/lookthrough/refresh_prices.py",
     "scripts/lookthrough/data/refresh-products.json",
     "scripts/lookthrough/source_quality.py",

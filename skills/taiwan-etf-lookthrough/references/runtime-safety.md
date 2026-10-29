@@ -52,6 +52,14 @@ ChatGPT／Colab 等託管環境若無法確認下載工具或 CA，不在該環�
 
 ## 5. 官方來源與網頁內容
 
+- 00731 固定使用復華 `/api/assets?fundID=ETF08&qDate=...` 與回應持股日的
+  `/api/assetsExcel/ETF08/YYYYMMDD`。清晨排程從前一日查起，最多三個日曆日；
+  僅明確全 null 的空回應可往前查，其他錯誤立即停止。最多四個請求共用既有
+  RefreshSession 的 100 次／80 MiB／240 秒總上限，不增加模型額度。
+  原生權重按整基金 NAV 驗證、同日匯出逐列對照、既有市場合約核對；不發行情請求。
+  股票與其他帳面資產須與 NAV 相差不超過 0.1%，殘差保持未分配；期貨名目額不加進 NAV。
+  股票總表百分比差異只容許逐股四捨五入精度的總界限並明示警告，原值永不放大。
+
 - 本地續作另外核對 `sitc.sinopac.com`、`www.tsit.com.tw`、`www.megafunds.com.tw`、
   `www.nomurafunds.com.tw`、`www.esunam.com`、`www.fsitc.com.tw`、
   `am.jpmorgan.com`、`webapi.alliancebernstein.com` 的來源路線；公開後端主機

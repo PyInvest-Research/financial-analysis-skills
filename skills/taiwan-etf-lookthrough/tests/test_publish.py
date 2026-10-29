@@ -58,7 +58,7 @@ class PublishTests(unittest.TestCase):
 
     def setUp(self) -> None:
         """Give each test an independent root and offline directory."""
-        self.temp = tempfile.TemporaryDirectory(dir="/private/tmp")
+        self.temp = tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve())
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "output"
         self.directory = CompanyDirectory([], "2026-10-23")
@@ -459,7 +459,7 @@ class PruneTests(unittest.TestCase):
 
     def test_retains_recent_thirty_month_lasts_and_pinned(self) -> None:
         """Catch missing month ends, recent snapshots or pinned dates."""
-        with tempfile.TemporaryDirectory(dir="/private/tmp") as folder:
+        with tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve()) as folder:
             root = Path(folder)
             for offset in range(70):
                 day = date(2026, 8, 1) + timedelta(days=offset)
@@ -477,7 +477,7 @@ class PruneTests(unittest.TestCase):
 
     def test_unsafe_malformed_and_symlink_paths_are_untouched(self) -> None:
         """Catch deletion or traversal beyond internally matching snapshots."""
-        with tempfile.TemporaryDirectory(dir="/private/tmp") as folder:
+        with tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve()) as folder:
             root = Path(folder) / "out"
             old = write_snapshot(root, snapshot(
                 holdings_date=date(2026, 8, 1)))
@@ -509,7 +509,7 @@ class PruneTests(unittest.TestCase):
 
     def test_invalid_pins_fail_before_deleting_anything(self) -> None:
         """Catch partial destructive work before invalid pin validation."""
-        with tempfile.TemporaryDirectory(dir="/private/tmp") as folder:
+        with tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve()) as folder:
             root = Path(folder)
             write_snapshot(root, snapshot(holdings_date=date(2026, 8, 1)))
             write_snapshot(root, snapshot(holdings_date=date(2026, 8, 2)))
@@ -523,7 +523,7 @@ class PruneTests(unittest.TestCase):
 
     def test_bad_pins_and_invalid_snapshots_are_preserved(self) -> None:
         """Catch malformed policy or invalid financial files being deleted."""
-        with tempfile.TemporaryDirectory(dir="/private/tmp") as folder:
+        with tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve()) as folder:
             root = Path(folder)
             bad = replace(snapshot(), holdings=(
                 replace(snapshot().holdings[0], weight=-0.5),))
@@ -552,6 +552,8 @@ class TransportTests(unittest.TestCase):
         opener = MagicMock()
         response = opener.open.return_value.__enter__.return_value
         response.geturl.return_value = etf.source_url
+        response.getheader.return_value = None
+        response.getcode.return_value = 200
         response.read.return_value = b"official raw JSON"
         with patch.object(publish, "build_opener", return_value=opener):
             self.assertEqual(publish.fetch_official(etf), b"official raw JSON")
@@ -600,6 +602,8 @@ class TransportTests(unittest.TestCase):
         opener = MagicMock()
         response = opener.open.return_value.__enter__.return_value
         response.geturl.return_value = ETF.source_url
+        response.getheader.return_value = None
+        response.getcode.return_value = 200
         response.read.return_value = b"source bytes"
         handlers = []
 
@@ -614,7 +618,7 @@ class TransportTests(unittest.TestCase):
             self.assertEqual(opener.open.call_args.kwargs["timeout"], 30)
             self.assertEqual(response.read.call_args.args, (10485761,))
             response.read.return_value = b"x" * 10485761
-            with self.assertRaisesRegex(ValueError, "10MiB"):
+            with self.assertRaisesRegex(ValueError, "source_too_large"):
                 publish.fetch_official(ETF)
             response.geturl.return_value = "https://evil.test/a"
             with self.assertRaises(ValueError):

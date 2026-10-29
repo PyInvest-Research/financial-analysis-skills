@@ -28,6 +28,7 @@ from .issuers.registry import PARSERS, SUPPORTED_ETFS, SupportedEtf
 from .models import Snapshot, snapshot_from_dict, snapshot_to_dict
 from .validate import validate_snapshot
 from .refresh import RefreshSession, acquire as acquire_refresh
+from .transport_evidence import TransportEvidence
 from .refresh_contract import products as refresh_products
 from .source_quality import parse_annotated
 
@@ -49,6 +50,7 @@ _ROUTES = frozenset({"http", "playwright", "official_only", "research"})
 _STATUSES = frozenset({"pass", "warn", "fail", "fetch_error", "official_only"})
 Saved = tuple[Snapshot, bytes]
 _refresh_session: RefreshSession | None = None
+_source_transport: TransportEvidence | None = None
 
 
 def _symbol(value: Any) -> str:
@@ -256,6 +258,30 @@ def _atomic_write(path: Path, raw: bytes) -> None:
             temporary.unlink(missing_ok=True)
 
 
+def _save_parse_failure(folder: Path, etf: SupportedEtf, raw: bytes,
+                        stamp: str, error: Exception) -> dict:
+    """Retain exact collector bytes outside public data for bounded repair.
+
+    The receipt binds bytes, registry identity, acquisition time and error.
+    Capture failures are recorded without discarding other valid updates.
+    The 2 MiB cap matches the agent's existing per-source budget.
+    """
+    record = {"status": "saved", "symbol": etf.symbol,
+              "source_url": etf.source_url, "fetched_at": stamp,
+              "error_type": type(error).__name__,
+              "untrusted_error": str(error)[:2000],
+              "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()}
+    if len(raw) > 2 * 1024 * 1024:
+        record["status"] = "source_too_large"
+        return record
+    try:
+        _atomic_write(folder / etf.symbol / f'{record["sha256"]}.raw', raw)
+    except (OSError, ValueError) as capture_error:
+        record["status"] = "capture_failed"
+        record["capture_error_type"] = type(capture_error).__name__
+    return record
+
+
 def publish_all(out_root: Path, *, fetch: Callable[[SupportedEtf], bytes],
                 today: date, fetched_at: str,
                 directory: CompanyDirectory,
@@ -279,6 +305,8 @@ def _publish_all(
         fetched_at: str, directory: CompanyDirectory, write: bool,
         observations: list[tuple[str, str, str | None, float | None]],
         selected: set[str] | None = None,
+        failure_root: Path | None = None,
+        failure_records: dict | None = None,
 ) -> dict:
     """Share real acquisition/validation between writing and read-only runs."""
     global _refresh_session
@@ -349,6 +377,9 @@ def _publish_all(
             row.update(previous_row or {}, last_status="fail",
                        last_error=f"{type(error).__name__}: {error}",
                        last_attempt_at=fetched_at)
+            if failure_root is not None and failure_records is not None:
+                failure_records[symbol] = _save_parse_failure(
+                    failure_root, etf, raw, fetched_at, error)
             observations.append((symbol, "fail", observed_day, stock_sum))
             continue
         row["last_status"] = result.status
@@ -509,18 +540,16 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.5.1",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.5.4",
                  "Content-Type": "application/json"}, method="POST",
     )
-    with opener.open(request, timeout=30) as response:
+    def check(response):
         _check_url(response.geturl(), "www.capitalfund.com.tw")
         if (response.geturl() != capital.SOURCE_URL
                 or response.getcode() != 200):
             raise ValueError("Capital POST changed endpoint or HTTP status")
-        raw = response.read(MAX_RESPONSE_BYTES + 1)
-        if len(raw) > MAX_RESPONSE_BYTES:
-            raise ValueError("Official response exceeds the 10MiB read cap")
-        return raw
+    return (_source_transport or TransportEvidence()).read(
+        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES, check_response=check)
 
 
 def _fetch_capital(etf: SupportedEtf) -> bytes:
@@ -556,19 +585,17 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.5.1"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.5.4"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
         headers["Content-Type"] = "application/json; charset=utf-8"
     request = Request(url, data=data, headers=headers)
-    with opener.open(request, timeout=30) as response:
+    def check(response):
         if response.geturl() != url:
             raise ValueError("Source response URL changed")
-        raw = response.read(MAX_RESPONSE_BYTES + 1)
-        if len(raw) > MAX_RESPONSE_BYTES:
-            raise ValueError("Official response exceeds the 10MiB read cap")
-        return raw
+    return (_source_transport or TransportEvidence()).read(
+        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES, check_response=check)
 
 
 def _source_get(opener: Any, url: str, host: str) -> bytes:
@@ -619,8 +646,10 @@ def _fetch_expansion(etf: SupportedEtf) -> bytes:
     the request clock, determine the snapshot holdings day.
     """
     module, symbol, active = _EXPANSION[etf.issuer]
-    if (etf.symbol != symbol or etf.is_active != active
-            or etf.source_url != module.SOURCE_URL):
+    if etf.issuer == "nomura":
+        nomura.validate_request(etf)
+    elif (etf.symbol != symbol or etf.is_active != active
+          or etf.source_url != module.SOURCE_URL):
         raise ValueError("Unqualified expansion source identity/URL")
     host = _check_url(etf.source_url)
     opener = build_opener(ProxyHandler({}), _NoSourceRedirect(host))
@@ -630,14 +659,16 @@ def _fetch_expansion(etf: SupportedEtf) -> bytes:
         return _source_request(opener, etf.source_url, host,
                                {"pStrFundID": "D90", "pStrDate": ""})
     if etf.issuer == "nomura":
-        assets = _source_request(opener, etf.source_url, host,
-                                 {"FundID": "00935", "SearchDate": None})
         # The source UI falls back to the local day when selecting latest PCF.
         # This is only a query parameter; CNavDt remains the holdings date.
-        publication = datetime.now(ZoneInfo("Asia/Taipei")).date().isoformat()
+        today = datetime.now(ZoneInfo("Asia/Taipei")).date()
+        publication = today.isoformat()
         pcf = _source_request(opener, nomura.PCF_URL, host,
-                              {"Type": 1, "Keyword": "", "FundNo": "00935",
+                              {"Type": 1, "Keyword": "", "FundNo": etf.symbol,
                                "Date": publication})
+        day = nomura.pcf_valuation_day(pcf, etf, today)
+        assets = _source_request(opener, etf.source_url, host,
+                                 {"FundID": etf.symbol, "SearchDate": day.isoformat()})
         return nomura.capture(assets, pcf)
     if etf.issuer == "esun":
         overview = _source_request(opener, esun.OVERVIEW_URL, host, {
@@ -684,7 +715,7 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         if etf.source_url != refresh_products()[etf.symbol]["source_url"]:
             raise ValueError("Unqualified refresh source URL")
         if _refresh_session is None:
-            _refresh_session = RefreshSession()
+            _refresh_session = RefreshSession(transport=_source_transport)
         return acquire_refresh(etf.symbol, _refresh_session)
     if etf.symbol in mixed.PRODUCTS:
         return _fetch_mixed(etf)
@@ -697,14 +728,12 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.1",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.4",
     })
-    with opener.open(request, timeout=30) as response:
+    def check(response):
         _check_url(response.geturl(), host)
-        raw = response.read(MAX_RESPONSE_BYTES + 1)
-        if len(raw) > MAX_RESPONSE_BYTES:
-            raise ValueError("Official response exceeds the 10MiB read cap")
-        return raw
+    return (_source_transport or TransportEvidence()).read(
+        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES, check_response=check)
 
 
 def _fetch_mixed(etf: SupportedEtf) -> bytes:
@@ -746,8 +775,9 @@ def main(argv: list[str] | None = None) -> int:
     errors still return 1. A dry-run computes proposed changes in
     memory; it creates no output directories, temporary snapshots or index.
     """
-    global _refresh_session
+    global _refresh_session, _source_transport
     _refresh_session = None
+    _source_transport = None
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--dry-run", action="store_true")
@@ -760,6 +790,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         root = _safe_root(args.out)
         report_path = None
+        failure_root = None
+        failure_records: dict = {}
         if args.allow_partial and args.run_report is None:
             raise ValueError("Partial publication requires a run report")
         if args.run_report is not None:
@@ -770,6 +802,12 @@ def main(argv: list[str] | None = None) -> int:
             if (report_path == root or root in report_path.parents
                     or report_path.exists() or report_path.is_symlink()):
                 raise ValueError("Run report must be fresh and outside data")
+            failure_root = report_path.with_suffix(".parse-failures")
+            _safe_root(failure_root)
+            if (failure_root == root or root in failure_root.parents
+                    or failure_root.exists()):
+                raise ValueError("Parse evidence must be fresh outside data")
+            _source_transport = TransportEvidence(report_path.with_suffix(".transport"))
         pins = _read_pins(root)
         directory = CompanyDirectory.from_file(
             Path(__file__).parent / "data" / "company-directory.json")
@@ -781,6 +819,7 @@ def main(argv: list[str] | None = None) -> int:
             root, fetch=fetch_official, today=today, fetched_at=stamp,
             directory=directory, write=not args.dry_run,
             observations=observations,
+            failure_root=failure_root, failure_records=failure_records,
             selected=set(args.symbols) if args.symbols else None)
         for symbol, status, day, stock_sum in observations:
             total = "unknown" if stock_sum is None else f"{stock_sum:.8f}"
@@ -808,6 +847,9 @@ def main(argv: list[str] | None = None) -> int:
             _atomic_write(report_path, _encoded({
                 "completed": True, "partial": failed,
                 "generated_at": stamp, "counts": counts,
+                "parse_failures": failure_records,
+                "source_denials": (_source_transport.denials.records
+                                   if _source_transport else []),
                 "failed_symbols": [symbol for symbol, status, _, _
                                    in observations
                                    if status in ("fail", "fetch_error")],
@@ -818,6 +860,9 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError) as error:
         print(f"Publication failed: {error}", file=sys.stderr)
         return 1
+    finally:
+        _source_transport = None
+        _refresh_session = None
 
 
 if __name__ == "__main__":

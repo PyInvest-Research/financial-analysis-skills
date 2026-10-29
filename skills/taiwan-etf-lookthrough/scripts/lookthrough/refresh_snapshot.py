@@ -96,4 +96,5 @@ def build_snapshot(
         source_hashes=hashes)
     return Snapshot("2", symbol, product["issuer"], product["is_active"],
                     inventory.day, fetched_at, product["source_url"],
-                    "official", tuple(holdings), evidence)
+                    "official", tuple(holdings), evidence,
+                    quality_notes=inventory.quality_notes)

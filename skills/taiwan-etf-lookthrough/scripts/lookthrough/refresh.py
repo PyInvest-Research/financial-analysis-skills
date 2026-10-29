@@ -1,7 +1,7 @@
 """Refresh qualified portfolios with bounded shared official price reads."""
 
 import base64
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import json
 from time import monotonic
 from typing import TYPE_CHECKING
@@ -12,6 +12,7 @@ from urllib.request import (
 from zoneinfo import ZoneInfo
 
 from .issuers import ftft, jpmorgan, mixed
+from . import refresh_fh
 from .issuers._assets import read_json
 from .models import Snapshot
 from .refresh_contract import products
@@ -24,6 +25,7 @@ from .refresh_snapshot import build_snapshot, inventory_markets
 from .refresh_workbooks import (
     fh_download, read_fhtrust, read_ftft, read_jpmorgan,
 )
+from .transport_evidence import TransportEvidence
 
 if TYPE_CHECKING:
     from .issuers.registry import SupportedEtf
@@ -54,7 +56,7 @@ class RefreshSession:
     requests, 80 MiB and 240 seconds are spent on the additional products.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, transport: TransportEvidence | None = None) -> None:
         """Start an empty bounded source cache and observation ledger."""
         self.started = monotonic()
         self.requests = 0
@@ -62,6 +64,7 @@ class RefreshSession:
         self.blocked: set[str] = set()
         self.quotes: dict[tuple[str, date], bytes | None] = {}
         self.events: list[dict] = []
+        self.transport = transport or TransportEvidence()
 
     def get(self, url: str, form: dict | None = None) -> bytes:
         """Fetch an exact allowlisted HTTPS URL or a public query form."""
@@ -74,13 +77,14 @@ class RefreshSession:
             raise ValueError("Unqualified official HTTPS refresh endpoint")
         if host in self.blocked:
             raise ValueError("Official host stopped after transport failure")
+        self.transport.denials.check(url)
         if (self.requests >= 100 or self.bytes >= 80 * 1024**2
                 or monotonic() - self.started >= 240):
             raise ValueError("Official refresh resource budget exhausted")
         self.requests += 1
         body = urlencode(form).encode() if form is not None else None
         request = Request(url, data=body, headers={
-            "User-Agent": "PyInvest-ETF-Lookthrough/1.5.1",
+            "User-Agent": "PyInvest-ETF-Lookthrough/1.5.2",
             **({"Content-Type": "application/x-www-form-urlencoded"}
                if body is not None else {}),
         })
@@ -89,13 +93,14 @@ class RefreshSession:
         try:
             opener = build_opener(ProxyHandler({}), NoRedirect())
             remaining = 240 - (monotonic() - self.started)
-            with opener.open(request, timeout=min(20, max(1, remaining))) as r:
+            def check(r):
                 if r.geturl() != url or r.getcode() != 200:
                     raise ValueError("Changed official URL/status")
-                raw = r.read(MAX_BYTES + 1)
-                self.bytes += len(raw)
-                if len(raw) > MAX_BYTES or self.bytes > 80 * 1024**2:
-                    raise ValueError("Official source response byte limit")
+            raw = self.transport.read(opener, request, timeout=min(20, max(1, remaining)),
+                                      limit=MAX_BYTES, check_response=check)
+            self.bytes += len(raw)
+            if self.bytes > 80 * 1024**2:
+                raise ValueError("Official source response byte limit")
             event.update(status="ok", bytes=len(raw))
             return raw
         except Exception as error:
@@ -129,6 +134,10 @@ def _inventory(symbol: str, sources: dict[str, bytes]) -> Inventory:
                                sources["assets"]),
                            native_nav=symbol == "00878")
     if issuer == "fhtrust":
+        if symbol == "00731" and "assets" in sources:
+            if sources.keys() != {"assets", "workbook"}:
+                raise ValueError("Ambiguous FH API capture sources")
+            return refresh_fh.read_inventory(sources["assets"], sources["workbook"])
         return read_fhtrust(sources["page"], sources["workbook"], symbol, fund)
     if issuer == "ftft":
         inventory = read_ftft(sources["assets"], symbol, fund)
@@ -172,9 +181,12 @@ def acquire(symbol: str, session: RefreshSession) -> bytes:
             sources[key] = session.get(mixed.API + endpoint +
                                        f"?FundCode={fund}&SearchDate={day}")
     elif issuer == "fhtrust":
-        sources["page"] = session.get(product["source_url"])
-        _, url = fh_download(sources["page"], fund)
-        sources["workbook"] = session.get(url)
+        if symbol == "00731":
+            sources = refresh_fh.acquire(session, datetime.now(ZoneInfo("Asia/Taipei")).date())
+        else:
+            sources["page"] = session.get(product["source_url"])
+            _, url = fh_download(sources["page"], fund)
+            sources["workbook"] = session.get(url)
     elif issuer == "ftft":
         sources["dates"] = session.get(product["source_url"])
         day = ftft.latest_day(sources["dates"])
@@ -223,5 +235,14 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
             raise ValueError("Invalid refresh source size")
         return result
     sources, quotes = decoded("sources"), decoded("quotes")
-    return build_snapshot(etf.symbol, _inventory(etf.symbol, sources),
+    inventory = _inventory(etf.symbol, sources)
+    if etf.symbol == "00731" and "assets" in sources:
+        stamp = datetime.fromisoformat(fetched_at)
+        if stamp.utcoffset() != timedelta(0):
+            raise ValueError("FH capture requires an explicit UTC timestamp")
+        age = (stamp.astimezone(ZoneInfo("Asia/Taipei")).date()
+               - inventory.day).days
+        if quotes or not 1 <= age <= refresh_fh.MAX_LOOKBACK_DAYS:
+            raise ValueError("FH API capture is outside the dated acquisition contract")
+    return build_snapshot(etf.symbol, inventory,
                           list(sources.values()), quotes, fetched_at)
