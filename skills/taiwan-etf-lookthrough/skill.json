@@ -9,6 +9,7 @@
   "githubUrl": "https://github.com/PyInvest-Research/financial-analysis-skills/tree/main/skills/taiwan-etf-lookthrough",
   "files": [
     "SKILL.md",
+    "CHANGELOG.md",
     "agents/openai.yaml",
     "LICENSE",
     "skill.json",

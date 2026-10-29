@@ -1,6 +1,6 @@
 # 固定歷史示範：原五檔＋直接2330
 
-這是使用者核准的**固定示範特例**，本檔歷史產物由 v1.0.0 生成，現隨 v1.3.0 保留原bytes。五份共同官方持股日與假設估值日都是 **2026-10-22**；本次實際生成日為真實台北 **2026-10-26**。不等待五檔首次排程發布來決定固定示範日期，亦不把假設市值當使用者真實部位或即時估值。
+這是使用者核准的**固定示範特例**，本檔歷史產物由 v1.0.0 生成，後續版本保留原 bytes。五份共同官方持股日與假設估值日都是 **2026-10-22**；本次實際生成日為真實台北 **2026-10-26**。不等待五檔首次排程發布來決定固定示範日期，亦不把假設市值當使用者真實部位或即時估值。
 
 | 部位 | 假設TWD市值 |
 | --- | ---: |
@@ -14,7 +14,7 @@
 
 ## 授權與每日資料分開
 
-00878這一份已核對的legacy官方來源Snapshot可隨固定skill/demo；此例外不適用其他日期或每日發布。國泰五檔daily仍`official_only`，沒有browser自動publisher，也沒有由此demo seed daily index／latest／dated snapshot。repository的`public/data/etf-holdings/v1/pinned.json`只記五個(symbol,2026-10-22)保留政策，沒有持股資料或網站data-date；它不是公開快照已發布的證據。固定示範不代表任意國泰日期的每日快照已提供。
+00878這一份已核對的legacy官方來源Snapshot可隨固定skill/demo；此例外不適用其他日期或每日發布。v1.0.0 發布時，國泰五檔 daily 為 `official_only`，沒有 browser 自動 publisher；這是歷史狀態，當期支援範圍與日期請查 [snapshot-coverage.md](../references/snapshot-coverage.md)。本 demo 不作為 daily index／latest／dated snapshot 的種子。repository的`public/data/etf-holdings/v1/pinned.json`只記五個(symbol,2026-10-22)保留政策，沒有持股資料或網站data-date；它不是公開快照已發布的證據。固定示範不代表任意國泰日期的每日快照已提供。
 
 ## 檔案與來源
 
@@ -43,7 +43,7 @@ outputs = run_lookthrough(
 
 本次實跑沒有傳歷史today，五份驗證均pass。之後日子改變，完整JSON的驗證age等內容可能不同；strict 模式持股年齡超過30天會驗證失敗並保留未穿透；v1.3.0 預設 annotated 則計算歷史暫估並標注，應誠實解釋為歷史資料已過期，不可回填新fetched_at、刪警告或把today鎖回歷史日期冒充新鮮。需要當期分析時另用合格新來源與新的市值／日期，不覆寫本固定示範。
 
-`tests/test_demo.py` 保留原 v1.0.0 金融數字對照；v1.3.0 的完整欄位比較與明示 test-only clock 見下方「現行驗收」。產品範例一律 default today。
+`tests/test_demo.py` 保留原 v1.0.0 金融數字對照；v1.3.0 的完整欄位比較與明示 test-only clock 見下方「歷史驗收」。產品範例一律 default today。
 
 ChatGPT Web人類操作：使用者已回傳原draft的實跑PASS報告及相符hash，原始Web輸出未附；本次v1候選另作本機驗證，沒有宣稱新的Web實跑。自行上傳套件時，請對話先讀SKILL.md與本README；若環境可解壓與執行Python，依上例離線跑。無執行能力就回報，不心算expected；來源過期就保留未穿透與原因，不覆寫日期。
 
@@ -66,14 +66,14 @@ ChatGPT Web人類操作：使用者已回傳原draft的實跑PASS報告及相符
 - 期貨部位會額外帶來市場（含成分股）曝險，本版未拆解至個股。
 - 本報告為資料整理與計算，不構成投資建議。
 
-## v1.3.0 現行驗收
+## v1.3.0 歷史驗收
 
 原 v1.0.0 產物維持不動。新增 `v1.3.0/expected-result.json`、report.md、
 exposures.csv 與 generation-evidence.json，使用真實執行日、不傳 today、
 一次禁網執行產生。六個輸入雜湊不變，totals／companies／industries／metrics
 與 v1.0.0 完全一致；新增品質標籤、來源檢查與 0056 分母警告是刻意的版本差異。
 
-ChatGPT 驗收應比較 `v1.3.0/expected-result.json`。同日只排除 generated_at；
+重現 v1.3.0 的 ChatGPT 驗收時應比較 `v1.3.0/expected-result.json`。同日只排除 generated_at；
 跨日驗證 age 必須按真實日期解釋，不能為通過比較隱藏警告。
 歷史 v1.0.0 單元測試保留金融數字對照，v1.3.0 單元測試使用其生成日
 的明示 test-only clock，除 generated_at 外逐欄完整比較。這不代表新平台已驗收。
