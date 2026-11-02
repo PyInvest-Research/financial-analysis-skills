@@ -14,7 +14,11 @@
 
 ## 授權與每日資料分開
 
-00878這一份已核對的legacy官方來源Snapshot可隨固定skill/demo；此例外不適用其他日期或每日發布。v1.0.0 發布時，國泰五檔 daily 為 `official_only`，沒有 browser 自動 publisher；這是歷史狀態，當期支援範圍與日期請查 [snapshot-coverage.md](../references/snapshot-coverage.md)。本 demo 不作為 daily index／latest／dated snapshot 的種子。repository的`public/data/etf-holdings/v1/pinned.json`只記五個(symbol,2026-10-22)保留政策，沒有持股資料或網站data-date；它不是公開快照已發布的證據。固定示範不代表任意國泰日期的每日快照已提供。
+這份 00878 快照取自已核對的歷史官方來源，只供固定 skill 示範使用，不能套用到其他日期，也不能用於每日發布。
+
+v1.0.0 發布時，國泰旗下五檔 ETF 的每日資料狀態為 `official_only`，當時也還沒有以瀏覽器自動發布的機制；以上是當時的歷史狀態。目前的支援範圍與持股日，請查閱 [snapshot-coverage.md](../references/snapshot-coverage.md)。
+
+本示範不能作為當期索引或快照的初始資料，也不能拿固定示範來證明國泰其他日期已有每日資料。
 
 ## 檔案與來源
 

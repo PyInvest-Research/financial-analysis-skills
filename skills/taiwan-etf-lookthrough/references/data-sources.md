@@ -459,13 +459,19 @@ outputs = run_lookthrough(
 
 ## 固定demo：本地共同日與00878唯一例外
 
-`demo/portfolio.json`維持0050=300000、006208=200000、0056=150000、00878=150000、00919=100000、直接2330=100000 TWD，全部是假設市值。五份Snapshot共同as-of2026-10-22，原URL、fetched_at及raw來源hash不變；00878使用已資格、有總NAV的legacy中文完整表，不借modern unknown-NAV推算。唯一00878快照可隨固定demo，daily五Cathay仍official_only。
+`demo/portfolio.json` 中的金額都是**假設市值**（新台幣），不是使用者真實部位：0050 為 300,000、006208 為 200,000、0056 為 150,000、00878 為 150,000、00919 為 100,000，直接持有 2330 為 100,000。五份 ETF 快照的共同持股日為 2026-10-22；各快照的原始 URL、`fetched_at` 與原始來源 hash 均維持原樣。
+
+00878 使用的是已核對、含總淨值（NAV）的舊版中文完整持股表，沒有改用缺少淨值的新版格式來推算。這項來源例外**僅適用於固定示範**，不能延伸到其他日期，也不能作為判斷當期來源是否合格的依據。
 
 預期結果由現有run_lookthrough在真實台北2026-10-26、default today、use_network=False＋deny opener實跑一次生成；前置source／snapshot hash與03:44Z獨立2330預期先凍結，並非拷貝舊expected或反推。完整證據在demo/provenance.json、pre-run-evidence.json、generation-evidence.json及repository demo-handcheck.md。舊原五檔雙run與Codex乾淨ZIP證據仍保持原樣，不把它們當本次新Web驗收。
 
 demo/report.md與README明示native百分比保留、不rescale，Cathay native97.13%與同頁amount/NAV97.111452727684...%差異、44.631996610434726 TWD桶殘差、1320 TWD未分類與NYF/TX/TX202611/WTXX6F四筆unknown futures。source manifests原件留研究區，包內只有canonical snapshots及小lineage metadata，不冒稱下載包內已有全部大型raw。
 
-`public/data/etf-holdings/v1/pinned.json`只記這五個日期保留對，不產生daily index/latest/dated snapshot或網站data-date；固定示範與每日發布分開，當期資料狀態以公開索引為準。產品／ChatGPT Web人類操作範例均default today，超過既有30日freshness即依核心保留未穿透；不得鎖回歷史today或改fetchstamp。完整JSON重現比較只去最上層generated_at；固定clock限test_demo的歷史單元測試，不能冒充actual平台驗收。
+固定示範保留原本的持股日，與當期資料包分開管理。固定示範不能用來建立當期快照，也不能用來宣稱每日資料已成功取得。目前支援哪些商品、各商品的持股日，請查閱 [snapshot-coverage.md](snapshot-coverage.md)；舊網站索引已停用，不再讀取。
+
+一般使用與平台操作一律以**實際執行日**為準。若資料超過既有的 30 天規則，依核心邏輯保留過期警告，並照常提供可用資料；不得把 today 寫死，也不得修改 `fetched_at` 來掩蓋資料過期。
+
+重現完整 JSON 歷史結果時，只排除最上層的 `generated_at`。固定時鐘僅用於歷史單元測試，不代表平台驗收結果。
 
 
 封存管線可用 `publish --raw-dir <fresh-directory>` 同時保存原始 bytes 與不可變的 `raw-manifest.json`；輸出目錄須獨立於持股發布目錄。
