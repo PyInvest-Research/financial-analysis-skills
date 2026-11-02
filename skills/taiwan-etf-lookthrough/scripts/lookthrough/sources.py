@@ -1,111 +1,19 @@
-"""Acquire published or flat local snapshots without trusting metadata URLs."""
+"""Read local source snapshots without any website transport."""
 
 from datetime import date
-from http.client import HTTPException
 import json
 from pathlib import Path
 import re
-from typing import Any, Callable
-from urllib.parse import urlsplit
-from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .models import Snapshot, snapshot_from_dict
 
 
-PYINVEST_BASE_URL = 'https://pyecontech.com/data/etf-holdings/v1'
 _COMPANION_NAMES = frozenset({'portfolio.json', 'expected-result.json'})
 _SNAPSHOT_FIELDS = frozenset({'etf_symbol', 'holdings_date', 'holdings'})
 
 
 class SourceUnavailable(RuntimeError):
-    """Signal acquisition, decoding, schema or snapshot identity failure."""
-
-
-def _check_pyinvest_url(url: str) -> None:
-    """Restrict real requests and redirects to first-party snapshot paths."""
-    parsed = urlsplit(url)
-    root_path = urlsplit(PYINVEST_BASE_URL).path
-    if (parsed.scheme != 'https' or parsed.hostname != 'pyecontech.com'
-            or parsed.username is not None or parsed.password is not None
-            or parsed.port not in (None, 443)
-            or parsed.query or parsed.fragment
-            or not (parsed.path == root_path
-                    or parsed.path.startswith(root_path + '/'))
-            or not re.fullmatch(r'[A-Za-z0-9/._-]+', parsed.path)
-            or any(part in ('.', '..') for part in parsed.path.split('/'))):
-        raise ValueError('URL is not an approved PyInvest snapshot endpoint')
-
-
-class _PyInvestRedirect(HTTPRedirectHandler):
-    """Check each redirect before urllib sends its next request."""
-
-    def redirect_request(self, req: Request, fp: Any, code: int, msg: str,
-                         headers: Any, newurl: str) -> Request | None:
-        """Permit only first-party HTTPS snapshot destinations."""
-        _check_pyinvest_url(newurl)
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
-
-
-class _NoRedirect(HTTPRedirectHandler):
-    """Reject every redirect before sending a second request."""
-
-    def redirect_request(self, req: Request, fp: Any, code: int, msg: str,
-                         headers: Any, newurl: str) -> None:
-        """Refuse same-host and cross-host redirects alike."""
-        raise ValueError("PyInvest public JSON redirects are disabled")
-
-
-def open_public_json(url: str) -> bytes:
-    """Read exact-host public JSON with default TLS and no redirects.
-
-    This transport does not install code or disable certificate validation.
-    The caller records whether the actual TLS trust store was audited.
-    """
-    _check_pyinvest_url(url)
-    with build_opener(_NoRedirect()).open(url, timeout=20) as response:
-        if response.geturl() != url:
-            raise ValueError("Unexpected public JSON destination")
-        raw = response.read(10 * 1024 * 1024 + 1)
-        if len(raw) > 10 * 1024 * 1024:
-            raise ValueError("Public JSON exceeds size limit")
-        return raw
-
-
-def _open_url(url: str) -> bytes:
-    """Read with verified default TLS and a twenty-second timeout.
-
-    Operators must verify their interpreter CA store according to
-    references/runtime-safety.md before live acquisition. No custom SSL
-    context, credentials or source_url metadata is used here.
-    """
-    _check_pyinvest_url(url)
-    transport = build_opener(_PyInvestRedirect())
-    with transport.open(url, timeout=20) as response:
-        _check_pyinvest_url(response.geturl())
-        return response.read()
-
-
-def _read_json(url: str, opener: Callable[[str], bytes] | None) -> Any:
-    """Decode UTF-8 JSON and wrap transport or serialization errors."""
-    try:
-        raw = (opener or _open_url)(url)
-        return json.loads(raw.decode('utf-8-sig'))
-    except (OSError, HTTPException, ValueError, TypeError,
-            AttributeError) as error:
-        raise SourceUnavailable(f'Cannot read {url}: {error}') from error
-
-
-def fetch_index(base_url: str = PYINVEST_BASE_URL,
-                opener: Callable[[str], bytes] | None = None) -> dict:
-    """Fetch an index object, raising SourceUnavailable on read failure.
-
-    Injected openers receive the constructed URL and may support offline fake
-    bases. Index contents never authorize additional network destinations.
-    """
-    payload = _read_json(base_url.rstrip('/') + '/index.json', opener)
-    if not isinstance(payload, dict):
-        raise SourceUnavailable('Index must be a JSON object')
-    return payload
+    """Signal local decoding, schema or snapshot identity failure."""
 
 
 def _symbol(value: str) -> str:
@@ -114,34 +22,6 @@ def _symbol(value: str) -> str:
     if not re.fullmatch(r'[0-9A-Z]{4,6}', normalized):
         raise SourceUnavailable('Snapshot symbol must be 4-6 ASCII characters')
     return normalized
-
-
-def fetch_pyinvest_snapshot(
-        symbol: str, holdings_date: date | None = None, *,
-        base_url: str = PYINVEST_BASE_URL,
-        opener: Callable[[str], bytes] | None = None) -> Snapshot:
-    """Fetch latest or dated holdings and verify the requested identity.
-
-    Preserve serialized source_kind and provenance for stable content hashes.
-    HTTP, timeout, encoding, JSON and schema errors raise SourceUnavailable.
-    Financial validation remains the caller's separate responsibility.
-    """
-    symbol = _symbol(symbol)
-    if holdings_date is not None and type(holdings_date) is not date:
-        raise SourceUnavailable('Requested holdings date must be a date')
-    filename = (holdings_date.isoformat() if holdings_date else 'latest')
-    url = f"{base_url.rstrip('/')}/{symbol}/{filename}.json"
-    payload = _read_json(url, opener)
-    try:
-        snapshot = snapshot_from_dict(payload)
-    except ValueError as error:
-        message = f'Invalid snapshot at {url}: {error}'
-        raise SourceUnavailable(message) from error
-    if snapshot.etf_symbol != symbol:
-        raise SourceUnavailable(f'Snapshot symbol mismatch at {url}')
-    if holdings_date is not None and snapshot.holdings_date != holdings_date:
-        raise SourceUnavailable(f'Snapshot holdings date mismatch at {url}')
-    return snapshot
 
 
 def load_local_snapshot(path: Path) -> Snapshot | None:

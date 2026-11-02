@@ -17,7 +17,7 @@ parser 合約見 [mixed-etfs.md](mixed-etfs.md)。schema 1 的序列化與雜湊
 | is_active | boolean，指主動管理，不是掛牌存續 |
 | holdings_date | string `YYYY-MM-DD`，官方實際持股日 |
 | fetched_at | string，UTC ISO 8601 timestamp |
-| source_url | string，實際官方或 PyInvest 來源，另依 runtime-safety 檢查 |
+| source_url | string，原始官方或歷史發布來源，另依 runtime-safety 檢查 |
 | source_kind | `pyinvest` / `official` / `agent_official` |
 | holdings | Holding object array；Python 模型為 tuple |
 
@@ -76,7 +76,7 @@ annotated 的字串、零值、cash／other_asset 擴充見文末 v1.5.0。
 
 Snapshot metadata 欄位為 `symbol` string；`holdings_date`, `issuer`, `fetched_at`, `source_kind`, `source_url`, `snapshot_sha256`, `validation_status` 可為 string / null；`is_active` boolean / null；`date_status` 為 `common`, `within_tolerance`, `stale`, `active_mismatch` 或 null。未取得快照保留 null，不填假日期。validation 為 `{status, checks}`，status 是 `pass` / `warn` / `fail`，checks 每筆 `{name, status, detail}` 為 string。
 
-`run_lookthrough(portfolio_path, out_dir, *, local_snapshot_dir=None, official_files=None, use_network=True, today=None, base_url=..., opener=None)` 回傳以 `result.json`, `report.md`, `exposures.csv` 為 key 的 `dict[str, Path]`。不要把回傳 mapping 當結果 JSON；需讀取對應檔案。CSV 是 UTF-8 BOM，欄位為 `issuer_code,name,industry_code,amount_twd,share,source,security_code,source_amount_twd`；來源貢獻才可加總。
+`run_lookthrough(portfolio_path, out_dir, *, local_snapshot_dir=None, official_files=None, bundled_dir=None, use_network=True, today=None, base_url=None, opener=None)` 回傳以 `result.json`, `report.md`, `exposures.csv` 為 key 的 `dict[str, Path]`。本版函式只讀檔；use_network、base_url、opener、ca_verified 僅保留舊呼叫相容性。不要把回傳 mapping 當結果 JSON；需讀取對應檔案。CSV 是 UTF-8 BOM，欄位為 `issuer_code,name,industry_code,amount_twd,share,source,security_code,source_amount_twd`；來源貢獻才可加總。
 
 ### 未知總額與格式遷移
 

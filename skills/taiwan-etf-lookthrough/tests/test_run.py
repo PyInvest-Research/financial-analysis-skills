@@ -1,6 +1,7 @@
 """Test orchestration using only synthetic files and injected transports."""
 
 from copy import deepcopy
+import hashlib
 from functools import partial
 from datetime import date, datetime, timedelta
 import json
@@ -76,6 +77,9 @@ class RunTests(unittest.TestCase):
         """Run and read all outputs, defaulting to an entirely offline run."""
         options = {'today': TODAY, 'use_network': False, **kwargs}
         portfolio_path = options.pop('portfolio_path', FIX / 'portfolio.json')
+        if self.remote and 'bundled_dir' not in options:
+            options['bundled_dir'] = self.make_bundle()
+        options.setdefault('bundled_dir', self.root / 'no-bundle')
         paths = run_lookthrough(portfolio_path, self.root / 'out',
                                 **options)
         self.assertEqual(set(paths), {'result.json', 'report.md',
@@ -87,6 +91,29 @@ class RunTests(unittest.TestCase):
         stamp = datetime.fromisoformat(result['generated_at'])
         self.assertEqual(stamp.utcoffset(), timedelta(0))
         return result
+
+    def make_bundle(self) -> Path:
+        """Convert synthetic availability fixtures to real indexed files."""
+        folder = self.root / 'bundle-fixture'
+        folder.mkdir(exist_ok=True)
+        rows = []
+        for entry in self.index.get('etfs', []):
+            code, days = entry['symbol'], entry.get('dates', [])
+            if not isinstance(days, list) or not days:
+                continue
+            day = max(days)
+            value = self.remote.get(f'{code}/{day}.json')
+            if value is None:
+                continue
+            raw = value if isinstance(value, bytes) else json.dumps(value).encode()
+            fields = {k: v for k, v in value.items() if k != 'fetched_at'} if isinstance(value, dict) else {}
+            sha = hashlib.sha256(json.dumps(fields, sort_keys=True, ensure_ascii=False,
+                                           separators=(',', ':')).encode()).hexdigest()
+            rows.append(dict(symbol=code, holdings_date=day, snapshot_sha256=sha))
+            (folder / f'{code}.json').write_bytes(raw)
+        (folder / 'index.json').write_text(json.dumps(dict(
+            schema_version='1', source='gcs:etf-holdings/v1', etfs=rows)))
+        return folder
 
     def write_local(self, *payloads: Any) -> Path:
         """Write flat candidate files without modifying shared fixtures."""
@@ -152,23 +179,22 @@ class RunTests(unittest.TestCase):
             self.assertIn(sentence, report)
         self.assertEqual(json.loads((folder / '0.json').read_text()), payload)
 
-    def test_falls_back_when_pyinvest_unavailable(self) -> None:
-        """Keep transport failures visible after an official fallback."""
-        result = self.run_case(use_network=True, opener=self.opener,
-                               official_files=self.official())
+    def test_corrupt_bundle_falls_back_to_official(self) -> None:
+        """Keep bundle failures visible after a usable official fallback."""
+        bundle = self.root / 'bundle'
+        bundle.mkdir()
+        (bundle / 'index.json').write_text('{')
+        result = self.run_case(bundled_dir=bundle, official_files=self.official())
         self.assertEqual(result['positions'][0]['status'], 'looked_through')
-        self.assertEqual(result['snapshots'][0]['source_kind'],
-                         'agent_official')
-        self.assertIn('PyInvest', ' '.join(result['warnings']))
+        self.assertEqual(result['snapshots'][0]['source_kind'], 'agent_official')
+        self.assertIn('內建快照', ' '.join(result['warnings']))
 
     def test_offline_mode_never_calls_opener(self) -> None:
-        """Neither opener nor index fetch is consulted in offline mode."""
+        """Legacy transport callbacks are unused in the offline bundle path."""
         opener = MagicMock(side_effect=AssertionError('network forbidden'))
-        with patch('lookthrough.run.fetch_index') as index:
-            result = self.run_case(local_snapshot_dir=FIX / 'pyinvest',
-                                   opener=opener)
+        with patch('socket.socket.connect', side_effect=AssertionError('network')):
+            result = self.run_case(local_snapshot_dir=FIX / 'pyinvest', opener=opener)
         opener.assert_not_called()
-        index.assert_not_called()
         self.assertEqual(result['totals']['coverage'], .95)
 
     def test_local_priority_avoids_all_network(self) -> None:
@@ -188,39 +214,28 @@ class RunTests(unittest.TestCase):
         path.write_text(json.dumps(payload))
         return path
 
-    def test_partial_local_upgrades_from_published_holdings(self) -> None:
-        """Recent partial rows must not suppress fuller published sources."""
+    def test_partial_explicit_local_remains_a_caller_choice(self) -> None:
+        """Packaged data cannot silently replace a caller's explicit inventory."""
         portfolio = self.annotated_portfolio()
         local = deepcopy(self.payload)
         local['holdings'] = local['holdings'][:1]
         folder = self.write_local(local)
-        for day in ['2026-10-21', '2026-10-22', '2026-10-23']:
-            with self.subTest(day=day):
-                self.index['etfs'] = [{'symbol': '0050', 'dates': [day]}]
-                self.remote[f'0050/{day}.json'] = {
-                    **self.payload, 'holdings_date': day}
-                result = self.run_case(
-                    validation_policy='annotated', portfolio_path=portfolio,
-                    local_snapshot_dir=folder,
-                    use_network=True, opener=self.opener)
-                self.assertEqual(result['totals']['coverage'], .95)
-                self.assertEqual(result['snapshots'][0]['holdings_date'], day)
+        from bundle_support import write_bundle
+        bundle = write_bundle(self.root / 'bundle', [self.payload])
+        result = self.run_case(validation_policy='annotated', portfolio_path=portfolio,
+                               local_snapshot_dir=folder, bundled_dir=bundle)
+        self.assertEqual(result['totals']['coverage'], .6)
         self.assertEqual(json.loads((folder / '0.json').read_text()), local)
 
-    def test_partial_local_survives_remote_failure(self) -> None:
-        """Failed acquisition retains known rows, denominator and reason."""
+    def test_partial_local_keeps_known_rows_and_full_denominator(self) -> None:
+        """Known local rows remain usable without any automatic HTTP request."""
         portfolio = self.annotated_portfolio()
         local = deepcopy(self.payload)
         local['holdings'] = local['holdings'][:1]
-        folder = self.write_local(local)
-        result = self.run_case(
-            validation_policy='annotated', portfolio_path=portfolio,
-            local_snapshot_dir=folder,
-            use_network=True, opener=self.opener)
-        self.assertTrue(self.urls)
+        result = self.run_case(validation_policy='annotated', portfolio_path=portfolio,
+                               local_snapshot_dir=self.write_local(local))
         self.assertEqual(result['totals']['coverage'], .6)
         self.assertEqual(result['totals']['total_value'], 100000)
-        self.assertIn('no available dates', ' '.join(result['warnings']))
 
     def test_complete_annotated_local_avoids_network(self) -> None:
         """Complete usable local holdings preserve the inexpensive path."""
@@ -232,21 +247,16 @@ class RunTests(unittest.TestCase):
                       use_network=True, opener=opener)
         opener.assert_not_called()
 
-    def test_current_partial_precedes_stale_complete_remote(self) -> None:
-        """Completeness does not silently reverse the documented date tier."""
+    def test_current_local_precedes_stale_complete_bundle(self) -> None:
+        """Completeness cannot reverse the explicit local source choice."""
         portfolio = self.annotated_portfolio()
         local = deepcopy(self.payload)
         local['holdings'] = local['holdings'][:1]
-        folder = self.write_local(local)
-        day = '2026-09-01'
-        self.index['etfs'] = [{'symbol': '0050', 'dates': [day]}]
-        self.remote[f'0050/{day}.json'] = {
-            **self.payload, 'holdings_date': day}
-        result = self.run_case(
-            validation_policy='annotated', portfolio_path=portfolio,
-            local_snapshot_dir=folder,
-            use_network=True, opener=self.opener)
-        self.assertTrue(any(url.endswith(f'/{day}.json') for url in self.urls))
+        from bundle_support import write_bundle
+        old = {**self.payload, 'holdings_date': '2026-09-01'}
+        result = self.run_case(validation_policy='annotated', portfolio_path=portfolio,
+                               local_snapshot_dir=self.write_local(local),
+                               bundled_dir=write_bundle(self.root / 'bundle', [old]))
         self.assertEqual(result['totals']['coverage'], .6)
 
     def test_invalid_local_falls_through(self) -> None:
@@ -289,19 +299,8 @@ class RunTests(unittest.TestCase):
                                        official_files=self.official())
                 self.assertEqual(result['snapshots'][0]['source_kind'],
                                  'agent_official')
-                self.assertIn('PyInvest', ' '.join(result['warnings']))
+                self.assertIn('內建快照', ' '.join(result['warnings']))
 
-    def test_invalid_index_entries_are_not_followed(self) -> None:
-        """Reject malformed relevant dates without constructing their URLs."""
-        for dates in [['../secret'], ['2026-02-30'], '2026-10-22', [None]]:
-            with self.subTest(dates=dates):
-                self.urls.clear()
-                self.index['etfs'] = [{'symbol': 'ETFA', 'dates': dates}]
-                result = self.run_case(use_network=True, opener=self.opener,
-                                       official_files=self.official())
-                self.assertEqual(len(self.urls), 1)
-                self.assertEqual(result['totals']['coverage'], .95)
-                self.assertIn('index', ' '.join(result['warnings']))
 
     def test_wrong_official_identity_and_invalid_metadata(self) -> None:
         """Wrong ETF and malformed metadata leave the full ETF unprocessed."""
@@ -354,7 +353,7 @@ class RunTests(unittest.TestCase):
         } for day in ['2026-10-21', '2026-10-22']}
         paths = run_lookthrough(self.two_etfs(), self.root / 'aligned',
                                 local_snapshot_dir=FIX / 'pyinvest',
-                                use_network=True, opener=self.opener,
+                                use_network=True, bundled_dir=self.make_bundle(),
                                 today=TODAY)
         result = json.loads(paths['result.json'].read_text())
         self.assertEqual([s['holdings_date'] for s in result['snapshots']],
@@ -370,7 +369,7 @@ class RunTests(unittest.TestCase):
         self.remote['ETFB/2026-10-23.json'] = invalid
         paths = run_lookthrough(self.two_etfs(), self.root / 'aligned',
                                 local_snapshot_dir=FIX / 'pyinvest',
-                                opener=self.opener, today=TODAY)
+                                bundled_dir=self.make_bundle(), today=TODAY)
         result = json.loads(paths['result.json'].read_text())
         self.assertEqual(result['snapshots'][0]['date_status'], 'common')
         self.assertIsNone(result['snapshots'][1]['holdings_date'])
@@ -397,31 +396,7 @@ class RunTests(unittest.TestCase):
         self.assertEqual(result['totals']['coverage'], .95)
         self.assertTrue(result['warnings'])
 
-    def test_remote_index_failure_tries_latest(self) -> None:
-        """A failed index transport still permits verified latest.json."""
-        self.remote['ETFA/latest.json'] = self.payload
 
-        def opener(url: str) -> bytes:
-            """Fail the index alone, serving only the explicit latest file."""
-            if url.endswith('index.json'):
-                raise OSError('Synthetic index failure')
-            return self.opener(url)
-
-        result = self.run_case(use_network=True, opener=opener)
-        self.assertEqual(result['totals']['coverage'], .95)
-        self.assertIn('index failure', ' '.join(result['warnings']))
-
-    def test_invalid_newer_remote_retains_valid_older(self) -> None:
-        """Do not fall past an available valid older published snapshot."""
-        self.index['etfs'] = [{'symbol': 'ETFA',
-                               'dates': ['2026-10-22', '2026-10-23']}]
-        self.remote['ETFA/2026-10-23.json'] = {}
-        self.remote['ETFA/2026-10-22.json'] = self.payload
-        result = self.run_case(use_network=True, opener=self.opener,
-                               official_files=self.official())
-        self.assertEqual(result['snapshots'][0]['source_kind'], 'pyinvest')
-        self.assertEqual(result['snapshots'][0]['holdings_date'], '2026-10-22')
-        self.assertTrue(result['warnings'])
 
     def test_conflicting_local_date_falls_to_other_valid_date(self) -> None:
         """Exclude all conflicting copies but retain another valid day."""
@@ -473,7 +448,7 @@ class RunTests(unittest.TestCase):
                                opener=self.opener,
                                official_files=self.official(etf_symbol='ETFB'))
         reason = result['positions'][0]['reason']
-        for source in ['local', 'PyInvest', 'official']:
+        for source in ['local', '內建快照', 'official']:
             self.assertIn(source, reason)
         self.assertEqual(result['totals']['not_looked_through_value'], 100000)
 

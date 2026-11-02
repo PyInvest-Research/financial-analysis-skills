@@ -44,6 +44,9 @@ class SkillDocsTests(unittest.TestCase):
         files = set(manifest['files'])
         expected = {str(p.relative_to(ROOT))
                     for p in (ROOT / 'scripts').rglob('*.py')}
+        expected.update(str(p.relative_to(ROOT)) for p in
+                        (ROOT / 'scripts/lookthrough/data/snapshots')
+                        .glob('*.json'))
         expected.update({
             'SKILL.md', 'CHANGELOG.md', 'agents/openai.yaml',
             'references/schema.md',
@@ -89,7 +92,7 @@ class SkillDocsTests(unittest.TestCase):
             self.assertNotIn('..', Path(name).parts)
             self.assertTrue((ROOT / name).is_file(), name)
         self.assertEqual(manifest['status'], 'published')
-        self.assertEqual(manifest['version'], '1.6.1')
+        self.assertRegex(manifest['version'], r'^1\.\d+\.\d+$')
         self.assertEqual(manifest['version'], __version__)
         project = tomllib.loads((ROOT / 'pyproject.toml').read_text())
         self.assertEqual(project['project']['version'], __version__)

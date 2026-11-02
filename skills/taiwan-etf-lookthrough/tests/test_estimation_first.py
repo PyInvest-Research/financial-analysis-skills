@@ -10,7 +10,6 @@ import struct
 import tempfile
 import unittest
 from unittest.mock import patch
-from urllib.request import Request
 
 from openpyxl import Workbook
 
@@ -25,7 +24,6 @@ from lookthrough.models import (  # noqa: E402
 from lookthrough.portfolio import PortfolioError, parse_portfolio  # noqa: E402
 from lookthrough.run import run_lookthrough  # noqa: E402
 from lookthrough.validate import validate_snapshot  # noqa: E402
-from lookthrough.sources import _NoRedirect, PYINVEST_BASE_URL  # noqa: E402
 
 
 TODAY = date(2026, 10, 28)
@@ -66,6 +64,7 @@ class EstimationTests(unittest.TestCase):
         for index, value in enumerate(snapshots):
             (folder / f"{index}.json").write_text(json.dumps(
                 snapshot_to_dict(value)))
+        options.setdefault("bundled_dir", self.root / "no-bundle")
         paths = run_lookthrough(
             portfolio, self.root / "out", local_snapshot_dir=folder,
             today=TODAY, use_network=False, **options)
@@ -264,31 +263,22 @@ class EstimationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid row 2"):
             self.official("code,name,weight\n2330,TSMC,NaN\n")
 
-    def test_current_remote_precedes_stale_local(self) -> None:
-        """Stale local availability must not prevent trying current JSON."""
-        def public(url: str) -> bytes:
-            """Serve the exact index and requested dated payload only."""
-            if url.endswith("/index.json"):
-                return json.dumps(dict(schema_version="1", etfs=[
-                    dict(symbol="0050", dates=["2026-10-28"])])).encode()
-            self.assertTrue(url.endswith("/0050/2026-10-28.json"))
-            return json.dumps(snapshot_to_dict(snapshot())).encode()
-
-        portfolio = self.root / "portfolio.json"
-        portfolio.write_text(json.dumps(dict(
-            currency="TWD", valuation_date=TODAY.isoformat(), positions=[
-                dict(symbol="0050", kind="etf", market_value=100000)])))
-        folder = self.root / "local"
+    def test_explicit_stale_local_precedes_packaged_snapshot(self) -> None:
+        """Preserve a caller's selected local inventory and its stale warning."""
+        from bundle_support import write_bundle
+        portfolio = self.root / 'portfolio.json'
+        portfolio.write_text(json.dumps(dict(currency='TWD', valuation_date=TODAY.isoformat(),
+            positions=[dict(symbol='0050', kind='etf', market_value=100000)])))
+        folder = self.root / 'local'
         folder.mkdir()
-        (folder / "old.json").write_text(json.dumps(snapshot_to_dict(snapshot(
-            holdings_date=date(2026, 9, 1), holdings=(
-                Holding("2330", "台積電", "stock", .5),)))))
-        paths = run_lookthrough(portfolio, self.root / "remote-out",
-                                local_snapshot_dir=folder, today=TODAY,
-                                opener=public)
-        result = json.loads(paths["result.json"].read_text())
-        self.assertEqual(result["totals"]["identified_stock_value"], 95000)
-        self.assertIn("TLS 信任庫未核對", " ".join(result["warnings"]))
+        (folder / 'old.json').write_text(json.dumps(snapshot_to_dict(snapshot(
+            holdings_date=date(2026, 9, 1), holdings=(Holding('2330', '台積電', 'stock', .5),)))))
+        bundle = write_bundle(self.root / 'bundle', [snapshot_to_dict(snapshot())])
+        paths = run_lookthrough(portfolio, self.root / 'out', local_snapshot_dir=folder,
+                                bundled_dir=bundle, today=TODAY)
+        result = json.loads(paths['result.json'].read_text())
+        self.assertEqual(result['totals']['identified_stock_value'], 50000)
+        self.assertEqual(result['snapshots'][0]['holdings_date'], '2026-09-01')
 
     def test_default_clock_uses_taipei_date(self) -> None:
         """UTC evening must use the next calendar day in Taipei."""
@@ -330,12 +320,6 @@ class EstimationTests(unittest.TestCase):
             source_url="https://example.com/holdings", policy="annotated")
         self.assertEqual(value.holdings[0].weight, .95)
 
-    def test_public_json_rejects_same_host_redirects(self) -> None:
-        """The relaxed CA-audit route still sends no redirected request."""
-        with self.assertRaises(ValueError):
-            _NoRedirect().redirect_request(
-                Request(PYINVEST_BASE_URL + "/index.json"), None,
-                302, "Found", {}, PYINVEST_BASE_URL + "/0050/latest.json")
 
     def test_biff_xls_reads_real_binary_records(self) -> None:
         """Read a minimal BIFF8 workbook, not an HTML stand-in."""

@@ -18,8 +18,10 @@ v1.1.0發布採8個通過商品；各檔有無公開快照見[snapshot-coverage.
 
 ## 執行順序與預算
 
-1. 先讀使用者提供的合格快照，再查已發布 PyInvest 索引。核對實際持股日；
-   本地新增 adapter 不代表公開索引已上架該檔。
+1. 先讀使用者明確指定的合格快照，否則讀套件的
+   `scripts/lookthrough/data/snapshots/index.json`。核對實際持股日；
+   超過 30 天、缺漏或不完整時主動取官方資料，不再查 PyInvest 網站 JSON。
+   本地新增 adapter 不代表內建索引已包含該檔。
 2. 缺少合格快照時，先查下表與同次執行留下的取得紀錄。從已核對的官方
    入口開始；每檔最多 10 次主動請求或 5 分鐘，整批最多 100 次或 60 分鐘，
    先到即停止。沿用原檔，不重新搜尋已掌握的路線。
@@ -47,7 +49,7 @@ v1.1.0發布採8個通過商品；各檔有無公開快照見[snapshot-coverage.
 8. 缺少工具、超出預算或所有已知安全路線失敗時，請使用者正常下載官方
    完整檔並上傳。仍無法取得則記錄原因與未知值；完整部位市值留在分母。
 
-`use_network=False` 的執行只用本機原檔／快照，不呼叫 collector 或瀏覽器。
+`run_lookthrough` 在兩種 `use_network` 設定下均只讀本機檔案與內建快照，不呼叫 collector 或瀏覽器。
 上述預算是 agent 操作合約，`run_lookthrough` 不會自行啟動這些備援步驟。
 報告使用「未串接來源」「取得失敗」「資料待確認」「驗證失敗」等具體原因。
 
@@ -129,7 +131,9 @@ Path("snapshots/00905.json").write_text(
 將生成快照放進 `local_snapshot_dir`，呼叫 `run_lookthrough(..., use_network=False)`，
 由同一 validator 檢查來源日期與金融合約。不要用測試用 `today` 掩飾過期。
 
-## 其他 15 家的已知官方備援入口
+## 歷史探測與其他已知官方備援入口
+
+下表是 2026-10-27 的取得紀錄。00984A／00993A 已於 2026-11-02 通過每日來源驗收，詳見 data-sources.md；不沿用其舊版「未串接」判定。
 
 以下保留所有已知入口；目前狀態以此更新，不能將歷史受限紀錄當永久封鎖。
 
@@ -143,7 +147,7 @@ Path("snapshots/00905.json").write_text(
 | HTTP 合格 | 摩根00401A | GET官方historicalData持股可用日期，再GET `type=holding_pcf`完整XLSX；四張sheet與NAV說明齊全。額外曝險仍未知。 |
 | 股票 HTTP 合格，衍生品口徑未知 | 聯博00404A | `ab.capture(holdings, basket)`；股票只來自實際holdings，**無日期參數的最新basket**僅提供同日NAV，日期不合就停止。帶日期basket實測回前日NAV，不使用。期貨與options原比例不轉NAV／名目，保留None與原值。 |
 | agent 官方備援，資格待補證 | 凱基00915、聯邦009804 | `kgi.extract`／`union.extract`可讀原始證據；`parse`會拒絕。凱基不能拿NAV日當股票日，聯邦仍缺分母與完整性旁證。取得新官方檔後依同一標準資格化。 |
-| agent 官方備援 | 中信00891、統一00939、大華銀00918、安聯00984A、華南009808 | 不在自動collector registry，依本文件預算和停止條件正常取官方完整檔，仍須資格驗證。 |
+| agent 官方備援 | 中信00891、統一00939、大華銀00918、華南009808 | 不在自動collector registry，依本文件預算和停止條件正常取官方完整檔，仍須資格驗證。 |
 
 前輪兩檔與本輪六檔實跑通過者，可由 `publish.fetch_official(get_supported(symbol))`
 取得交給 `PARSERS[descriptor.issuer]` 的 bytes。新路線每檔1–2個固定HTTPS

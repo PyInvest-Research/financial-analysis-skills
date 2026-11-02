@@ -1,6 +1,6 @@
 # 執行環境安全檢查
 
-安裝／更新套件、下載 Python 或可執行產物前，必須完成下載工具與實際 CA 核對。讀 PyInvest 公開 JSON 採第 4 節的有限例外。這是 AI 的操作規則，不要求一般使用者自行維護環境。只調整本次專案所需環境，不順帶全域升級或修改其他專案。
+安裝／更新套件、下載 Python 或可執行產物前，必須完成下載工具與實際 CA 核對。讀內建快照不需要網路或雲端憑證。這是 AI 的操作規則，不要求一般使用者自行維護環境。只調整本次專案所需環境，不順帶全域升級或修改其他專案。
 
 ## 1. 先核對下載工具與修補版本
 
@@ -30,25 +30,15 @@
 3. 若只有過舊的 pip／uv，先透過已修補的瀏覽器或可信下載工具取得官方修補產物，依獨立可信管道取得的官方 SHA256 核對後才執行。可依 Python 官方公告的固定 wheel 與雜湊進行 pip bootstrap；每次先核對公告，不從搜尋摘要複製。只從同一條可疑 TLS 通道取得產物和雜湊，不能當成獨立驗證。沒有可信 bootstrap 路徑就使用下節替代流程。
 4. 不使用 `curl | sh`、`--trusted-host`、`--allow-insecure-host`、`verify=False`、未驗證 SSL context 或關閉 hostname checking 修復下載問題。保持憑證驗證；不盲目安裝或更新套件。
 
-## 4. 公開 JSON 與無法確認環境時的工作
+## 4. 離線工作與無法確認環境時的處理
 
-僅限 `run_lookthrough(..., validation_policy="annotated")` 讀取
-`https://pyecontech.com/data/etf-holdings/v1/` 的公開 JSON：
-即使無法核對 CA 事件修補狀態，仍可嘗試讀取。程式固定 exact host 與路徑，
-禁止所有轉址，保留 Python 預設憑證／hostname 驗證，限制單份回應 10 MiB，
-取得後仍經 schema、身分及財務驗證。不發送投資組合資料或帳號資訊。
+`run_lookthrough` 只讀本機官方檔、內建快照與研究資料，不讀網站，也不讀 GCS。`use_network`、`base_url`、`opener`、`ca_verified` 僅保留舊呼叫相容性，不會觸發 HTTP。
 
-`ca_verified=False` 是預設；實際嘗試公開 JSON 時，報告寫入「TLS 信任庫未核對」。
-只有核對本次 interpreter 的實際信任庫後，才可傳 `ca_verified=True`。
-TLS 憑證驗證本身失敗時仍拒絕來源，依序改用本機、明確官方檔、固定研究與歷史比例；
-不能以 `verify=False`、自訂未驗證 context 或取消 hostname checking 取代驗證。
-此例外不允許安裝套件、下載執行產物、執行官網程式或更新其他官方 collector。
-strict 模式保留原有 CA 預檢與傳輸行為。
+ChatGPT／Colab 等託管環境若無法確認下載工具或 CA，不在該環境安裝／更新套件或使用 Python HTTPS collector。先利用已備妥環境處理現有檔案；缺安全取得路徑時說明限制並請使用者提供官方原檔。不得因資料過期而改寫日期。
 
+公司名錄可用內建快照經 `CompanyDirectory.from_file()` 離線讀取，或把已取得的官方列交給 `parse_directory()`；這兩個入口均不連網。只有明確呼叫 `refresh_directory()` 才下載，且須完成前述 CA 核對。
 
-ChatGPT／Colab 等託管環境若無法確認下載工具或 CA，不在該環境安裝／更新套件，也不使用其他 Python HTTPS collector；僅上面的 PyInvest 公開 JSON 例外可用。公司名錄可用內建快照經 `CompanyDirectory.from_file()` 離線讀取，或把已取得的官方列交給 `parse_directory()`；這兩個入口均不連網。只有明確呼叫 `refresh_directory()` 才下載。缺少安全下載路徑時保留既有快照並說明其資料日期，不宣稱已刷新。
-
-`uv --offline` 只限制 uv 自己的網路，不會禁止其啟動的 Python 連網。離線流程必須選用不連網的程式入口，不能靠這個旗標宣稱整個程式已隔離。
+`uv --offline` 只限制 uv 自己的網路，不會禁止其啟動的 Python 連網。離線流程須選擇不連網的入口；`publish.fetch_official` 等明確取得工具仍須另行核對。
 
 ## 5. 官方來源與網頁內容
 

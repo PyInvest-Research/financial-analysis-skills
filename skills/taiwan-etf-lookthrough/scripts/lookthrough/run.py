@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Callable
 from zoneinfo import ZoneInfo
 
+from .bundled import load_bundled_with_hash
 from .calculate import compute_lookthrough
 from .dates import classify_dates, select_dates
 from .directory import CompanyDirectory
@@ -22,11 +23,8 @@ from .report import build_result_json, write_outputs
 from .research import (
     bundled_snapshot, qualifies_research, qualifies_published_candidate,
 )
-from .sources import (
-    PYINVEST_BASE_URL, SourceUnavailable, fetch_index,
-    fetch_pyinvest_snapshot, load_local_snapshot, open_public_json,
-)
-from .validate import ValidationResult, validate_snapshot
+from .sources import SourceUnavailable, load_local_snapshot
+from .validate import MAX_AGE_DAYS, ValidationResult, validate_snapshot
 
 
 @dataclass(frozen=True)
@@ -118,103 +116,26 @@ def _local_candidates(
     return candidates
 
 
-def _index_dates(index: dict, symbol: str) -> list[date]:
-    """Validate only requested availability rows; never follow index URLs."""
-    if index.get('schema_version') != '1' or not isinstance(
-            index.get('etfs'), list):
-        raise ValueError('index must contain schema_version 1 and etfs array')
-    rows = [row for row in index['etfs']
-            if isinstance(row, dict) and row.get('symbol') == symbol]
-    if not rows:
-        return []
-    if len(rows) != 1:
-        raise ValueError(f'index contains duplicate entries for {symbol}')
-    values = rows[0].get('dates')
-    if not isinstance(values, list):
-        raise ValueError(f'index dates must be an array for {symbol}')
-    days = []
-    for value in values:
-        if not isinstance(value, str):
-            raise ValueError(f'index dates must be ISO strings for {symbol}')
-        day = date.fromisoformat(value)
-        if day.isoformat() != value:
-            raise ValueError(f'index date must use YYYY-MM-DD for {symbol}')
-        days.append(day)
-    return sorted(set(days), reverse=True)
-
-
-def _remote_candidates(
-    symbols: set[str], directory: CompanyDirectory, today: date,
-    reasons: dict[str, list[str]], base_url: str,
-    opener: Callable[[str], bytes] | None,
-    policy: str = "annotated",
-) -> dict[str, dict[date, _Candidate]]:
-    """Validate published candidates using an injectable transport."""
-    candidates: dict[str, dict[date, _Candidate]] = {}
-    if opener is None and policy == 'annotated':
-        opener = open_public_json
-    try:
-        index = fetch_index(base_url=base_url, opener=opener)
-    except SourceUnavailable as error:
-        index = None
-        for symbol in symbols:
-            reasons[symbol].append(f'PyInvest index: {error}')
-    for symbol in sorted(symbols):
-        try:
-            days = (_index_dates(index, symbol)
-                    if index is not None else [None])
-        except ValueError as error:
-            reasons[symbol].append(f'PyInvest index: {error}')
-            continue
-        if not days:
-            reasons[symbol].append('PyInvest index: no available dates')
-        for day in days:
-            try:
-                snapshot = fetch_pyinvest_snapshot(
-                    symbol, day, base_url=base_url, opener=opener)
-                research_route = index is not None and any(
-                    row.get('symbol') == symbol
-                    and row.get('route') == 'research'
-                    for row in index['etfs'] if isinstance(row, dict))
-                if research_route and not (qualifies_research(snapshot)
-                                           or qualifies_published_candidate(snapshot)):
-                    raise ValueError('Published research hash mismatch')
-                candidate = _candidate(snapshot, symbol, directory, today, day,
-                                       policy=policy)
-                candidates.setdefault(symbol, {})[
-                    snapshot.holdings_date] = candidate
-            except (SourceUnavailable, ValueError) as error:
-                reasons[symbol].append(f'PyInvest {day or "latest"}: {error}')
-    return candidates
-
-
 def run_lookthrough(
     portfolio_path: Path, out_dir: Path, *,
     local_snapshot_dir: Path | None = None,
     official_files: dict[str, tuple[Path, ColumnMap, dict]] | None = None,
     use_network: bool = True, today: date | None = None,
-    base_url: str = PYINVEST_BASE_URL,
+    bundled_dir: Path | None = None,
+    base_url: str | None = None,
     opener: Callable[[str], bytes] | None = None,
     validation_policy: str = "annotated",
     ca_verified: bool = False,
 ) -> dict[str, Path]:
-    """Write three report artifacts after local, PyInvest, official fallback.
+    """Write reports from explicit local inputs and packaged snapshots.
 
-    Strict uses its first usable source. Annotated prefers current official
-    rows, then stale, fixed research and historical ratios. Local
-    and published candidates align to their latest common usable date, or
-    each latest date when none is common. Explicit official files keep their
-    stated dates. Failed candidates never participate in date classification.
-    All acquisition failures remain in unavailable-position reasons or, on
-    successful fallback, report warnings. Offline mode never fetches an index
-    or invokes an opener. Inputs and bundled directory files remain unchanged.
-
-    Portfolio/schema/output errors propagate; per-source failures fall through
-    without removing any portfolio value from the denominator. Live default
-    strict transport requires the runtime-safety.md CA preflight. Annotated
-    public JSON retains default TLS, no redirects and a CA-audit warning.
-    Output I/O errors
-    may leave partial artifacts; accept the mapping only on successful return.
+    Explicit local candidates remain first; missing symbols use verified
+    bundled content. Official files can replace incomplete/stale candidates,
+    followed by stale bundles, fixed research and historical estimates.
+    No HTTP request is made. Legacy network/base/opener/CA keywords remain
+    accepted for callers migrating from earlier releases and are not used.
+    Preserve source provenance; bundle delivery is separate report metadata.
+    Per-source errors fall through without shrinking portfolio value.
     """
     if today is None:
         today = datetime.now(ZoneInfo('Asia/Taipei')).date()
@@ -234,25 +155,22 @@ def run_lookthrough(
         local_snapshot_dir, symbols, directory, today, reasons, warnings,
         validation_policy)
         if local_snapshot_dir is not None else {})
-    missing = {symbol for symbol in symbols if not candidates.get(symbol)}
-    if validation_policy == 'annotated':
-        missing |= {symbol for symbol in symbols
-                    if candidates.get(symbol) and all(
-                        _rank(c, today) > (0, 0)
-                        for c in candidates[symbol].values())}
-    if use_network and missing:
-        if validation_policy == 'annotated' and not ca_verified:
-            warnings.append('TLS 信任庫未核對；僅讀 PyInvest 公開 JSON，'
-                            '仍使用預設憑證驗證、exact host、禁止轉址')
-        remote = _remote_candidates(
-            missing, directory, today, reasons, base_url, opener,
-            validation_policy)
-        for symbol, values in remote.items():
-            for day, candidate in values.items():
-                existing = candidates.setdefault(symbol, {}).get(day)
-                if (existing is None or validation_policy == 'annotated'
-                        and _rank(candidate, today) < _rank(existing, today)):
-                    candidates[symbol][day] = candidate
+    packaged: dict[str, _Candidate] = {}
+    packaged_hashes: dict[str, str] = {}
+    for symbol in sorted(symbols):
+        if candidates.get(symbol):
+            continue
+        try:
+            record = load_bundled_with_hash(symbol, bundled_dir)
+            if record is not None:
+                snapshot = record.snapshot
+                candidate = _candidate(snapshot, symbol, directory, today,
+                                       policy=validation_policy)
+                candidates[symbol] = {snapshot.holdings_date: candidate}
+                packaged[symbol] = candidate
+                packaged_hashes[symbol] = record.content_sha256
+        except (SourceUnavailable, ValueError) as error:
+            reasons[symbol].append(f'內建快照: {error}')
     if validation_policy == 'annotated':
         candidates = {
             symbol: {day: c for day, c in values.items()
@@ -271,7 +189,7 @@ def run_lookthrough(
     }
     for symbol in sorted(symbols):
         if symbol in selected:
-            needs_update = any(
+            needs_update = bool(_rank(selected[symbol], today)[1]) or any(
                 c.status == 'warn' and c.name in (
                     'holdings_date_sane', 'stock_weight_sum', 'not_top_n_only',
                     'partial_equity_weights', 'NAV_denominator_qualification',
@@ -292,8 +210,10 @@ def run_lookthrough(
                 snapshot, symbol, directory, today, metadata['holdings_date'],
                 policy=validation_policy)
             if (validation_policy == 'strict' or symbol not in selected
-                    or _rank(candidate, today)
-                    <= _rank(selected[symbol], today)):
+                    or (_rank(candidate, today),
+                        -candidate.snapshot.holdings_date.toordinal())
+                    <= (_rank(selected[symbol], today),
+                        -selected[symbol].snapshot.holdings_date.toordinal())):
                 selected[symbol] = candidate
         except (OSError, ValueError, TypeError, AttributeError) as error:
             reasons[symbol].append(f'official: {error}')
@@ -311,6 +231,15 @@ def run_lookthrough(
             'official: no usable file; agent should obtain dated holdings '
             'from verified official HTTPS sources, calculate available rows '
             'with annotations, and retain missing amounts')
+    delivered = {symbol for symbol, candidate in packaged.items()
+                 if selected.get(symbol) is candidate}
+    for symbol in sorted(delivered):
+        snapshot = selected[symbol].snapshot
+        age = (today - snapshot.holdings_date).days
+        if age > MAX_AGE_DAYS:
+            warnings.append(f'{symbol}：內建快照持股日 '
+                            f'{snapshot.holdings_date}，距今 {age} 天，已過期；'
+                            '請由 agent 另取官方檔；計算函式不會連網，原始日期與未知值保持不變。')
     snapshots = {symbol: candidate.snapshot
                  for symbol, candidate in selected.items()}
     validations = {symbol: candidate.validation
@@ -330,15 +259,25 @@ def run_lookthrough(
     result = replace(result, warnings=(*result.warnings, *warnings))
     metrics = compute_metrics(result, directory)
     generated_at = datetime.now(timezone.utc).isoformat()
-    return write_outputs(build_result_json(portfolio, result, metrics,
-                                           generated_at), out_dir)
+    payload = build_result_json(portfolio, result, metrics, generated_at)
+    for row in payload['snapshots']:
+        if row['symbol'] in delivered:
+            row['delivery'] = 'bundled'
+            row['archive_content_sha256'] = packaged_hashes[row['symbol']]
+            row['source_note'] = (f"內建快照，持股日 {row['holdings_date']}。"
+                                  + row.get('source_note', ''))
+    by_symbol = {row['symbol']: row for row in payload['snapshots']}
+    for position in payload['positions']:
+        if position['symbol'] in delivered:
+            position['snapshot'] = dict(by_symbol[position['symbol']])
+    return write_outputs(payload, out_dir)
 
 
 def _tier(snapshot: Snapshot, today: date) -> int:
     """Rank current official holdings before stale and fixed research data."""
     if qualifies_research(snapshot) or qualifies_published_candidate(snapshot):
         return 2
-    return int((today - snapshot.holdings_date).days > 30)
+    return int((today - snapshot.holdings_date).days > MAX_AGE_DAYS)
 
 
 def _rank(candidate: _Candidate, today: date) -> tuple[int, int]:
@@ -357,5 +296,5 @@ def _rank(candidate: _Candidate, today: date) -> tuple[int, int]:
         or any(c.status == 'warn' and c.name in (
             'stock_weight_sum', 'not_top_n_only', 'partial_equity_weights',
             'refresh_partial_inventory', 'no_taiwan_rows_in_source')
-               for c in candidate.validation.checks))
+            for c in candidate.validation.checks))
     return _tier(snapshot, today), int(incomplete)

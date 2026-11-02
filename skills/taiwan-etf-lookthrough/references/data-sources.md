@@ -1,7 +1,7 @@
 # 已核對的持股來源
 
-使用者報告與每日發布採註記模式。公開快照與官方備援數量、商品名單及
-資料時間統一見 [snapshot-coverage.md](snapshot-coverage.md)。
+使用者報告與每日發布採註記模式。本版內建快照的商品名單及
+持股日見 [snapshot-coverage.md](snapshot-coverage.md)。
 下文保留歷次來源觀察與原嚴格合約作診斷依據，不代表目前每日更新範圍。
 透過 `parse_annotated` 取得的數值對帳差異會保留為 `quality_notes`；
 市場未知的新列保留未知，缺值不補零，仍拒絕錯身分、錯單位與非法數字。
@@ -11,7 +11,13 @@
 
 v1.2.0 已新增四檔混合／跨市場 ETF 的台股現貨部分，請先讀 [mixed-etfs.md](mixed-etfs.md)。下方原有來源合約仍適用各自商品，不能外推成整家投信支援。
 
-## 2026-11-02：四檔每日來源通過驗收
+## v1.7.0：內建快照與來源追溯
+
+一般報告不再下載 PyInvest 網站 JSON。套件自帶 GCS 封存還原的快照，缺漏或超過 30 天時由 agent 另取官方檔。下載包不會自行更新；索引中的 generated_at 是打包時間，不是持股日。
+
+`result.json` 的 `delivery="bundled"` 表示由套件交付，`source_kind` 仍是原始來源。`archive_content_sha256` 對應內建索引的 `snapshot_sha256`，計算時排除 fetched_at；報告既有 `snapshot_sha256` 包含原始 fetched_at，兩者用途不同。原始持股日、取得時間、權重與未知欄位不重寫。
+
+## 2026-11-02：四檔每日來源通過驗收（歷史紀錄）
 
 00984A、00993A、00903、00920 已通過 Actions 來源取得及正式 publisher 暫存發布驗收，接入每日抓取。首次驗收的官方持股日均為 **2026-10-30**，股票列數依序為 80、50、30、34。公開快照仍為 96 檔，其中 88 檔為每日來源、8 檔為固定研究。最新日期與執行狀態請見 [snapshot-coverage.md](snapshot-coverage.md)。
 

@@ -17,7 +17,7 @@ from lookthrough import publish
 from lookthrough.directory import CompanyDirectory
 from lookthrough.issuers.registry import SupportedEtf
 from lookthrough.models import Snapshot, snapshot_to_dict
-from lookthrough.sources import fetch_index, fetch_pyinvest_snapshot
+from lookthrough.sources import load_local_snapshot
 
 
 STAMP = "2026-10-23T00:00:00+00:00"
@@ -100,13 +100,7 @@ class PublishTests(unittest.TestCase):
         self.assertIsNone(row["last_error"])
         self.assertEqual(row["last_attempt_at"], STAMP)
 
-        def local_open(url: str) -> bytes:
-            """Resolve only test-local URLs for real snapshot consumers."""
-            return (self.root / url.removeprefix("https://test/")).read_bytes()
-
-        self.assertEqual(fetch_index("https://test", local_open), index)
-        loaded = fetch_pyinvest_snapshot(
-            "0052", base_url="https://test", opener=local_open)
+        loaded = load_local_snapshot(self.root / "0052/latest.json")
         self.assertEqual(loaded.holdings_date, date(2026, 10, 22))
         self.assertEqual((self.root / "0052/latest.json").read_bytes(),
                          (self.root / "0052/2026-10-22.json").read_bytes())
