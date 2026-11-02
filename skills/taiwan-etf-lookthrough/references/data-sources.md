@@ -460,3 +460,6 @@ outputs = run_lookthrough(
 demo/report.md與README明示native百分比保留、不rescale，Cathay native97.13%與同頁amount/NAV97.111452727684...%差異、44.631996610434726 TWD桶殘差、1320 TWD未分類與NYF/TX/TX202611/WTXX6F四筆unknown futures。source manifests原件留研究區，包內只有canonical snapshots及小lineage metadata，不冒稱下載包內已有全部大型raw。
 
 `public/data/etf-holdings/v1/pinned.json`只記這五個日期保留對，不產生daily index/latest/dated snapshot或網站data-date；固定示範與每日發布分開，當期資料狀態以公開索引為準。產品／ChatGPT Web人類操作範例均default today，超過既有30日freshness即依核心保留未穿透；不得鎖回歷史today或改fetchstamp。完整JSON重現比較只去最上層generated_at；固定clock限test_demo的歷史單元測試，不能冒充actual平台驗收。
+
+
+封存管線可用 `publish --raw-dir <fresh-directory>` 同時保存原始 bytes 與不可變的 `raw-manifest.json`；輸出目錄須獨立於持股發布目錄。

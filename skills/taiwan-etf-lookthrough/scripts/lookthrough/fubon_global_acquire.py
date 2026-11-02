@@ -136,7 +136,7 @@ class SourceSession:
             request = Request(
                 url,
                 headers={
-                    'User-Agent': 'PyInvest-ETF-Lookthrough/1.5.5',
+                    'User-Agent': 'PyInvest-ETF-Lookthrough/1.6.0',
                     'Accept-Encoding': 'identity'})
 
             def check(response: Any) -> None:

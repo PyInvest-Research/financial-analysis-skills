@@ -303,6 +303,21 @@ def publish_all(out_root: Path, *, fetch: Callable[[SupportedEtf], bytes],
                         write=True, observations=[], selected=symbols)
 
 
+def _record_attempt(sink: Callable[[dict], None] | None, symbol: str,
+                    status: str, raw: bytes | None = None,
+                    value: Snapshot | None = None,
+                    last_error: str | None = None) -> None:
+    """Bind one actual acquisition to its parsed content before retention."""
+    if sink is not None:
+        sink({"symbol": symbol, "status": status, "last_error": last_error,
+              "holdings_date": (value.holdings_date.isoformat()
+                                if value is not None else None),
+              "content_sha256": (_content_hash(value)
+                                 if value is not None else None),
+              "raw_sha256": (hashlib.sha256(raw).hexdigest()
+                             if raw is not None else None)})
+
+
 def _publish_all(
         out_root: Path, *, fetch: Callable[[SupportedEtf], bytes], today: date,
         fetched_at: str, directory: CompanyDirectory, write: bool,
@@ -310,6 +325,8 @@ def _publish_all(
         selected: set[str] | None = None,
         failure_root: Path | None = None,
         failure_records: dict | None = None,
+        raw_sink: Callable[[str, bytes], None] | None = None,
+        attempt_sink: Callable[[dict], None] | None = None,
 ) -> dict:
     """Share real acquisition/validation between writing and read-only runs."""
     global _refresh_session, _native_session
@@ -389,7 +406,11 @@ def _publish_all(
                        last_error=f"{type(error).__name__}: {error}",
                        last_attempt_at=fetched_at)
             observations.append((symbol, "fetch_error", None, None))
+            _record_attempt(attempt_sink, symbol, "fetch_error",
+                            last_error=row["last_error"])
             continue
+        if raw_sink is not None:
+            raw_sink(symbol, raw)
         observed_day: str | None = None
         stock_sum: float | None = None
         try:
@@ -421,6 +442,8 @@ def _publish_all(
                 failure_records[symbol] = _save_parse_failure(
                     failure_root, etf, raw, fetched_at, error)
             observations.append((symbol, "fail", observed_day, stock_sum))
+            _record_attempt(attempt_sink, symbol, "fail", raw,
+                            last_error=row["last_error"])
             continue
         row["last_status"] = result.status
         previous = dates.get(observed_day)
@@ -446,6 +469,7 @@ def _publish_all(
         row.update(latest_date=newest[0].holdings_date.isoformat(),
                    dates=sorted(dates))
         observations.append((symbol, result.status, observed_day, stock_sum))
+        _record_attempt(attempt_sink, symbol, result.status, raw, value)
     index = {"schema_version": "1", "generated_at": fetched_at,
              "etfs": [rows[symbol] for symbol in sorted(rows)]}
     if write:
@@ -580,16 +604,18 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.5.5",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.6.0",
                  "Content-Type": "application/json"}, method="POST",
     )
+
     def check(response):
         _check_url(response.geturl(), "www.capitalfund.com.tw")
         if (response.geturl() != capital.SOURCE_URL
                 or response.getcode() != 200):
             raise ValueError("Capital POST changed endpoint or HTTP status")
     return (_source_transport or TransportEvidence()).read(
-        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES, check_response=check)
+        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES,
+        check_response=check)
 
 
 def _fetch_capital(etf: SupportedEtf) -> bytes:
@@ -625,17 +651,19 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.5.5"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.6.0"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
         headers["Content-Type"] = "application/json; charset=utf-8"
     request = Request(url, data=data, headers=headers)
+
     def check(response):
         if response.geturl() != url:
             raise ValueError("Source response URL changed")
     return (_source_transport or TransportEvidence()).read(
-        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES, check_response=check)
+        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES,
+        check_response=check)
 
 
 def _source_get(opener: Any, url: str, host: str) -> bytes:
@@ -708,7 +736,8 @@ def _fetch_expansion(etf: SupportedEtf) -> bytes:
                                "Date": publication})
         day = nomura.pcf_valuation_day(pcf, etf, today)
         assets = _source_request(opener, etf.source_url, host,
-                                 {"FundID": etf.symbol, "SearchDate": day.isoformat()})
+                                 {"FundID": etf.symbol,
+                                  "SearchDate": day.isoformat()})
         return nomura.capture(assets, pcf)
     if etf.issuer == "esun":
         overview = _source_request(opener, esun.OVERVIEW_URL, host, {
@@ -758,7 +787,8 @@ def fetch_official(etf: SupportedEtf) -> bytes:
     if etf.symbol in ("009804", "00915"):
         if _refresh_session is None:
             _refresh_session = RefreshSession(transport=_source_transport)
-        return (union if etf.symbol == "009804" else kgi).acquire(_refresh_session, etf)
+        return (union if etf.symbol == "009804" else kgi).acquire(
+            _refresh_session, etf)
     if etf.symbol in refresh_products():
         if etf.source_url != refresh_products()[etf.symbol]["source_url"]:
             raise ValueError("Unqualified refresh source URL")
@@ -776,12 +806,14 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.5",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.6.0",
     })
+
     def check(response):
         _check_url(response.geturl(), host)
     return (_source_transport or TransportEvidence()).read(
-        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES, check_response=check)
+        opener, request, timeout=30, limit=MAX_RESPONSE_BYTES,
+        check_response=check)
 
 
 def _fetch_mixed(etf: SupportedEtf) -> bytes:
@@ -829,6 +861,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--raw-dir", type=Path,
+                        help="Fresh external raw bytes and attempt receipts")
     parser.add_argument("--symbols", nargs="+", help="Only reviewed symbols")
     parser.add_argument("--allow-partial", action="store_true",
                         help="Save valid updates despite per-ETF failures")
@@ -837,6 +871,20 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         root = _safe_root(args.out)
+        raw_root = _safe_root(args.raw_dir) if args.raw_dir else None
+        if raw_root is not None and (
+                raw_root.exists() or raw_root == root
+                or root in raw_root.parents or raw_root in root.parents):
+            raise ValueError("Raw directory must be fresh and outside data")
+        raw_files: list[dict] = []
+        attempts: list[dict] = []
+
+        def save_raw(symbol: str, raw: bytes) -> None:
+            """Write original bytes before parsing; propagate I/O failures."""
+            _atomic_write(raw_root / f"{symbol}.raw", raw)
+            raw_files.append({"symbol": symbol, "bytes": len(raw),
+                              "sha256": hashlib.sha256(raw).hexdigest()})
+
         report_path = None
         failure_root = None
         failure_records: dict = {}
@@ -855,7 +903,8 @@ def main(argv: list[str] | None = None) -> int:
             if (failure_root == root or root in failure_root.parents
                     or failure_root.exists()):
                 raise ValueError("Parse evidence must be fresh outside data")
-            _source_transport = TransportEvidence(report_path.with_suffix(".transport"))
+            _source_transport = TransportEvidence(
+                report_path.with_suffix(".transport"))
         pins = _read_pins(root)
         directory = CompanyDirectory.from_file(
             Path(__file__).parent / "data" / "company-directory.json")
@@ -863,12 +912,22 @@ def main(argv: list[str] | None = None) -> int:
         today = datetime.fromisoformat(stamp).astimezone(
             ZoneInfo("Asia/Taipei")).date()
         observations: list[tuple[str, str, str | None, float | None]] = []
+        if raw_root is not None:
+            raw_root.mkdir(parents=True)
         index = _publish_all(
             root, fetch=fetch_official, today=today, fetched_at=stamp,
             directory=directory, write=not args.dry_run,
             observations=observations,
             failure_root=failure_root, failure_records=failure_records,
-            selected=set(args.symbols) if args.symbols else None)
+            selected=set(args.symbols) if args.symbols else None,
+            raw_sink=save_raw if raw_root is not None else None,
+            attempt_sink=attempts.append if raw_root is not None else None)
+        if raw_root is not None:
+            _atomic_write(raw_root / "raw-manifest.json", _encoded({
+                "schema_version": "1", "fetched_at": stamp,
+                "files": sorted(raw_files, key=lambda item: item["symbol"]),
+                "attempts": sorted(attempts, key=lambda item: item["symbol"]),
+            }))
         for symbol, status, day, stock_sum in observations:
             total = "unknown" if stock_sum is None else f"{stock_sum:.8f}"
             print(f"{symbol} {status} {day or '-'} {total}")
