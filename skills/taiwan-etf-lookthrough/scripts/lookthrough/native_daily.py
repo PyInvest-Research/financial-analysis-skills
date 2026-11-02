@@ -68,8 +68,12 @@ def qualifies(snapshot: Snapshot) -> bool:
         if not equities or snapshot.equity_evidence is None:
             return False
         for holding in equities:
-            code, market = resolve_security(snapshot.etf_symbol,
-                                            holding.code, holding.name)
+            if snapshot.issuer == 'allianz':
+                code, market = allianz.resolve_security(
+                    holding.code, holding.name)
+            else:
+                code, market = resolve_security(snapshot.etf_symbol,
+                                                holding.code, holding.name)
             kind = ('stock' if market in ('TWSE', 'TPEx')
                     else 'foreign_stock')
             if (code != holding.code or market != holding.market

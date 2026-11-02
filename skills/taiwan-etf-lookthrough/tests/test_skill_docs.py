@@ -89,7 +89,7 @@ class SkillDocsTests(unittest.TestCase):
             self.assertNotIn('..', Path(name).parts)
             self.assertTrue((ROOT / name).is_file(), name)
         self.assertEqual(manifest['status'], 'published')
-        self.assertEqual(manifest['version'], '1.6.0')
+        self.assertEqual(manifest['version'], '1.6.1')
         self.assertEqual(manifest['version'], __version__)
         project = tomllib.loads((ROOT / 'pyproject.toml').read_text())
         self.assertEqual(project['project']['version'], __version__)

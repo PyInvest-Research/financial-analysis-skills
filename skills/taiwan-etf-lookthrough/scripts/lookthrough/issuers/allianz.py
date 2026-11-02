@@ -14,7 +14,9 @@ import re
 import unicodedata
 
 from ._assets import check_stock, nav_number, number, read_json
-from ..models import EquityEvidence, Holding, Snapshot, snapshot_from_dict, snapshot_to_dict
+from ..models import (
+    EquityEvidence, Holding, Snapshot, snapshot_from_dict, snapshot_to_dict,
+)
 from ..refresh_contract import directory
 
 SOURCE_URL = "https://etf.allianzgi.com.tw/webapi/api/Fund/GetFundAssets"
@@ -26,6 +28,29 @@ _FUNDS = {
                "TW00000993A7", "2026/02/03"),
 }
 _PARTS = ("overview", "assets", "detail")
+
+
+def resolve_security(code: str, name: str) -> tuple[str, str]:
+    """Resolve this domestic source's full names through the Taiwan roster.
+
+    The official fund contract permits full names and abbreviations. Reject
+    unknown codes, foreign markers and names belonging to another company.
+    Raise ValueError without changing the source name or the saved roster.
+    """
+    if (not isinstance(code, str) or not isinstance(name, str)
+            or not name.strip()):
+        raise ValueError("Invalid Allianz stock identity")
+    roster = directory()
+    company = roster.get(code)
+    if (company is None or company.market not in {"TWSE", "TPEx"}
+            or re.search(
+                r"\b(?:ADR|ADS|NYSE|NASDAQ|HKEX)\b|存託憑證|美股|港股",
+                name, re.I)
+            or any(other.name.replace("*", "") == name.replace("*", "")
+                   and other.code != code
+                   for other in roster._companies.values())):
+        raise ValueError("Unknown/contradictory Allianz market identity")
+    return code, company.market
 
 
 def capture(overview: bytes, assets: bytes, detail: bytes) -> bytes:
@@ -41,7 +66,8 @@ def capture(overview: bytes, assets: bytes, detail: bytes) -> bytes:
 def _response(raw: bytes, count: int):
     value = read_json(raw)
     if (not isinstance(value, dict) or set(value) != {
-            "TotalPages", "TotalItems", "Entries", "Message", "StatusCode", "RedirectUrl"}
+            "TotalPages", "TotalItems", "Entries", "Message", "StatusCode",
+            "RedirectUrl"}
             or number(value["StatusCode"], native=True) != 0
             or number(value["TotalPages"], native=True) != -1
             or number(value["TotalItems"], native=True) != count
@@ -51,14 +77,16 @@ def _response(raw: bytes, count: int):
 
 
 def _day(text):
-    if not isinstance(text, str) or not re.fullmatch(r"\d{4}/\d{2}/\d{2}", text):
+    if (not isinstance(text, str)
+            or not re.fullmatch(r"\d{4}/\d{2}/\d{2}", text)):
         raise ValueError("Missing Allianz actual NAV/data date")
     return date.fromisoformat(text.replace("/", "-"))
 
 
 def _identity(row, symbol="00984A"):
     spec = _FUNDS.get(symbol)
-    if (spec is None or not isinstance(row, dict) or row.get("CFundNo") != spec[0]
+    if (spec is None or not isinstance(row, dict)
+            or row.get("CFundNo") != spec[0]
             or row.get("CSecuritiesCode") != symbol
             or not isinstance(row.get("CFullName"), str)
             or unicodedata.normalize("NFKC", row["CFullName"]) != spec[1]):
@@ -66,20 +94,24 @@ def _identity(row, symbol="00984A"):
 
 
 def _futures(summary, table):
-    """Retain observed derivative rows without interpreting their percentages."""
+    """Retain derivative rows without interpreting their percentages."""
     columns = ["序號", "期貨代號", "期貨名稱", "口數", "權重(%)", "契約年月"]
     if (not isinstance(summary, list) or len(summary) != 4
             or summary[0] != "期貨" or summary[2] != "TWD"
-            or not isinstance(summary[1], str) or not summary[1].startswith("TWD$")
+            or not isinstance(summary[1], str)
+            or not summary[1].startswith("TWD$")
             or number(summary[1][4:]) != number(summary[3])
             or table["TableTitle"] != "期貨"
-            or table["Columns"] != [{"Name": n, "TextAlign": "center"} for n in columns]
-            or not isinstance(table["Rows"], list) or not 1 <= len(table["Rows"]) <= 1000):
+            or table["Columns"] != [
+                {"Name": n, "TextAlign": "center"} for n in columns]
+            or not isinstance(table["Rows"], list)
+            or not 1 <= len(table["Rows"]) <= 1000):
         raise ValueError("Changed Allianz futures disclosure schema")
     holdings, notes, seen = [], [], set()
     for i, row in enumerate(table["Rows"], 1):
         if (not isinstance(row, list) or len(row) != 6
-                or any(not isinstance(v, str) for v in row) or row[0] != str(i)):
+                or any(not isinstance(v, str) for v in row)
+                or row[0] != str(i)):
             raise ValueError("Changed Allianz futures row")
         _, code, name, quantity, percent, expiry = row
         if (not re.fullmatch(r"[A-Z][A-Z0-9]{0,15}", code) or not name.strip()
@@ -105,14 +137,17 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
             or etf.is_active is not True or etf.source_url != SOURCE_URL):
         raise ValueError("Unqualified Allianz candidate request")
     package = read_json(raw)
-    if (not isinstance(package, dict) or set(package) != {"capture_kind", *_PARTS}
+    if (not isinstance(package, dict)
+            or set(package) != {"capture_kind", *_PARTS}
             or package["capture_kind"] != _KIND):
         raise ValueError("Expected Allianz three-response capture")
     try:
-        parts = tuple(base64.b64decode(package[k], validate=True) for k in _PARTS)
+        parts = tuple(base64.b64decode(
+            package[k], validate=True) for k in _PARTS)
     except (TypeError, binascii.Error) as error:
         raise ValueError("Malformed Allianz capture") from error
-    overview, assets, detail = (_response(b, n) for b, n in zip(parts, (1, 0, 0)))
+    overview, assets, detail = (_response(b, n)
+                                for b, n in zip(parts, (1, 0, 0)))
     if not isinstance(overview, list) or len(overview) != 1:
         raise ValueError("Allianz overview is not unique")
     _identity(overview[0], etf.symbol)
@@ -131,7 +166,8 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
     if not isinstance(data, dict) or set(data) != {"FundAsset", "Table"}:
         raise ValueError("Changed Allianz assets schema")
     fund = data["FundAsset"]
-    if not isinstance(fund, dict) or set(fund) != {"Aum", "Units", "Nav", "NavDate", "PCFDate"}:
+    if (not isinstance(fund, dict)
+            or set(fund) != {"Aum", "Units", "Nav", "NavDate", "PCFDate"}):
         raise ValueError("Changed Allianz NAV schema")
     day = _day(fund["NavDate"])
     if (_day(detail.get("LastNavDate")) != day
@@ -141,13 +177,16 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
     stamp = datetime.fromisoformat(fetched_at)
     if ("T" not in fetched_at or stamp.utcoffset() != timedelta(0)
             or day > stamp.astimezone(timezone(timedelta(hours=8))).date()):
-        raise ValueError("Allianz holdings postdate capture or capture lacks UTC")
+        raise ValueError(
+            "Allianz holdings postdate capture or capture lacks UTC")
     # Validate the separate PCF date, but do not promote it to holdings date.
     if _day(fund["PCFDate"]) < day:
         raise ValueError("Invalid Allianz PCF date context")
-    nav, units, per_unit = (nav_number(fund[k]) for k in ("Aum", "Units", "Nav"))
+    nav, units, per_unit = (nav_number(fund[k])
+                            for k in ("Aum", "Units", "Nav"))
     if (abs(nav / units - per_unit) > Decimal("0.005")
-            or nav_number(overview[0].get("CLatestNAV"), native=True) != per_unit
+            or nav_number(overview[0].get("CLatestNAV"),
+                          native=True) != per_unit
             or nav_number(overview[0].get("CLatestNAVStr")) != per_unit):
         raise ValueError("Inconsistent Allianz NAV/units")
     tables = data["Table"]
@@ -156,15 +195,18 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
         raise ValueError("Changed Allianz asset categories")
     summary, stocks = tables[:2]
     for table in tables:
-        if not isinstance(table, dict) or set(table) != {"TableTitle", "Columns", "Rows"}:
+        if (not isinstance(table, dict)
+                or set(table) != {"TableTitle", "Columns", "Rows"}):
             raise ValueError("Changed Allianz table schema")
     if (summary["TableTitle"] != ""
             or summary["Columns"] != [{"Name": None, "TextAlign": None}]
-            or not isinstance(summary["Rows"], list) or len(summary["Rows"]) != len(tables)
+            or not isinstance(summary["Rows"], list)
+            or len(summary["Rows"]) != len(tables)
             or summary["Rows"][0] != [" ", " ", " ", " "]):
         raise ValueError("Changed Allianz summary table")
     amounts = summary["Rows"][1]
-    if (not isinstance(amounts, list) or len(amounts) != 4 or amounts[0] != "股票"
+    if (not isinstance(amounts, list) or len(amounts) != 4
+            or amounts[0] != "股票"
             or amounts[2] != "TWD" or not isinstance(amounts[1], str)
             or not amounts[1].startswith("TWD$")):
         raise ValueError("Unknown Allianz stock amount/currency")
@@ -172,35 +214,34 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
     if stock_value > nav or number(amounts[1][4:]) != stock_value:
         raise ValueError("Inconsistent Allianz stock amount")
     title = stocks["TableTitle"]
-    match = re.fullmatch(r"股票 \((\d+\.\d{2})%\)", title) if isinstance(title, str) else None
+    match = re.fullmatch(
+        r"股票 \((\d+\.\d{2})%\)", title) if isinstance(title, str) else None
     expected_columns = ["序號", "股票代號", "股票名稱", "股數", "權重(%)"]
     if (match is None or stocks["Columns"] != [
-            {"Name": name, "TextAlign": "center"} for name in expected_columns]):
+            {"Name": name, "TextAlign": "center"}
+            for name in expected_columns]):
         raise ValueError("Unknown Allianz stock weight unit/schema")
     category_weight = Decimal(match[1])
-    if (stock_value / nav * 100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) != category_weight:
+    if (stock_value / nav * 100).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_UP) != category_weight:
         raise ValueError("Allianz stock percentage is not whole-fund NAV")
     rows = stocks["Rows"]
     if not isinstance(rows, list) or not 1 <= len(rows) <= 5000:
         raise ValueError("Empty/unbounded Allianz stock table")
     roster = directory()
     holdings, seen, differences = [], set(), 0
-    name_codes = {}
-    # Reject a source name that exactly identifies a different roster company.
-    for company in roster._companies.values():
-        name_codes.setdefault(company.name.replace("*", ""), set()).add(company.code)
     total = Decimal(0)
     for index, row in enumerate(rows, 1):
         if (not isinstance(row, list) or len(row) != 5
-                or any(not isinstance(v, str) for v in row) or row[0] != str(index)):
+                or any(not isinstance(v, str) for v in row)
+                or row[0] != str(index)):
             raise ValueError("Truncated/changed Allianz stock row sequence")
         _, code, name, quantity, percent = row
         check_stock(code, name, number(quantity), Decimal(0), nav)
+        _, market = resolve_security(code, name)
         company = roster.get(code)
-        if (code in seen or company is None or company.market not in {"TWSE", "TPEx"}
-                or re.search(r"\b(?:ADR|ADS|NYSE|NASDAQ|HKEX)\b|存託憑證|美股|港股", name, re.I)
-                or name_codes.get(name.replace("*", ""), {code}) != {code}):
-            raise ValueError("Unknown/duplicate/contradictory Allianz market identity")
+        if code in seen:
+            raise ValueError("Duplicate Allianz market identity")
         if not re.fullmatch(r"\d+\.\d{2}%", percent):
             raise ValueError("Invalid Allianz native percentage")
         weight = Decimal(percent[:-1])
@@ -209,14 +250,17 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
         seen.add(code)
         total += weight
         differences += name.replace("*", "") != company.name.replace("*", "")
-        holdings.append(Holding(code, name, "stock", float(weight / 100), market=company.market))
+        holdings.append(Holding(code, name, "stock", float(weight / 100),
+                                market=market))
     # No independent row-count API exists. For this reviewed source contract,
     # require the entire sequential list to reconcile to the printed aggregate.
     # A future differently rounded schema needs review, not silent relaxation.
     if total != category_weight:
-        raise ValueError("Incomplete Allianz stock percentages/aggregate mismatch")
+        raise ValueError(
+            "Incomplete Allianz stock percentages/aggregate mismatch")
     future_holdings, future_notes = (
-        _futures(summary["Rows"][2], tables[2]) if len(tables) == 3 else ([], []))
+        _futures(summary["Rows"][2], tables[2])
+        if len(tables) == 3 else ([], []))
     residual = nav - stock_value
     notes = (
         f"官方基金資產資料日 {day}；PCFDate {fund['PCFDate']} 不作持股日。",
@@ -227,8 +271,9 @@ def parse(raw: bytes, etf, fetched_at: str) -> Snapshot:
     )
     holdings.extend(future_holdings)
     holdings.append(Holding("UNCLASSIFIED", "未分解非股票資產及負債", "other", None))
-    evidence = EquityEvidence(True, float(nav), float(stock_value), len(rows),
-                              float(stock_value), tuple(hashlib.sha256(b).hexdigest() for b in parts))
+    evidence = EquityEvidence(
+        True, float(nav), float(stock_value), len(rows), float(stock_value),
+        tuple(hashlib.sha256(b).hexdigest() for b in parts))
     return snapshot_from_dict(snapshot_to_dict(Snapshot(
         "2", etf.symbol, etf.issuer, True, day, fetched_at, SOURCE_URL,
         "official", tuple(holdings), evidence, notes)))

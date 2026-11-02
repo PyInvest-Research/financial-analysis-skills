@@ -1,0 +1,11 @@
+{
+  "symbol": "00984A",
+  "source_url": "https://etf.allianzgi.com.tw/webapi/api/Fund/GetFundAssets",
+  "capture_kind": "allianz-native-assets-candidate-v1",
+  "parts": ["overview", "assets", "detail"],
+  "holdings_date": "2026-11-02",
+  "fetched_at": "2026-11-02T10:31:31.837897+00:00",
+  "raw_sha256": "da38d4b01332c22ab5cd09d175667a8cf94e596e3a0718a3260f307545512692",
+  "github_run_id": "41429406406",
+  "github_run_url": "https://github.com/KaiQin04/pyinvest/actions/runs/41429406406"
+}
