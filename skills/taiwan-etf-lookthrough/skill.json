@@ -209,5 +209,10 @@
     "automaticUpdate": true,
     "historicalBundleImmutable": true,
     "validationPolicy": "annotated reports and daily publication; preserve unknowns and source dates"
+  },
+  "data_bundle": {
+    "id": "2026-11-02-da16ae328287",
+    "date": "2026-11-02",
+    "sha256": "da16ae328287d893bdbd92f156e5d2443d10f0f23ffbe436c113d6413ab7c038"
   }
 }

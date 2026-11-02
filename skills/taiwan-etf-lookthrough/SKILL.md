@@ -10,6 +10,13 @@ description: 當使用者要做台灣 ETF 持股穿透、比較持股重疊或�
 商品與快照範圍只查 [snapshot-coverage.md](references/snapshot-coverage.md)；版本沿革見 [CHANGELOG.md](CHANGELOG.md)，一般計算不需讀取歷史。
 固定示範特例、原始檔與殘差說明見 [demo/README.md](demo/README.md)，不代表當期持股或新的平台驗收。
 
+## 版本與資料包
+版本標示分成兩部分，例如 `v1.7.1 · 資料包 2026-11-02`。只更新快照時，程式版號不變；功能、解析器、計算規則或操作介面有實質變動時才換版。
+
+`skill.json.data_bundle.id` 是台北時間的打包日期，加上 12 碼內容識別碼。同日不同內容可以區分，同日相同內容不重複提交。`data_bundle.sha256` 綁定整批原始快照檔案的名稱與確切 bytes，與各檔封存內容雜湊的口徑不同。
+
+打包日期不是 ETF 持股日，各檔仍依自己的持股日解讀。重現研究時保存程式版本、資料包 ID、輸入檔與產生的 result.json。下載後的副本不會自動更新，需要較新資料時請重新下載。
+
 ## 開始使用
 - ChatGPT Web：上傳 ZIP、portfolio JSON 與官方檔，先讀本文件；只有能解壓並執行 Python 與依賴時才運算，否則說明缺少執行能力並提供本機方法，不心算或編造輸出。
 - 可連網 agent：使用 skill 專案自己的 `.venv` 或 `/opt/homebrew/bin/uv run`，先讀 [runtime-safety.md](references/runtime-safety.md)。安裝須核對下載工具與 CA；不全域安裝或同步使用者目錄。`package=false`，設 `PYTHONPATH=scripts` 後 import，`run.py` 沒有 CLI wrapper。
