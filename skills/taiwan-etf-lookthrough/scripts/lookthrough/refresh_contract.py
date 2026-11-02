@@ -105,3 +105,15 @@ def qualifies_refresh(snapshot: Snapshot) -> bool:
     except (KeyError, ValueError):
         return False
     return True
+
+
+def qualifies_candidate(snapshot: Snapshot) -> bool:
+    """Bind historical candidate claims to their exact reviewed content."""
+    product = candidate_products().get(snapshot.etf_symbol)
+    if product is None:
+        return False
+    try:
+        return (snapshot_sha256(snapshot) == product.get("snapshot_sha256")
+                and qualifies_refresh(snapshot))
+    except (ValueError, TypeError, OverflowError):
+        return False

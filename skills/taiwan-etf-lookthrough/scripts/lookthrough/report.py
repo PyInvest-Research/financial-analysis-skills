@@ -20,7 +20,10 @@ from .portfolio import Portfolio
 from .research import (
     qualifies_research, research_record, qualifies_published_candidate,
 )
-from .refresh_contract import candidate_products, qualifies_refresh
+from .refresh_contract import (
+    candidate_products, qualifies_candidate, qualifies_refresh,
+)
+from .native_daily import qualifies as qualifies_native
 
 
 OVERLAP_DISCLAIMER = "持股重疊不等於報酬相關，也不能單憑重疊判定分散失效。"
@@ -37,7 +40,7 @@ CSV_FIELDS = ("issuer_code", "name", "industry_code", "amount_twd", "share",
 
 def _candidate_provenance(snapshot) -> dict[str, Any] | None:
     """Keep stock-evidence limits attached only to the exact reviewed content."""
-    if snapshot is None or not qualifies_refresh(snapshot):
+    if snapshot is None or not qualifies_candidate(snapshot):
         return None
     product = candidate_products().get(snapshot.etf_symbol, {})
     evidence = product.get("canonical_provenance")
@@ -92,8 +95,15 @@ def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
                if record["fetched_at_basis"] == "research_package_assembly"
                else "取得時間沿用研究包記錄的官方請求時間。"))
         payload["research_qualification"] = record["qualification"]
+    elif snapshot and qualifies_native(snapshot):
+        payload.update(automatic_update=True, runner_verified=True,
+                       qualification_scope="accepted_native_daily_source")
+        payload["source_note"] = (
+            "此商品已通過官方來源與發布驗收，接入每日抓取；不保證每天更新成功。"
+            "持股日採投信公布日期，來源失敗時保留上次合格快照。"
+            "原生權重不放大，未知非股票與期貨曝險仍保留未知。")
     elif snapshot and qualifies_refresh(snapshot):
-        if snapshot.etf_symbol in candidate_products():
+        if qualifies_candidate(snapshot):
             payload.update(automatic_update=False, runner_verified=False,
                            qualification_scope="reviewed_dated_local_candidate")
             payload["source_note"] = (
@@ -117,7 +127,7 @@ def _quality(position: PositionStatus) -> str:
     warned = {c.name for c in position.validation.checks if c.status == "warn"}
     candidate = candidate_products().get(snapshot.etf_symbol)
     if (candidate and candidate.get("quality_note_scope") == "nonstock_only"
-            and qualifies_refresh(snapshot)):
+            and qualifies_candidate(snapshot)):
         # Exact content digest binds this note scope to independently reviewed
         # complete stock evidence. Validation still retains the original warning.
         warned.discard("source_quality_notes")
