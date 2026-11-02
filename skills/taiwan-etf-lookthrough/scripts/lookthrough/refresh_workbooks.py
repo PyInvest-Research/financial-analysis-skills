@@ -1,6 +1,7 @@
 """Read additional official full-portfolio workbooks and native asset JSON."""
 
 from datetime import date
+from dataclasses import replace
 from decimal import Decimal
 import re
 
@@ -150,7 +151,7 @@ def read_fhtrust(page: bytes, workbook: bytes, symbol: str,
             assets.append(Holding(row[0], str(row[1]), "futures", None))
         else:
             stocks.append(SecurityRow(row[0], row[1], number(row[2])))
-    total = None
+    total, notes = None, []
     for element in panel.find("table"):
         records = rows(element)
         if records[0] != ["項目", "金額", "權重 (%)"]:
@@ -162,11 +163,122 @@ def read_fhtrust(page: bytes, workbook: bytes, symbol: str,
             if label == "股票":
                 total = amount
             elif label != "期貨":
-                if "應付" in label:
-                    amount = -abs(amount)
-                assets.append(Holding(label, label,
-                                      "cash" if "現金" in label else "other",
-                                      float(amount / nav)))
+                # After-payables cash is already net; keep the source sign.
+                # Only these exact labels establish a TWD valuation amount.
+                # Foreign/missing currency cannot be divided by the TWD NAV,
+                # even when its native amount is zero or a percent is printed.
+                known_ntd = label in {
+                    "扣除應付買入證券款後現金餘額(NTD)",
+                    "期貨保證金(NTD)", "應付申購預收款(NTD)",
+                }
+                cash = re.fullmatch(
+                    r"扣除應付買入證券款後現金餘額\([A-Z]{3}\)", label)
+                weight = float(amount / nav) if known_ntd else None
+                if not known_ntd:
+                    notes.append(f"FH {label}: unqualified book currency or "
+                                 "category; NAV weight unknown")
+                assets.append(Holding(
+                    label, label, "cash" if cash else "other", weight))
     if not stocks or total is None:
         raise ValueError("Missing FH complete stock inventory")
-    return Inventory(day, nav, stocks, total, assets)
+    return Inventory(day, nav, stocks, total, assets, tuple(notes))
+
+
+def read_fhtrust_00924_native(
+    page: bytes, workbook: bytes, assets: bytes,
+) -> Inventory:
+    """Read the reviewed 2026-10-29 inventory without qualifying its markets.
+
+    This explicit offline entry is not a product registration or collector.
+    The 146-row, three-place percentage contract is source/date limited.
+    Native weights are retained; independent summary discrepancies are notes,
+    not a reason to normalize weights or demand complete fund accounting.
+    """
+    inventory = read_fhtrust(page, workbook, "00924", "ETF20")
+    root = read_json(assets)
+    if (not isinstance(root, dict) or type(root.get("status")) is not Decimal
+            or root["status"] != 0
+            or not isinstance(root.get("result"), list)
+            or len(root["result"]) != 1):
+        raise ValueError("Invalid 00924 asset response")
+    data = root["result"][0]
+    if (not isinstance(data, dict)
+            or data.get("fundID") != "ETF20"
+            or data.get("etf002") != "00924"
+            or data.get("twNameFull") != "復華美國標普500成長ETF基金"
+            or data.get("dDate") != "2026/10/29"
+            or inventory.day != date(2026, 10, 29)
+            or nav_number(data.get("pcf_FundNav")) != inventory.nav
+            or data.get("diff") != []):
+        raise ValueError("00924 identity/date/NAV contract mismatch")
+    details, summaries = data.get("detail"), data.get("summary")
+    if (not isinstance(details, list) or not isinstance(summaries, list)
+            or any(not isinstance(row, dict)
+                   or row.get("ftype") not in {"股票", "期貨", "其他資產"}
+                   for row in details)):
+        raise ValueError("Invalid 00924 asset classes")
+    stocks = [row for row in details if row["ftype"] == "股票"]
+    totals = [row for row in summaries
+              if isinstance(row, dict) and row.get("ftype") == "股票"]
+    if len(stocks) != 146 or len(inventory.stocks) != 146 or len(totals) != 1:
+        raise ValueError("Incomplete 00924 stock inventory")
+    table = _workbook_rows(workbook)
+    if table[10] != ["證券代號", "證券名稱", "股數", "金額", "權重(%)"]:
+        raise ValueError("00924 workbook stock header mismatch")
+    book = []
+    for row in table[11:]:
+        if not any(value is not None for value in row):
+            continue
+        if row == ["期貨代號", "期貨名稱", "口數", "金額", "權重(%)"]:
+            break
+        book.append(row)
+    if len(book) != 146:
+        raise ValueError("Incomplete 00924 workbook stocks")
+
+    def native_percent(value: str) -> Decimal:
+        """Read an explicit native three-decimal percentage."""
+        if (not isinstance(value, str)
+                or not re.fullmatch(r"\d+\.\d{3}%", value)):
+            raise ValueError(
+                "00924 requires explicit three-place percent units")
+        return _percentage(value)
+
+    seen, valued, amounts = set(), [], []
+    for row, exported, prior in zip(stocks, book, inventory.stocks):
+        code, name = row.get("stockid"), row.get("stockname")
+        shares, amount = number(row.get("qshare")), number(row.get("mvalue"))
+        weight = native_percent(row.get("prate_addaccint"))
+        if (not isinstance(code, str) or not code.strip() or code in seen
+                or not isinstance(name, str) or not name.strip()
+                or row.get("qshareCur") != "USD"
+                or number(row.get("accint")) != 0
+                or shares < 0 or shares != shares.to_integral()
+                or not 0 <= amount <= inventory.nav or weight < 0):
+            raise ValueError("Invalid 00924 stock identity/quantity/value")
+        if (len(exported) != 5 or exported[:2] != [code, name]
+                or number(exported[2]) != shares
+                or number(exported[3]) != amount
+                or native_percent(exported[4]) != weight
+                or (prior.code, prior.name, prior.shares)
+                != (code, name, shares)):
+            raise ValueError("00924 API/workbook stock disagreement")
+        if abs(amount / inventory.nav - weight) > Decimal("0.000005"):
+            raise ValueError(
+                "00924 row exceeds half-unit percentage tolerance")
+        seen.add(code)
+        amounts.append(amount)
+        valued.append(replace(prior, nav_weight=weight))
+    total = number(totals[0].get("totValue"))
+    if sum(amounts) != total or total != inventory.stock_total:
+        raise ValueError("00924 stock book total mismatch")
+    aggregate = native_percent(totals[0].get("totRatio"))
+    notes = list(inventory.quality_notes)
+    if abs(aggregate - total / inventory.nav) > Decimal("0.000005"):
+        notes.append("00924 independent stock summary "
+                     f"{totals[0]['totRatio']} "
+                     "differs from amount/NAV "
+                     f"{total / inventory.nav * 100}%; "
+                     "cause unknown; native row weights retained")
+    notes.append("00924 stock market identities require independent review; "
+                 "this inventory does not qualify a canonical candidate")
+    return replace(inventory, stocks=valued, quality_notes=tuple(notes))

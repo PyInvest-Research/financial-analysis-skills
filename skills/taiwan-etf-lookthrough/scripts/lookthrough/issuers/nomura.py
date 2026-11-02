@@ -34,6 +34,8 @@ _PRODUCTS = {
     "00935": (False, "野村臺灣創新科技50 ETF證券投資信託基金"),
     "00944": (False, "野村臺灣趨勢動能高股息ETF證券投資信託基金"),
     "00980A": (True, "野村臺灣智慧優選主動式ETF"),
+    "00985A": (True, "野村臺灣增強50主動式ETF"),
+    "00999A": (True, "野村臺灣策略高息主動式ETF"),
 }
 _PCF_KEYS = {
     "CId", "CFundId", "CFullName", "CFundShortName", "CPcfdate", "CNavDt",

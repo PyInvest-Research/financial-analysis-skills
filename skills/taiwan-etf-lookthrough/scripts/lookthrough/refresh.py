@@ -15,7 +15,7 @@ from .issuers import ftft, jpmorgan, mixed
 from . import refresh_fh
 from .issuers._assets import read_json
 from .models import Snapshot
-from .refresh_contract import products
+from .refresh_contract import candidate_products, products, reviewed_products
 from .refresh_inventory import (
     Inventory, read_cathay, read_kgi, read_mega, read_sinopac, read_tsit,
     read_union,
@@ -124,10 +124,16 @@ class RefreshSession:
         return self.quotes[key]
 
 
-def _inventory(symbol: str, sources: dict[str, bytes]) -> Inventory:
+def _inventory(symbol: str, sources: dict[str, bytes], *,
+               fetched_at: str | None = None) -> Inventory:
     """Read only original captured source documents without network I/O."""
-    product = products()[symbol]
+    product = reviewed_products()[symbol]
     issuer, fund = product["issuer"], product["fund_id"]
+    if symbol in candidate_products():
+        if issuer != 'cathay':
+            raise ValueError('Unreviewed candidate issuer')
+        from .refresh_cathay_candidate import read_inventory
+        return read_inventory(sources, fetched_at, symbol=symbol)
     if issuer == "cathay":
         return read_cathay(sources["assets"], sources["stocks"],
                            sources["balance"], mixed.assets_day(
@@ -170,6 +176,8 @@ def capture(symbol: str, sources: dict[str, bytes],
 
 def acquire(symbol: str, session: RefreshSession) -> bytes:
     """Collect the reviewed current source and reuse date-specific prices."""
+    if symbol not in products():
+        raise ValueError("No acquisition route before same-program runner acceptance")
     product = products()[symbol]
     issuer, fund = product["issuer"], product["fund_id"]
     sources = {}
@@ -220,8 +228,8 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     payload = read_json(raw, limit=32 * 1024**2)
     if (payload.get("refresh_version") != 1
             or payload.get("symbol") != etf.symbol
-            or etf.symbol not in products()
-            or etf.source_url != products()[etf.symbol]["source_url"]):
+            or etf.symbol not in reviewed_products()
+            or etf.source_url != reviewed_products()[etf.symbol]["source_url"]):
         raise ValueError("Refresh product capture identity mismatch")
 
     def decoded(key: str) -> dict[str, bytes]:
@@ -235,7 +243,17 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
             raise ValueError("Invalid refresh source size")
         return result
     sources, quotes = decoded("sources"), decoded("quotes")
-    inventory = _inventory(etf.symbol, sources)
+    if etf.symbol in candidate_products():
+        if quotes:
+            raise ValueError("Dated native-weight candidate cannot use quote substitutions")
+        if reviewed_products()[etf.symbol]['issuer'] != 'cathay':
+            raise ValueError('Unreviewed candidate source contract')
+        from .refresh_cathay_candidate import source_keys
+        keys = source_keys(etf.symbol)
+        if set(sources) != set(keys):
+            raise ValueError("Missing candidate identity/date/receipt sources")
+        sources = {key: sources[key] for key in keys}
+    inventory = _inventory(etf.symbol, sources, fetched_at=fetched_at)
     if etf.symbol == "00731" and "assets" in sources:
         stamp = datetime.fromisoformat(fetched_at)
         if stamp.utcoffset() != timedelta(0):

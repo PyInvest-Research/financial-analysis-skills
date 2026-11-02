@@ -1,13 +1,15 @@
 """Parse qualified Sinopac actual assets and native percent-of-NAV stocks."""
 
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
+import hashlib
 import re
 from typing import TYPE_CHECKING
 
 from ..models import (
-    Holding, Snapshot, snapshot_from_dict, snapshot_to_dict,
+    EquityEvidence, Holding, Snapshot, snapshot_from_dict, snapshot_to_dict,
 )
+from ..refresh_contract import directory
 from ._assets import check_stock, nav_number, number
 from ._tables import Node, has_class, one, read_html, rows
 
@@ -53,6 +55,10 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
             or etf.source_url != SOURCE_URL):
         raise ValueError("Mismatched Sinopac source descriptor")
     root = read_html(raw)
+    one(root.find("html"), "complete Sinopac document")
+    if (any(root.find(tag) for tag in ("form", "select", "button"))
+            or any(n.attrs.get("rel") == "next" for n in root.find("a"))):
+        raise ValueError("Unqualified Sinopac interactive/paged source")
     headings = [node for node in root.find("div")
                 if has_class(node, "cash_title-s")]
     identity = one([node for node in headings if "證劵代碼" in node.text],
@@ -79,6 +85,10 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         raise ValueError("Invalid actual Sinopac asset date")
     day_text = match.group(1)
     day = date.fromisoformat(day_text.replace("/", "-"))
+    stamp = datetime.fromisoformat(fetched_at)
+    if ("T" not in fetched_at or stamp.utcoffset() != timedelta(0)
+            or day > stamp.astimezone(timezone(timedelta(hours=8))).date()):
+        raise ValueError("Sinopac holdings postdate UTC capture")
     nav_cell = one([node for node in root.find("div")
                     if has_class(node, "fl_cell") and any(
                         child.text.endswith("基金淨資產價值(元)")
@@ -107,11 +117,15 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     summaries = [_summary(table) for table in asset_tables]
     if summaries[0] != summaries[1] or _twd(summaries[0][0][1]) != nav:
         raise ValueError("Sinopac NAV summaries disagree")
+    if abs(nav / number(summaries[0][1][1])
+           - _twd(summaries[0][2][1])) > Decimal("0.005"):
+        raise ValueError("Sinopac NAV/units differ from rounded unit NAV")
     values = rows(one(stock_tables, "complete desktop stocks"))[1:]
     if not values or values != mobile:
         raise ValueError("Sinopac desktop/mobile stocks do not reconcile")
     holdings: list[Holding] = []
     seen: set[str] = set()
+    roster = directory()
     for row in values:
         if len(row) != 4 or row[0] in seen:
             raise ValueError("Malformed or duplicate Sinopac stock")
@@ -122,9 +136,23 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         percentage = number(row[3])
         if not 0 <= percentage <= 100:
             raise ValueError("Sinopac stock weight outside NAV range")
+        company = roster.get(row[0])
+        if (company is None or company.market not in {"TWSE", "TPEx"}
+                or row[1].replace("*", "") != company.name.replace("*", "")):
+            raise ValueError("Unknown Sinopac company/listing identity")
         seen.add(row[0])
         holdings.append(Holding(row[0], row[1], "stock",
-                                float(percentage / 100)))
-    snapshot = Snapshot("1", etf.symbol, etf.issuer, etf.is_active, day,
-                        fetched_at, SOURCE_URL, "official", tuple(holdings))
+                                float(percentage / 100), market=company.market))
+    evidence = EquityEvidence(True, float(nav), None, len(holdings), None,
+                              (hashlib.sha256(raw).hexdigest(),))
+    holdings.append(Holding("UNCLASSIFIED", "未揭露非股票資產與負債", "other", None))
+    notes = (
+        f"依本基金國內股票ETF範圍及官方公司名錄 {roster.as_of} 核代號、名稱與市場。",
+        "來源明示整基金NAV百分點；保留原生權重，不正規化。"
+        "未揭露股票總市值，不以權重乘NAV補造獨立市值證據。",
+        "股票全表與手機逐筆資料一致；未列非股票資產、期貨及負債不等於零，保持未知。",
+    )
+    snapshot = Snapshot("2", etf.symbol, etf.issuer, etf.is_active, day,
+                        fetched_at, SOURCE_URL, "official", tuple(holdings),
+                        evidence, notes)
     return snapshot_from_dict(snapshot_to_dict(snapshot))

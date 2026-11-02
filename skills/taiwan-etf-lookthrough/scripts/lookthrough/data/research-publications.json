@@ -1,0 +1,137 @@
+{
+  "schema_version": "1",
+  "snapshots": {
+    "00636": {
+      "holdings_date": "2026-10-30",
+      "snapshot_sha256": "d461abb0cd8dcf369f7e884d63ebeda8e5b107163908e3341de0db13cf21286e",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00875-00636-small-batch/README.md"
+    },
+    "00830": {
+      "holdings_date": "2026-10-29",
+      "snapshot_sha256": "bd24ac8ac2ba0b631bdb21052bdca359dca0b09b046ece3f35ca40836137088d",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00830-small-batch/README.md"
+    },
+    "00875": {
+      "holdings_date": "2026-10-29",
+      "snapshot_sha256": "25218f6fb0cdbb6659cf7cfeef7810d165c73cc035052503344aa4cd8e898275",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00875-00636-small-batch/README.md"
+    },
+    "00881": {
+      "holdings_date": "2026-10-30",
+      "snapshot_sha256": "44cd717204816764ea0058d43490c086f1f20f198b1f2af1e35ef464146f2400",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00881-00922-fixed-publication/README.md",
+      "previous_official_only_entry": {
+        "dates": [],
+        "is_active": false,
+        "issuer": "cathay",
+        "last_attempt_at": "2026-11-01T01:18:49.455835+00:00",
+        "last_error": null,
+        "last_status": "official_only",
+        "latest_date": null,
+        "route": "official_only",
+        "source_url": "https://www.cathaysite.com.tw/fund-details/ECR?tab=portfolio",
+        "symbol": "00881"
+      }
+    },
+    "00922": {
+      "holdings_date": "2026-10-29",
+      "snapshot_sha256": "997ae82f3602c908c01b4b5d11a35b83321daa756949a632ac5573e872384c1b",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00881-00922-fixed-publication/README.md",
+      "previous_official_only_entry": {
+        "dates": [],
+        "is_active": false,
+        "issuer": "cathay",
+        "last_attempt_at": "2026-11-01T01:18:49.455835+00:00",
+        "last_error": null,
+        "last_status": "official_only",
+        "latest_date": null,
+        "route": "official_only",
+        "source_url": "https://www.cathaysite.com.tw/fund-details/EDO?tab=portfolio",
+        "symbol": "00922"
+      }
+    },
+    "00903": {
+      "holdings_date": "2026-10-28",
+      "snapshot_sha256": "5c2d09cc8151af7c4e3115efa0119e30717d5a680cf6bccfd675ad29f88b6e5a",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00903-00920-fixed-publication/README.md"
+    },
+    "00920": {
+      "holdings_date": "2026-10-28",
+      "snapshot_sha256": "f28e714b6a9a7f9126817f55f160723db5701b3ba5037318a02d8bac98e8bb47",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00903-00920-fixed-publication/README.md"
+    },
+    "00400A": {
+      "holdings_date": "2026-10-22",
+      "snapshot_sha256": "65e75891d176d33bb8c87bf9a64d2b7a86ba997888fb21f8b22047b1b7a97346",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00400A-00701-fixed-publication/README.md",
+      "previous_official_only_entry": {
+        "dates": [],
+        "is_active": true,
+        "issuer": "cathay",
+        "last_attempt_at": "2026-11-01T01:18:49.455835+00:00",
+        "last_error": null,
+        "last_status": "official_only",
+        "latest_date": null,
+        "route": "official_only",
+        "source_url": "https://www.cathaysite.com.tw/fund-details/EEA?tab=portfolio",
+        "symbol": "00400A"
+      }
+    },
+    "00701": {
+      "holdings_date": "2026-10-22",
+      "snapshot_sha256": "57da5c92c41e4bd808e0d325f7a289b225440398a0b6c60fd39174aadcf8c042",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00400A-00701-fixed-publication/README.md",
+      "previous_official_only_entry": {
+        "dates": [],
+        "is_active": false,
+        "issuer": "cathay",
+        "last_attempt_at": "2026-11-01T01:18:49.455835+00:00",
+        "last_error": null,
+        "last_status": "official_only",
+        "latest_date": null,
+        "route": "official_only",
+        "source_url": "https://www.cathaysite.com.tw/fund-details/EAD?tab=portfolio",
+        "symbol": "00701"
+      }
+    },
+    "00985A": {
+      "holdings_date": "2026-10-29",
+      "snapshot_sha256": "0c88f15b46eafe675ead02a462ac62ae3b081ccb549381dec6d93a9ed95b3c12",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00985A-00984A-fixed-publication/README.md"
+    },
+    "00984A": {
+      "holdings_date": "2026-10-29",
+      "snapshot_sha256": "612dba908392afb830204d7be7632d7d31df7efc273607d291dac206e27700d8",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00985A-00984A-fixed-publication/README.md"
+    },
+    "00993A": {
+      "holdings_date": "2026-10-29",
+      "snapshot_sha256": "4d39a1b684240fca88ed735c8ecd2a3076ad99585b3dd26a571e6dccf1ce0edc",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "review": "docs/etf-discovery/2026-11-01-00993A-fixed-publication/README.md"
+    }
+  }
+}

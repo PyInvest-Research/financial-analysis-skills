@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from .directory import CompanyDirectory
-from .models import Snapshot
+from .models import Snapshot, snapshot_sha256
 
 
 DATA = Path(__file__).parent / "data"
@@ -16,6 +16,23 @@ DATA = Path(__file__).parent / "data"
 def products() -> dict[str, dict]:
     """Read the bounded reviewed product and overseas-identity allowlist."""
     return json.loads((DATA / "refresh-products.json").read_text())["products"]
+
+
+@lru_cache(maxsize=1)
+def candidate_products() -> dict[str, dict]:
+    """Read dated offline-reviewed candidates, never daily acquisition routes."""
+    rows = json.loads((DATA / "refresh-candidates.json").read_text())["products"]
+    if (set(rows).intersection(products())
+            or any(row.get("automatic_update") is not False
+                   or row.get("runner_accepted") is not False
+                   for row in rows.values())):
+        raise ValueError("Candidate products must remain outside daily routes")
+    return rows
+
+
+def reviewed_products() -> dict[str, dict]:
+    """Share identity validation while keeping acquisition opt-in separate."""
+    return {**products(), **candidate_products()}
 
 
 @lru_cache(maxsize=1)
@@ -31,7 +48,7 @@ def resolve_security(symbol: str, code: str, name: str) -> tuple[str, str]:
     inferred from a numeric ticker or silently counted as zero Taiwan.
     The Taishin TT suffix is a reviewed source convention, not a global rule.
     """
-    product = products()[symbol]
+    product = reviewed_products()[symbol]
     if product["issuer"] == "tsit" and code.endswith(" TT"):
         code = code[:-3]
     known = product["markets"].get(code)
@@ -54,13 +71,24 @@ def qualifies_refresh(snapshot: Snapshot) -> bool:
     arbitrary caller-provided JSON was downloaded by this process.
     Numeric completeness and NAV consistency are checked by the validator.
     """
-    product = products().get(snapshot.etf_symbol)
+    from .native_daily import qualifies as qualifies_native
+
+    if qualifies_native(snapshot):
+        return True
+    product = reviewed_products().get(snapshot.etf_symbol)
     if (product is None or snapshot.schema_version != "2"
             or snapshot.issuer != product["issuer"]
             or snapshot.is_active != product["is_active"]
             or snapshot.source_url != product["source_url"]
             or type(snapshot.holdings_date) is not date):
         return False
+    if snapshot.etf_symbol in candidate_products():
+        # Only the reviewed dated content qualifies before runner acceptance.
+        try:
+            if snapshot_sha256(snapshot) != product.get("snapshot_sha256"):
+                return False
+        except (ValueError, TypeError, OverflowError):
+            return False
     equities = [h for h in snapshot.holdings
                 if h.kind in ("stock", "foreign_stock")]
     if not equities:

@@ -1,0 +1,3035 @@
+{
+  "schema_version": 1,
+  "products": {
+    "00830": {
+      "issuer": "cathay",
+      "fund_id": "BO",
+      "is_active": false,
+      "source_url": "https://cwapi.cathaysite.com.tw/api/ETF/GetETFAssets?fundCode=BO&status=1",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-29",
+      "snapshot_sha256": "bd24ac8ac2ba0b631bdb21052bdca359dca0b09b046ece3f35ca40836137088d",
+      "contract": "Cathay full stock array and own Assets-day query; five original financial responses plus exact receipt bundle.",
+      "contract_evidence": "docs/etf-discovery/2026-10-30-round40/contract-evidence.json",
+      "market_evidence": "docs/etf-discovery/2026-10-30-round40/market-evidence.json",
+      "market_evidence_SHA256": "9080de7403b2b5d63c68089436be930cc44765e6be41d0db6ee9e3e27c717d04",
+      "markets": {
+        "NVDA.US": {
+          "name": "NVIDIA CORPORATION",
+          "market": "NASDAQ",
+          "official_name": "NVIDIA Corporation - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "AVGO.US": {
+          "name": "BROADCOM INC",
+          "market": "NASDAQ",
+          "official_name": "Broadcom Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "MU.US": {
+          "name": "Micron Technology Inc",
+          "market": "NASDAQ",
+          "official_name": "Micron Technology, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "AMD.US": {
+          "name": "ADV MICRO DEVICES",
+          "market": "NASDAQ",
+          "official_name": "Advanced Micro Devices, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "TXN.US": {
+          "name": "TEXAS INSTRUMENTS INC",
+          "market": "NASDAQ",
+          "official_name": "Texas Instruments Incorporated - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "ADI.US": {
+          "name": "ANALOG DEVICES INC",
+          "market": "NASDAQ",
+          "official_name": "Analog Devices, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "QCOM.US": {
+          "name": "QUALCOMM INC",
+          "market": "NASDAQ",
+          "official_name": "QUALCOMM Incorporated - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "TSM.US": {
+          "name": "TAIWAN SEMICOND ADS",
+          "market": "NYSE",
+          "official_name": "Taiwan Semiconductor Manufacturing Company Ltd.",
+          "security_form": "ADS",
+          "source_directory": "other_web.bin"
+        },
+        "MRVL.US": {
+          "name": "MARVELL TECH GROUP",
+          "market": "NASDAQ",
+          "official_name": "Marvell Technology, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "INTC.US": {
+          "name": "Intel Corp",
+          "market": "NASDAQ",
+          "official_name": "Intel Corporation - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "ASML.US": {
+          "name": "ASML HLDG NY REG",
+          "market": "NASDAQ",
+          "official_name": "ASML Holding N.V. - New York Registry Shares",
+          "security_form": "New_York_registry_shares",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "KLAC.US": {
+          "name": "K L A-TENCOR CORP",
+          "market": "NASDAQ",
+          "official_name": "KLA Corporation  - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "AMAT.US": {
+          "name": "APPLIED MATERIALS INC",
+          "market": "NASDAQ",
+          "official_name": "Applied Materials, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "LRCX.US": {
+          "name": "LAM RESEARCH CORP",
+          "market": "NASDAQ",
+          "official_name": "Lam Research Corporation - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "NXPI.US": {
+          "name": "NXP SEMICONDUCTORS",
+          "market": "NASDAQ",
+          "official_name": "NXP Semiconductors N.V. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "MPWR.US": {
+          "name": "MONOLITHIC POWER SYS",
+          "market": "NASDAQ",
+          "official_name": "Monolithic Power Systems, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "ALAB.US": {
+          "name": "ASTERA LABS INC",
+          "market": "NASDAQ",
+          "official_name": "Astera Labs, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "COHR.US": {
+          "name": "COHERENT INC",
+          "market": "NYSE",
+          "official_name": "Coherent Corp. Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "other_web.bin"
+        },
+        "TER.US": {
+          "name": "TERADYNE INC",
+          "market": "NASDAQ",
+          "official_name": "Teradyne, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "MCHP.US": {
+          "name": "MICROCHIP TECHNOLOGY INC",
+          "market": "NASDAQ",
+          "official_name": "Microchip Technology Incorporated - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "ARM.US": {
+          "name": "ARM HOLDINGS PLC ADS",
+          "market": "NASDAQ",
+          "official_name": "Arm Holdings plc - American Depositary Shares",
+          "security_form": "ADS",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "CRDO.US": {
+          "name": "CREDO TECHNOLOGY GROUP HOLDI",
+          "market": "NASDAQ",
+          "official_name": "Credo Technology Group Holding Ltd - Ordinary Shares",
+          "security_form": "ordinary_shares",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "ON.US": {
+          "name": "ON SEMICONDUCTOR",
+          "market": "NASDAQ",
+          "official_name": "ON Semiconductor Corporation - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "Q.US": {
+          "name": "啟諾迪電子公司",
+          "market": "NYSE",
+          "official_name": "Qnity Electronics, Inc. Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "other_web.bin"
+        },
+        "GFS.US": {
+          "name": "GLOBALFOUNDRIES ORD",
+          "market": "NASDAQ",
+          "official_name": "GlobalFoundries Inc. - Ordinary Share",
+          "security_form": "ordinary_shares",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "ENTG.US": {
+          "name": "ENTEGRIS INC",
+          "market": "NASDAQ",
+          "official_name": "Entegris, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "TSEM.US": {
+          "name": "TOWER SEMICONDUCTOR",
+          "market": "NASDAQ",
+          "official_name": "Tower Semiconductor Ltd. - Ordinary Shares",
+          "security_form": "ordinary_shares",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "MTSI.US": {
+          "name": "MACOM TECHNOLOGY SOLUTIONS H",
+          "market": "NASDAQ",
+          "official_name": "MACOM Technology Solutions Holdings, Inc. - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "SITM.US": {
+          "name": "SITIME CORP",
+          "market": "NASDAQ",
+          "official_name": "SiTime Corporation - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        },
+        "LSCC.US": {
+          "name": "LATTICE SEMICOND",
+          "market": "NASDAQ",
+          "official_name": "Lattice Semiconductor Corporation - Common Stock",
+          "security_form": "common_stock",
+          "source_directory": "nasdaq_web.bin"
+        }
+      },
+      "quality_note_scope": "nonstock_only"
+    },
+    "00875": {
+      "issuer": "cathay",
+      "fund_id": "CC",
+      "is_active": false,
+      "source_url": "https://cwapi.cathaysite.com.tw/api/ETF/GetETFAssets?fundCode=CC&status=1",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-29",
+      "snapshot_sha256": "25218f6fb0cdbb6659cf7cfeef7810d165c73cc035052503344aa4cd8e898275",
+      "quality_note_scope": "nonstock_only",
+      "quality_notes": [
+        "Foreign-currency cash/margin NAV weights remain unknown (CAD, EUR, GBP, JPY, SGD, USD); full assets/liabilities reconciliation is unverified. Futures notional is disclosed separately; NAV valuation is unknown."
+      ],
+      "contract": "SharedCathay full-stock-array/date contract plus ownCCidentity,actualreceipts,complete61stocksetandNAV; frozen dated localcandidate only.",
+      "contract_evidence": "docs/etf-discovery/2026-10-30-round40/contract-evidence.json",
+      "market_evidence": "docs/etf-discovery/2026-10-30-round41/market-evidence.json",
+      "market_evidence_SHA256": "9726dd98ad3e60714e93cdd1d22b726e4f6c9935f741e6e792b4270675d3aecb",
+      "markets": {
+        "NTSK.US": {
+          "name": "NETSKOPE, INC CS",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "RBRK.US": {
+          "name": "RUBRIK, INC.",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "4704.JP": {
+          "name": "TREND MICRO INC.",
+          "market": "Tokyo Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "QLYS.US": {
+          "name": "QUALYS, INC.",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "S.US": {
+          "name": "SENTINELONE, INC.",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "BB.CN": {
+          "name": "Blackberry Rg",
+          "market": "Canada composite (CN)",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": true
+        },
+        "CRWD.US": {
+          "name": "CROWDSTRIKE HLD CM A",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "FSLY.US": {
+          "name": "FASTLY, INC. CL A",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "CHKP.US": {
+          "name": "CHECK POINT SOFTWARE",
+          "market": "NASDAQ",
+          "security_form": "ordinary_shares",
+          "composite_scope_preserved": false
+        },
+        "NET.US": {
+          "name": "CLOUDFLARE, INC.",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "ZD.US": {
+          "name": "ZIFF DAVIS, INC. CMN",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "NTCT.US": {
+          "name": "NETSCOUT SYSTEMS I",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "MITK.US": {
+          "name": "MITEK SYSTEMS INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "PANW.US": {
+          "name": "Palo Alto Networks Inc",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "CSCO.US": {
+          "name": "Cisco Systems Inc",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "RDWR.US": {
+          "name": "RADWARE LTD.",
+          "market": "NASDAQ",
+          "security_form": "ordinary_shares",
+          "composite_scope_preserved": false
+        },
+        "AVGO.US": {
+          "name": "BROADCOM INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "AKAM.US": {
+          "name": "AKAMAI TECHNOLOGIES",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "GEN.US": {
+          "name": "GEN DIGITAL INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "OSPN.US": {
+          "name": "ONESPAN INC.",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "FTNT.US": {
+          "name": "FORTINET INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "CGNT.US": {
+          "name": "COGNYTE SOFTW",
+          "market": "NASDAQ",
+          "security_form": "ordinary_shares",
+          "composite_scope_preserved": false
+        },
+        "2326.JP": {
+          "name": "Digital Arts Rg",
+          "market": "Tokyo Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "4475.JP": {
+          "name": "HENNGE Rg",
+          "market": "Tokyo Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "3692.JP": {
+          "name": "FFRI Rg",
+          "market": "Tokyo Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "053800.KS": {
+          "name": "AHNLAB Rg",
+          "market": "KOSDAQ",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "ALLT.US": {
+          "name": "ALLOT LTD.",
+          "market": "NASDAQ",
+          "security_form": "ordinary_shares",
+          "composite_scope_preserved": false
+        },
+        "4417.JP": {
+          "name": "Glbl Sec Expts Rg",
+          "market": "Tokyo Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "4258.JP": {
+          "name": "AMIYA Rg",
+          "market": "Tokyo Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "TENB.US": {
+          "name": "TENABLE HOLDINGS CM",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "ZS.US": {
+          "name": "ZSCALER, INC. CMN",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "NABL.US": {
+          "name": "N-ABLE, INC.",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "OKTA.US": {
+          "name": "OKTA INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "RPD.US": {
+          "name": "RAPID7 INC CMN STK",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "CVLT.US": {
+          "name": "COMMVAULT SYSTEMS INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "TLS.US": {
+          "name": "TELOS CORPORATION CM",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "SAIC.US": {
+          "name": "SCIENCE APPLICATIONS",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "NCC.LN": {
+          "name": "NCC Group Rg",
+          "market": "London Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "DDOG.US": {
+          "name": "DATADOG INC - CLASS A",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "VRNS.US": {
+          "name": "VARONIS SYSTEMS INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "BAH.US": {
+          "name": "BOOZ ALLEN HAMLTN",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "AMTM.US": {
+          "name": "AMENTUM HOLDINGS, IN",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "OTEX.CN": {
+          "name": "Open Text Rg",
+          "market": "Canada composite (CN)",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": true
+        },
+        "CACI.US": {
+          "name": "C A C I INTL CL A",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "SAIL.US": {
+          "name": "SAILPOINT TECHNOLOGI",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "ESTC.US": {
+          "name": "ELASTIC NV",
+          "market": "NYSE",
+          "security_form": "ordinary_shares",
+          "composite_scope_preserved": false
+        },
+        "NOC.US": {
+          "name": "NORTHROP GRUM HOL CO",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "QQ/.LN": {
+          "name": "QinetiQ Group Rg",
+          "market": "London Stock Exchange",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": false
+        },
+        "ATEN.US": {
+          "name": "A10 NETWORKS, INC.",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "PSN.US": {
+          "name": "PARSONS CORP",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "LDOS.US": {
+          "name": "LEIDOS HLDGS, INC.",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "BA/.LN": {
+          "name": "BAE Systems Rg",
+          "market": "London Stock Exchange",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": false
+        },
+        "GD.US": {
+          "name": "GEN DYNAMICS CP",
+          "market": "NYSE",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "FROG.US": {
+          "name": "JFROG LTD. ORD SHS",
+          "market": "NASDAQ",
+          "security_form": null,
+          "composite_scope_preserved": false
+        },
+        "RXT.US": {
+          "name": "RACKSPACE TECH CM",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "HO.FP": {
+          "name": "Thales",
+          "market": "Euronext Paris",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": false
+        },
+        "STH.SP": {
+          "name": "StarHub Rg",
+          "market": "Singapore Exchange",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": false
+        },
+        "ATO.FP": {
+          "name": "Atos",
+          "market": "Euronext Paris",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": false
+        },
+        "TIETO.FH": {
+          "name": "Tietoevry Rg",
+          "market": "NASDAQ Helsinki",
+          "security_form": "Common Stock",
+          "composite_scope_preserved": false
+        },
+        "FFIV.US": {
+          "name": "F5 NETWORKS, INC.",
+          "market": "NASDAQ",
+          "security_form": "common_stock",
+          "composite_scope_preserved": false
+        },
+        "SCT.LN": {
+          "name": "Softcat Rg",
+          "market": "London Stock Exchange",
+          "security_form": null,
+          "composite_scope_preserved": false
+        }
+      },
+      "canonical_provenance": {
+        "equity_basis": "Based on the fund's own 61 complete stock rows. The official native NAV weights sum to 98.09%. Independently, the stock book value of 1055609489 TWD divided by the whole-fund NAV of 1076653221 TWD equals 98.045449399161738...%. No normalization is applied.",
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "taiwan_amount_is_independent_reported_book_value": false,
+        "Taiwan_amount_definition": "All 61 stock rows are independently bound to foreign listing-market identities. The Taiwan-listed stock subset is therefore empty, and its native NAV-weight sum is 0. The source does not separately report a Taiwan stock book amount.",
+        "equity_limitations": [
+          "The 00875 listing identities were observed on 2026-10-30 for holdings dated 2026-10-29. These observations are not a complete same-day historical exchange archive. Canada composite (CN) is not a unique execution venue. Rg tags do not establish a voting subclass or an ADR."
+        ],
+        "nonstock_limitations": [
+          "NAV weights for foreign-currency cash and margin (CAD, EUR, GBP, JPY, SGD, USD) remain unknown. A full reconciliation of assets and liabilities has not been verified. Futures notional is disclosed separately, but its NAV valuation is unknown."
+        ],
+        "direct_stock_scope_only": true,
+        "full_asset_liability_reconciliation_verified": false,
+        "disclosed_derivatives": {
+          "source_notional_TWD": 19252548,
+          "weight": null,
+          "exposure_weight": null,
+          "exposure_weight_status": "The source notional exists, but the parser has not populated exposure_weight. This is not a missing source disclosure.",
+          "added_to_NAV_book_sum": false
+        }
+      }
+    },
+    "00636": {
+      "issuer": "cathay",
+      "fund_id": "66",
+      "is_active": false,
+      "source_url": "https://cwapi.cathaysite.com.tw/api/ETF/GetETFAssets?fundCode=66&status=1",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-30",
+      "snapshot_sha256": "d461abb0cd8dcf369f7e884d63ebeda8e5b107163908e3341de0db13cf21286e",
+      "contract": "Own66identity and exact five-financial-receipt date contract; full48stock rows plus same-day emptyETF/fund actual arrays and separatefuture list; frozen local candidate only.",
+      "contract_evidence": "docs/etf-discovery/2026-10-30-round57/contract-evidence.json",
+      "market_evidence": "docs/etf-discovery/2026-10-30-round57/market-evidence.json",
+      "market_evidence_SHA256": "34eef17df01fe83032322235427f4b05155aadc6482d19729feb0ce1d0f6e6da",
+      "markets": {
+        "600519.CH": {
+          "name": "貴州茅台",
+          "market": "China composite (CH)"
+        },
+        "300750.CH": {
+          "name": "寧德時代",
+          "market": "China composite (CH)"
+        },
+        "600036.CH": {
+          "name": "招商銀行",
+          "market": "China composite (CH)"
+        },
+        "600900.CH": {
+          "name": "長江電力",
+          "market": "China composite (CH)"
+        },
+        "601398.CH": {
+          "name": "工商銀行",
+          "market": "China composite (CH)"
+        },
+        "601288.CH": {
+          "name": "農業銀行",
+          "market": "China composite (CH)"
+        },
+        "300308.CH": {
+          "name": "Zhongji Innolight (A) (SC SZ)",
+          "market": "China composite (CH)"
+        },
+        "601899.CH": {
+          "name": "紫金礦業",
+          "market": "China composite (CH)"
+        },
+        "601318.CH": {
+          "name": "中國平安",
+          "market": "China composite (CH)"
+        },
+        "688256.CH": {
+          "name": "Cambricon Technologies (A) (SC SH)",
+          "market": "China composite (CH)"
+        },
+        "601138.CH": {
+          "name": "工業富聯",
+          "market": "China composite (CH)"
+        },
+        "002594.CH": {
+          "name": "比亞迪",
+          "market": "China composite (CH)"
+        },
+        "601166.CH": {
+          "name": "興業銀行",
+          "market": "China composite (CH)"
+        },
+        "601328.CH": {
+          "name": "交通銀行",
+          "market": "China composite (CH)"
+        },
+        "688041.CH": {
+          "name": "Hygon Information Technology (A) (SC SH)",
+          "market": "China composite (CH)"
+        },
+        "601857.CH": {
+          "name": "中國石油",
+          "market": "China composite (CH)"
+        },
+        "603259.CH": {
+          "name": "藥明康德",
+          "market": "China composite (CH)"
+        },
+        "002371.CH": {
+          "name": "北方華創",
+          "market": "China composite (CH)"
+        },
+        "600000.CH": {
+          "name": "浦發銀行",
+          "market": "China composite (CH)"
+        },
+        "002475.CH": {
+          "name": "立訊精密",
+          "market": "China composite (CH)"
+        },
+        "601988.CH": {
+          "name": "中國銀行",
+          "market": "China composite (CH)"
+        },
+        "600276.CH": {
+          "name": "恒瑞醫藥",
+          "market": "China composite (CH)"
+        },
+        "601088.CH": {
+          "name": "中國神華",
+          "market": "China composite (CH)"
+        },
+        "600030.CH": {
+          "name": "中信證券",
+          "market": "China composite (CH)"
+        },
+        "000858.CH": {
+          "name": "五糧液",
+          "market": "China composite (CH)"
+        },
+        "300059.CH": {
+          "name": "東方財富",
+          "market": "China composite (CH)"
+        },
+        "300502.CH": {
+          "name": "Eoptolink Technology (A) (SC SZ)",
+          "market": "China composite (CH)"
+        },
+        "601225.CH": {
+          "name": "陜西煤業",
+          "market": "China composite (CH)"
+        },
+        "601939.CH": {
+          "name": "建設銀行",
+          "market": "China composite (CH)"
+        },
+        "601816.CH": {
+          "name": "京滬高鐵",
+          "market": "China composite (CH)"
+        },
+        "603993.CH": {
+          "name": "洛陽鉬業",
+          "market": "China composite (CH)"
+        },
+        "601211.CH": {
+          "name": "國泰君安",
+          "market": "China composite (CH)"
+        },
+        "600183.CH": {
+          "name": "生益科技",
+          "market": "China composite (CH)"
+        },
+        "601601.CH": {
+          "name": "中國太保",
+          "market": "China composite (CH)"
+        },
+        "688012.CH": {
+          "name": "Advanced Micro-Fabrication Equipment (A)",
+          "market": "China composite (CH)"
+        },
+        "601658.CH": {
+          "name": "Postal Savings Bank of China (A)",
+          "market": "China composite (CH)"
+        },
+        "600028.CH": {
+          "name": "中國石化",
+          "market": "China composite (CH)"
+        },
+        "688008.CH": {
+          "name": "瀾起科技",
+          "market": "China composite (CH)"
+        },
+        "603986.CH": {
+          "name": "兆易創新",
+          "market": "China composite (CH)"
+        },
+        "300394.CH": {
+          "name": "Suzhou TFC Optical Communication (A) (SC SZ)",
+          "market": "China composite (CH)"
+        },
+        "002384.CH": {
+          "name": "東山精密",
+          "market": "China composite (CH)"
+        },
+        "000651.CH": {
+          "name": "格力電器",
+          "market": "China composite (CH)"
+        },
+        "300274.CH": {
+          "name": "Sungrow Power Supply (A)",
+          "market": "China composite (CH)"
+        },
+        "000338.CH": {
+          "name": "濰柴動力",
+          "market": "China composite (CH)"
+        },
+        "601998.CH": {
+          "name": "中信銀行",
+          "market": "China composite (CH)"
+        },
+        "300476.CH": {
+          "name": "Victory Giant Technology (HuiZhou) (A) (SC SZ)",
+          "market": "China composite (CH)"
+        },
+        "601319.CH": {
+          "name": "中國人保",
+          "market": "China composite (CH)"
+        },
+        "688235.CH": {
+          "name": "BeOne Medicines (A) (SC SH)",
+          "market": "China composite (CH)"
+        }
+      },
+      "quality_note_scope": "equity_and_nonstock",
+      "quality_notes": [
+        "All48native stock identifiers bind unique Equity/Common Stock China composite(CH) records;47same-security originals reused,1new688235lookup. CH is not a unique SSE/SZSE venue or issuer nationality. Marketobservations10/30-31Taipei are not a complete same-day historical exchange archive.",
+        "Foreign CNH/CNY/USD cash and USD margin NAV weights remain unknown; no FX inference or full asset/liability reconciliation. TWD cash22961132, margin3113 and payable-12968106 retained. FutureSCN154contracts2026/11 source notionalTWD64286578 and native2.75% disclosed; canonical future exposure/valuation fields unparsed, not absent, excluded from spot stocks."
+      ],
+      "canonical_provenance": {
+        "equity_basis": "Based on the fund's own 48 complete actual stock rows. The official native NAV weights sum to 97.13%. Independently, the stock book value of 2274164945 TWD divided by the fund's own whole NAV of 2341338882 TWD equals 97.13096051509556744293626778%. This reconciles with the native weight sum within an unchanged precision tolerance of 48 × 0.005 pp. No PCF, index basket, price substitution, or normalization is used.",
+        "taiwan_amount_is_independent_reported_book_value": false,
+        "Taiwan_amount_definition": "All 48 listing-market identities are verified as foreign. The Taiwan-listed stock subset is therefore empty, and its native NAV-weight sum is 0. The source does not separately report a Taiwan stock book amount.",
+        "equity_limitations": [
+          "All 48 native stock identifiers bind to unique Equity/Common Stock records in China composite (CH). Of these, 47 reuse the original lookups for the same securities, and 1 (688235) required a new lookup. CH does not identify a unique SSE or SZSE execution venue, and it does not indicate issuer nationality. The market observations made on 2026-10-30 and 2026-10-31 (Taipei time) are not a complete same-day historical exchange archive."
+        ],
+        "nonstock_limitations": [
+          "NAV weights for foreign-currency cash (CNH, CNY, USD) and USD margin remain unknown. No FX inference is made, and no full reconciliation of assets and liabilities has been performed. The TWD items are retained as reported: cash of 22961132, margin of 3113, and payables of -12968106. The source discloses the SCN future (154 contracts, maturity 2026/11) with a source notional of TWD 64286578 and a native percentage of 2.75%. The source notional and native percentage are present, but exposure_weight has not been parsed and the future's NAV valuation remains unknown. The future is excluded from Taiwan-listed spot stock calculations."
+        ],
+        "native_stock_percentage_sum": "97.13",
+        "stock_amount_over_NAV_pct": "97.130960515095567442936267779454234510935696321811",
+        "market_scope": "China composite(CH), unique execution venue unassigned",
+        "actual_holdings_date_Asia_Taipei": "2026-10-30",
+        "market_observation_Taipei_dates": [
+          "2026-10-30",
+          "2026-10-31"
+        ],
+        "full_asset_liability_reconciliation_verified": false,
+        "direct_stock_scope_only": true,
+        "actual_direct_ETF_rows": 0,
+        "actual_direct_fund_rows": 0,
+        "disclosed_derivatives": {
+          "source_code": "SCN",
+          "name": "SGX FTSE CHINA A50",
+          "contracts": 154,
+          "maturity": "2026/11",
+          "source_notional_TWD": 64286578,
+          "source_notional_over_fund_NAV_pct": "2.7457186353598513382566377200",
+          "derived_notional_over_fund_NAV_pct": "2.7457186353598513382566377249442526449274590742478",
+          "source_native_pct": "2.75",
+          "weight": null,
+          "exposure_weight": null,
+          "exposure_weight_status": "The source notional exists, but the parser has not populated exposure_weight. This is not a missing source disclosure.",
+          "added_to_NAV_book_sum": false
+        },
+        "unused_InfoMain_allAssets": {
+          "raw": "96,421",
+          "units_and_scope_verified": false,
+          "denominator": false,
+          "denominator_field": "Assets.fundNav"
+        },
+        "equity_weight_basis": "sum_of_official_native_NAV_weights"
+      }
+    },
+    "00881": {
+      "issuer": "cathay",
+      "fund_id": "CR",
+      "fund_name": "國泰台灣科技龍頭ETF基金",
+      "is_active": false,
+      "source_url": "https://cwapi.cathaysite.com.tw/api/ETF/GetETFAssets?fundCode=CR&status=1",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-30",
+      "snapshot_sha256": "44cd717204816764ea0058d43490c086f1f20f198b1f2af1e35ef464146f2400",
+      "source_contract": "cathay_info_four_originals_v1",
+      "source_sha256": {
+        "info": "4000653eacec91d22fe77d8d961c5dad1142753ff02db00609c1078ae9bd7d3c",
+        "assets": "134d0a4cebaf1429f2e6aff40c0ee41fa7a3bdb9b44785f358b8bda2f82b5f93",
+        "stocks": "c616b39d1d11fc6b8e45751c6151c70323a081dc27d1da389c0d9824b4accad3",
+        "balance": "b58e442271cc222a4372a9360066bdcc2d77f41b6cb739bb2ffe901d97ae941e"
+      },
+      "contract_evidence": "docs/etf-discovery/2026-10-30-round37/official-contract.json",
+      "market_evidence": "docs/etf-discovery/2026-10-30-round37/analysis.json",
+      "market_evidence_SHA256": "90b8c412dda2b402ed1c74112503305dc4979ef986fa8b167961208128a12723",
+      "listing_evidence": "docs/etf-discovery/2026-10-30-round37/exchange-identity.json",
+      "quality_note_scope": "nonstock_only",
+      "quality_notes": [
+        "Reported non-futures book amounts minus own NAV = -10490867 TWD (-0.0073696652210851961449984244189045166691703109927498% NAV). Cause and full asset/liability reconciliation remain unknown; do not fill, net or normalize the difference. Native stock weights are retained; they are not the balance-sheet residual.",
+        "Source futures amount is notional, not NAV book value. Futures weight/exposure remains unknown and excluded from Taiwan-listed spot equities. Stock/balance responses do not echo dates; actual SearchDate is bound to own Assets.preDate and InfoMain.navDate receipts."
+      ],
+      "markets": {
+        "2330": {
+          "name": "台積電",
+          "market": "TWSE",
+          "same_day_quote_name": "台積電",
+          "historical_name_bridge": false
+        },
+        "2454": {
+          "name": "聯發科",
+          "market": "TWSE",
+          "same_day_quote_name": "聯發科",
+          "historical_name_bridge": false
+        },
+        "2317": {
+          "name": "鴻海",
+          "market": "TWSE",
+          "same_day_quote_name": "鴻海",
+          "historical_name_bridge": false
+        },
+        "2308": {
+          "name": "台達電",
+          "market": "TWSE",
+          "same_day_quote_name": "台達電",
+          "historical_name_bridge": false
+        },
+        "2383": {
+          "name": "台光電",
+          "market": "TWSE",
+          "same_day_quote_name": "台光電",
+          "historical_name_bridge": false
+        },
+        "3017": {
+          "name": "奇鋐",
+          "market": "TWSE",
+          "same_day_quote_name": "奇鋐",
+          "historical_name_bridge": false
+        },
+        "2382": {
+          "name": "廣達",
+          "market": "TWSE",
+          "same_day_quote_name": "廣達",
+          "historical_name_bridge": false
+        },
+        "3037": {
+          "name": "欣興",
+          "market": "TWSE",
+          "same_day_quote_name": "欣興",
+          "historical_name_bridge": false
+        },
+        "2345": {
+          "name": "智邦",
+          "market": "TWSE",
+          "same_day_quote_name": "智邦",
+          "historical_name_bridge": false
+        },
+        "2303": {
+          "name": "聯電",
+          "market": "TWSE",
+          "same_day_quote_name": "聯電",
+          "historical_name_bridge": false
+        },
+        "2360": {
+          "name": "致茂",
+          "market": "TWSE",
+          "same_day_quote_name": "致茂",
+          "historical_name_bridge": false
+        },
+        "2059": {
+          "name": "川湖",
+          "market": "TWSE",
+          "same_day_quote_name": "川湖",
+          "historical_name_bridge": false
+        },
+        "3231": {
+          "name": "緯創",
+          "market": "TWSE",
+          "same_day_quote_name": "緯創",
+          "historical_name_bridge": false
+        },
+        "3008": {
+          "name": "大立光",
+          "market": "TWSE",
+          "same_day_quote_name": "大立光",
+          "historical_name_bridge": false
+        },
+        "2379": {
+          "name": "瑞昱",
+          "market": "TWSE",
+          "same_day_quote_name": "瑞昱",
+          "historical_name_bridge": false
+        },
+        "6223": {
+          "name": "旺矽",
+          "market": "TPEx",
+          "same_day_quote_name": "旺矽",
+          "historical_name_bridge": false
+        },
+        "4958": {
+          "name": "臻鼎-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "臻鼎-KY",
+          "historical_name_bridge": false
+        },
+        "6274": {
+          "name": "台  燿",
+          "market": "TPEx",
+          "same_day_quote_name": "台燿",
+          "historical_name_bridge": false
+        },
+        "2368": {
+          "name": "金像電",
+          "market": "TWSE",
+          "same_day_quote_name": "金像電",
+          "historical_name_bridge": false
+        },
+        "3034": {
+          "name": "聯詠",
+          "market": "TWSE",
+          "same_day_quote_name": "聯詠",
+          "historical_name_bridge": false
+        },
+        "3045": {
+          "name": "台灣大",
+          "market": "TWSE",
+          "same_day_quote_name": "台灣大",
+          "historical_name_bridge": false
+        },
+        "3189": {
+          "name": "景碩",
+          "market": "TWSE",
+          "same_day_quote_name": "景碩",
+          "historical_name_bridge": false
+        },
+        "3665": {
+          "name": "貿聯-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "貿聯-KY",
+          "historical_name_bridge": false
+        },
+        "2449": {
+          "name": "京元電子",
+          "market": "TWSE",
+          "same_day_quote_name": "京元電子",
+          "historical_name_bridge": false
+        },
+        "4904": {
+          "name": "遠傳",
+          "market": "TWSE",
+          "same_day_quote_name": "遠傳",
+          "historical_name_bridge": false
+        },
+        "8046": {
+          "name": "南電",
+          "market": "TWSE",
+          "same_day_quote_name": "南電",
+          "historical_name_bridge": false
+        },
+        "3044": {
+          "name": "健鼎",
+          "market": "TWSE",
+          "same_day_quote_name": "健鼎",
+          "historical_name_bridge": false
+        },
+        "6770": {
+          "name": "力積電",
+          "market": "TWSE",
+          "same_day_quote_name": "力積電",
+          "historical_name_bridge": false
+        },
+        "3081": {
+          "name": "聯  亞",
+          "market": "TPEx",
+          "same_day_quote_name": "聯亞",
+          "historical_name_bridge": false
+        },
+        "2313": {
+          "name": "華通",
+          "market": "TWSE",
+          "same_day_quote_name": "華通",
+          "historical_name_bridge": false
+        }
+      },
+      "canonical_provenance": {
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "native_stock_percentage_sum": "98.87",
+        "stock_amount_over_NAV_pct": "98.882940110786383819435970475246083796761759071649",
+        "Taiwan_amount_definition": "All actual equities are Taiwan-listed. Independent reported stock book total retained for crosscheck; displayed/per-company and headline Taiwan shares use the official native row weights without normalization.",
+        "taiwan_amount_is_independent_reported_book_value": true,
+        "full_asset_liability_reconciliation_verified": false,
+        "direct_stock_scope_only": true,
+        "actual_holdings_date_Asia_Taipei": "2026-10-30",
+        "nonfutures_book_sum_minus_NAV_TWD": "-10490867",
+        "nonfutures_book_sum_minus_NAV_pct": "-0.0073696652210851961449984244189045166691703109927498",
+        "nonstock_limitations": [
+          "Reported non-futures book amounts minus own NAV = -10490867 TWD (-0.0073696652210851961449984244189045166691703109927498% NAV). Cause and full asset/liability reconciliation remain unknown; do not fill, net or normalize the difference. Native stock weights are retained; they are not the balance-sheet residual.",
+          "Source futures amount is notional, not NAV book value. Futures weight/exposure remains unknown and excluded from Taiwan-listed spot equities. Stock/balance responses do not echo dates; actual SearchDate is bound to own Assets.preDate and InfoMain.navDate receipts."
+        ],
+        "equity_limitations": []
+      }
+    },
+    "00922": {
+      "issuer": "cathay",
+      "fund_id": "DO",
+      "fund_name": "國泰台灣領袖50 ETF基金",
+      "is_active": false,
+      "source_url": "https://cwapi.cathaysite.com.tw/api/ETF/GetETFAssets?fundCode=DO&status=1",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-29",
+      "snapshot_sha256": "997ae82f3602c908c01b4b5d11a35b83321daa756949a632ac5573e872384c1b",
+      "source_contract": "cathay_info_four_originals_v1",
+      "source_sha256": {
+        "info": "6b6e926b522b74b2b5d268a96270065e061c5054bc58b59f45c801a0a6644802",
+        "assets": "5b664358f85ff5f45613b85ab3eb5306e01360b7d28fe0bc8d49257f88c42038",
+        "stocks": "86e61106d564921d7cb7467453301eb53ca73828a6c90e48767173b5893c377a",
+        "balance": "c58b71148000f1bcd9d076a58ac77f06c4e2bd868842e9362969bb42fb081101"
+      },
+      "contract_evidence": "docs/etf-discovery/2026-10-30-round37/official-contract.json",
+      "market_evidence": "docs/etf-discovery/2026-10-30-round37/analysis.json",
+      "market_evidence_SHA256": "90b8c412dda2b402ed1c74112503305dc4979ef986fa8b167961208128a12723",
+      "listing_evidence": "docs/etf-discovery/2026-10-30-round37/exchange-identity.json",
+      "quality_note_scope": "equity_and_nonstock",
+      "quality_notes": [
+        "Reported non-futures book amounts minus own NAV = 4774707741 TWD (5.3298381354323450804083317950504066320464868728231% NAV). Cause and full asset/liability reconciliation remain unknown; do not fill, net or normalize the difference. Native stock weights are retained; they are not the balance-sheet residual.",
+        "Source futures amount is notional, not NAV book value. Futures weight/exposure remains unknown and excluded from Taiwan-listed spot equities. Stock/balance responses do not echo dates; actual SearchDate is bound to own Assets.preDate and InfoMain.navDate receipts.",
+        "2327 native name 國巨 is retained versus same-day exchange 國巨*. Exact saved Cathay code/name bridge is historical (2026-10-22), not independent proof of current-date name continuity or the asterisk's share/par-value semantics. All 49 returned stocks retained; no 50th stock fabricated."
+      ],
+      "markets": {
+        "2330": {
+          "name": "台積電",
+          "market": "TWSE",
+          "same_day_quote_name": "台積電",
+          "historical_name_bridge": false
+        },
+        "2454": {
+          "name": "聯發科",
+          "market": "TWSE",
+          "same_day_quote_name": "聯發科",
+          "historical_name_bridge": false
+        },
+        "2308": {
+          "name": "台達電",
+          "market": "TWSE",
+          "same_day_quote_name": "台達電",
+          "historical_name_bridge": false
+        },
+        "2317": {
+          "name": "鴻海",
+          "market": "TWSE",
+          "same_day_quote_name": "鴻海",
+          "historical_name_bridge": false
+        },
+        "3711": {
+          "name": "日月光投控",
+          "market": "TWSE",
+          "same_day_quote_name": "日月光投控",
+          "historical_name_bridge": false
+        },
+        "2383": {
+          "name": "台光電",
+          "market": "TWSE",
+          "same_day_quote_name": "台光電",
+          "historical_name_bridge": false
+        },
+        "2881": {
+          "name": "富邦金",
+          "market": "TWSE",
+          "same_day_quote_name": "富邦金",
+          "historical_name_bridge": false
+        },
+        "2303": {
+          "name": "聯電",
+          "market": "TWSE",
+          "same_day_quote_name": "聯電",
+          "historical_name_bridge": false
+        },
+        "1303": {
+          "name": "南亞",
+          "market": "TWSE",
+          "same_day_quote_name": "南亞",
+          "historical_name_bridge": false
+        },
+        "2891": {
+          "name": "中信金",
+          "market": "TWSE",
+          "same_day_quote_name": "中信金",
+          "historical_name_bridge": false
+        },
+        "2882": {
+          "name": "國泰金",
+          "market": "TWSE",
+          "same_day_quote_name": "國泰金",
+          "historical_name_bridge": false
+        },
+        "3017": {
+          "name": "奇鋐",
+          "market": "TWSE",
+          "same_day_quote_name": "奇鋐",
+          "historical_name_bridge": false
+        },
+        "2887": {
+          "name": "台新新光金",
+          "market": "TWSE",
+          "same_day_quote_name": "台新新光金",
+          "historical_name_bridge": false
+        },
+        "2327": {
+          "name": "國巨",
+          "market": "TWSE",
+          "same_day_quote_name": "國巨*",
+          "historical_name_bridge": true
+        },
+        "3037": {
+          "name": "欣興",
+          "market": "TWSE",
+          "same_day_quote_name": "欣興",
+          "historical_name_bridge": false
+        },
+        "6669": {
+          "name": "緯穎",
+          "market": "TWSE",
+          "same_day_quote_name": "緯穎",
+          "historical_name_bridge": false
+        },
+        "2885": {
+          "name": "元大金",
+          "market": "TWSE",
+          "same_day_quote_name": "元大金",
+          "historical_name_bridge": false
+        },
+        "2345": {
+          "name": "智邦",
+          "market": "TWSE",
+          "same_day_quote_name": "智邦",
+          "historical_name_bridge": false
+        },
+        "2883": {
+          "name": "凱基金",
+          "market": "TWSE",
+          "same_day_quote_name": "凱基金",
+          "historical_name_bridge": false
+        },
+        "2382": {
+          "name": "廣達",
+          "market": "TWSE",
+          "same_day_quote_name": "廣達",
+          "historical_name_bridge": false
+        },
+        "3008": {
+          "name": "大立光",
+          "market": "TWSE",
+          "same_day_quote_name": "大立光",
+          "historical_name_bridge": false
+        },
+        "2884": {
+          "name": "玉山金",
+          "market": "TWSE",
+          "same_day_quote_name": "玉山金",
+          "historical_name_bridge": false
+        },
+        "2357": {
+          "name": "華碩",
+          "market": "TWSE",
+          "same_day_quote_name": "華碩",
+          "historical_name_bridge": false
+        },
+        "2301": {
+          "name": "光寶科",
+          "market": "TWSE",
+          "same_day_quote_name": "光寶科",
+          "historical_name_bridge": false
+        },
+        "3443": {
+          "name": "創意",
+          "market": "TWSE",
+          "same_day_quote_name": "創意",
+          "historical_name_bridge": false
+        },
+        "2412": {
+          "name": "中華電",
+          "market": "TWSE",
+          "same_day_quote_name": "中華電",
+          "historical_name_bridge": false
+        },
+        "3231": {
+          "name": "緯創",
+          "market": "TWSE",
+          "same_day_quote_name": "緯創",
+          "historical_name_bridge": false
+        },
+        "2360": {
+          "name": "致茂",
+          "market": "TWSE",
+          "same_day_quote_name": "致茂",
+          "historical_name_bridge": false
+        },
+        "2059": {
+          "name": "川湖",
+          "market": "TWSE",
+          "same_day_quote_name": "川湖",
+          "historical_name_bridge": false
+        },
+        "3653": {
+          "name": "健策",
+          "market": "TWSE",
+          "same_day_quote_name": "健策",
+          "historical_name_bridge": false
+        },
+        "2890": {
+          "name": "永豐金",
+          "market": "TWSE",
+          "same_day_quote_name": "永豐金",
+          "historical_name_bridge": false
+        },
+        "2379": {
+          "name": "瑞昱",
+          "market": "TWSE",
+          "same_day_quote_name": "瑞昱",
+          "historical_name_bridge": false
+        },
+        "5274": {
+          "name": "信  驊",
+          "market": "TPEx",
+          "same_day_quote_name": "信驊",
+          "historical_name_bridge": false
+        },
+        "2892": {
+          "name": "第一金",
+          "market": "TWSE",
+          "same_day_quote_name": "第一金",
+          "historical_name_bridge": false
+        },
+        "2880": {
+          "name": "華南金",
+          "market": "TWSE",
+          "same_day_quote_name": "華南金",
+          "historical_name_bridge": false
+        },
+        "3034": {
+          "name": "聯詠",
+          "market": "TWSE",
+          "same_day_quote_name": "聯詠",
+          "historical_name_bridge": false
+        },
+        "6446": {
+          "name": "藥華藥",
+          "market": "TWSE",
+          "same_day_quote_name": "藥華藥",
+          "historical_name_bridge": false
+        },
+        "2886": {
+          "name": "兆豐金",
+          "market": "TWSE",
+          "same_day_quote_name": "兆豐金",
+          "historical_name_bridge": false
+        },
+        "1216": {
+          "name": "統一",
+          "market": "TWSE",
+          "same_day_quote_name": "統一",
+          "historical_name_bridge": false
+        },
+        "4958": {
+          "name": "臻鼎-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "臻鼎-KY",
+          "historical_name_bridge": false
+        },
+        "2395": {
+          "name": "研華",
+          "market": "TWSE",
+          "same_day_quote_name": "研華",
+          "historical_name_bridge": false
+        },
+        "5871": {
+          "name": "中租-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "中租-KY",
+          "historical_name_bridge": false
+        },
+        "5880": {
+          "name": "合庫金",
+          "market": "TWSE",
+          "same_day_quote_name": "合庫金",
+          "historical_name_bridge": false
+        },
+        "3661": {
+          "name": "世芯-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "世芯-KY",
+          "historical_name_bridge": false
+        },
+        "2368": {
+          "name": "金像電",
+          "market": "TWSE",
+          "same_day_quote_name": "金像電",
+          "historical_name_bridge": false
+        },
+        "3665": {
+          "name": "貿聯-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "貿聯-KY",
+          "historical_name_bridge": false
+        },
+        "1590": {
+          "name": "亞德客-KY",
+          "market": "TWSE",
+          "same_day_quote_name": "亞德客-KY",
+          "historical_name_bridge": false
+        },
+        "2449": {
+          "name": "京元電子",
+          "market": "TWSE",
+          "same_day_quote_name": "京元電子",
+          "historical_name_bridge": false
+        },
+        "6223": {
+          "name": "旺矽",
+          "market": "TPEx",
+          "same_day_quote_name": "旺矽",
+          "historical_name_bridge": false
+        }
+      },
+      "canonical_provenance": {
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "native_stock_percentage_sum": "99.09",
+        "stock_amount_over_NAV_pct": "99.079332069045558388451074863426183073101576304181",
+        "Taiwan_amount_definition": "All actual equities are Taiwan-listed. Independent reported stock book total retained for crosscheck; displayed/per-company and headline Taiwan shares use the official native row weights without normalization.",
+        "taiwan_amount_is_independent_reported_book_value": true,
+        "full_asset_liability_reconciliation_verified": false,
+        "direct_stock_scope_only": true,
+        "actual_holdings_date_Asia_Taipei": "2026-10-29",
+        "nonfutures_book_sum_minus_NAV_TWD": "4774707741",
+        "nonfutures_book_sum_minus_NAV_pct": "5.3298381354323450804083317950504066320464868728231",
+        "nonstock_limitations": [
+          "Reported non-futures book amounts minus own NAV = 4774707741 TWD (5.3298381354323450804083317950504066320464868728231% NAV). Cause and full asset/liability reconciliation remain unknown; do not fill, net or normalize the difference. Native stock weights are retained; they are not the balance-sheet residual.",
+          "Source futures amount is notional, not NAV book value. Futures weight/exposure remains unknown and excluded from Taiwan-listed spot equities. Stock/balance responses do not echo dates; actual SearchDate is bound to own Assets.preDate and InfoMain.navDate receipts."
+        ],
+        "equity_limitations": [
+          "2327 native name 國巨 is retained versus same-day exchange 國巨*. Exact saved Cathay code/name bridge is historical (2026-10-22), not independent proof of current-date name continuity or the asterisk's share/par-value semantics. All 49 returned stocks retained; no 50th stock fabricated."
+        ]
+      }
+    },
+    "00903": {
+      "issuer": "fubon",
+      "is_active": false,
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?stkId=00903&lan=TW",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-28",
+      "snapshot_sha256": "5c2d09cc8151af7c4e3115efa0119e30717d5a680cf6bccfd675ad29f88b6e5a",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Exact saved financial-copy SHA, own fund/date/NAV, complete native stock rows and existing pinned Fubon per-security market evidence; fixed research only.",
+      "market_evidence": "docs/etf-discovery/2026-10-29-round30/market-evidence.json",
+      "market_evidence_SHA256": "4ced39a66f157ba9aaf3c13818a27d8e7f351b9fc621e6351453d42f9eddbd6c",
+      "markets": {
+        "AAPL US": {
+          "name": "APPLE INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "MU US": {
+          "name": "MICRON TECHNOLOGY INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "NVDA US": {
+          "name": "NVIDIA CORP",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "META US": {
+          "name": "META PLATFORMS INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "AMZN US": {
+          "name": "AMAZON.COM INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "GOOGL US": {
+          "name": "Alphabet Inc-CL A",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "PLTR US": {
+          "name": "PALANTIR TECHNOLOGIES INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "AI US": {
+          "name": "C3.AI INC",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "AMBQ US": {
+          "name": "AMBIQ MICRO INC",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "KOPN US": {
+          "name": "KOPIN CORP",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "HIMX US": {
+          "name": "HIMAX TECHNOLOGIES INC",
+          "market": "NASDAQ",
+          "security_form": "ADS"
+        },
+        "ADBE US": {
+          "name": "ADOBE INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "2498": {
+          "name": "宏達電",
+          "market": "TWSE",
+          "security_form": "Taiwan_listed_stock"
+        },
+        "AMBA US": {
+          "name": "AMBARELLA INC",
+          "market": "NASDAQ",
+          "security_form": "ordinary_share"
+        },
+        "MSFT US": {
+          "name": "MICROSOFT CORP",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "SNAP US": {
+          "name": "SNAP INC",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "FIG US": {
+          "name": "FIGMA INC",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "6613 HK": {
+          "name": "藍思科技",
+          "market": "HKEX",
+          "security_form": "listed_equity"
+        },
+        "OLED US": {
+          "name": "UNIVERSAL DISPLAY CORP",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "AMD US": {
+          "name": "ADVANCED MICRO DEVICES",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "CRWV US": {
+          "name": "COREWEAVE INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "CRUS US": {
+          "name": "CIRRUS LOGIC INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "3896 HK": {
+          "name": "金山雲",
+          "market": "HKEX",
+          "security_form": "listed_equity"
+        },
+        "6752 JP": {
+          "name": "Panasonic Corp",
+          "market": "TSE",
+          "security_form": "Japan_listed_shares"
+        },
+        "AKAM US": {
+          "name": "AKAMAI TECHNOLOGIES INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "SOUN US": {
+          "name": "SOUNDHOUND AI INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "RBLX US": {
+          "name": "ROBLOX CORP",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "2330": {
+          "name": "台積電",
+          "market": "TWSE",
+          "security_form": "Taiwan_listed_stock"
+        },
+        "IQ US": {
+          "name": "IQIYI INC",
+          "market": "NASDAQ",
+          "security_form": "ADS"
+        },
+        "2635 HK": {
+          "name": "諾比侃",
+          "market": "HKEX",
+          "security_form": "listed_equity"
+        }
+      },
+      "canonical_provenance": {
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "equity_basis": "Complete disclosed stock rows and same-panel whole-fund TWD NAV; all native percentages retained without normalization.",
+        "taiwan_amount_is_independent_reported_book_value": false,
+        "Taiwan_amount_definition": "Sum of the disclosed book amounts for the independently identified TWSE rows; not a separately reported Taiwan aggregate.",
+        "equity_limitations": [
+          "00903候選來源：持股日期取完整資產表；查詢控制日期不是持股日期。尚未啟用每日更新。",
+          "保留官方原生NAV百分比；與同頁金額/NAV差異在一個0.0001百分點內，未證實差異原因，不重放大。",
+          "股票總表原生98.0486%與總市值/NAV的98.05011581300357764902388498%有差異；逐列界限只能限制差額，不能證明總表捨入原因，保留未知警告。",
+          "海外代碼與市場按保存官方名錄核對；HIMX US、IQ US是ADS，未併入台灣股票。市場名錄觀察日期10/29–30，不冒稱逐日歷史交易所證明。",
+          "全基金NAV減股票市值為18891566 TWD，仍未分配；現金／保證金幣別與換算口徑未全核，不補零或會計平衡。"
+        ],
+        "nonstock_limitations": [
+          "官方非股原值：保證金 (TWD) 460；NAV權重未知。",
+          "官方非股原值：保證金 (USD) 6,974,839；NAV權重未知。",
+          "官方非股原值：現金 (TWD) 6,415,949；NAV權重未知。",
+          "官方非股原值：現金 (USD) 6,324,921；NAV權重未知。",
+          "期貨NQZ6F原數量1、金額19440507、比率2.0065%；曝險與NAV權重未驗。"
+        ],
+        "direct_stock_scope_only": true,
+        "full_asset_liability_reconciliation_verified": false,
+        "source_projection": "Existing reviewed financial HTML copy with ephemeral form values removed; source hash is the copy hash, not the original HTTP HTML hash."
+      },
+      "fund_id": "00903"
+    },
+    "00920": {
+      "issuer": "fubon",
+      "is_active": false,
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?stkId=00920&lan=TW",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-28",
+      "snapshot_sha256": "f28e714b6a9a7f9126817f55f160723db5701b3ba5037318a02d8bac98e8bb47",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Exact saved financial-copy SHA, own fund/date/NAV, complete native stock rows and existing pinned Fubon per-security market evidence; fixed research only.",
+      "market_evidence": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "market_evidence_SHA256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "markets": {
+        "IBE SQ": {
+          "name": "IBERDROLA SA",
+          "market": "Madrid",
+          "security_form": "local_listed_equity"
+        },
+        "GEV US": {
+          "name": "GE VERNOVA INC",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "BE US": {
+          "name": "BLOOM ENERGY CORP",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "2308": {
+          "name": "台達電",
+          "market": "TWSE",
+          "security_form": "Taiwan_listed_stock"
+        },
+        "6762 JP": {
+          "name": "TDK Corp",
+          "market": "Tokyo Stock Exchange",
+          "security_form": "local_listed_equity"
+        },
+        "3017": {
+          "name": "奇鋐",
+          "market": "TWSE",
+          "security_form": "Taiwan_listed_stock"
+        },
+        "006400 KS": {
+          "name": "SAMSUNG SDI CO LTD",
+          "market": "KRX",
+          "security_form": "common_shares"
+        },
+        "RWE GY": {
+          "name": "RWE AG",
+          "market": "Xetra",
+          "security_form": "local_listed_equity"
+        },
+        "VWS DC": {
+          "name": "VESTAS WIND SYSTEM",
+          "market": "Nasdaq Copenhagen",
+          "security_form": "local_listed_equity"
+        },
+        "FSLR US": {
+          "name": "FIRST SOLAR INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "TRN IM": {
+          "name": "TERNA SPA",
+          "market": "Euronext Milan",
+          "security_form": "local_listed_equity"
+        },
+        "NXT US": {
+          "name": "NEXPOWER INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "373220 KS": {
+          "name": "LG ENERGY SOLUTION LTD",
+          "market": "KRX",
+          "security_form": "share_class_unknown"
+        },
+        "EDP PL": {
+          "name": "EDP SA",
+          "market": "Euronext Lisbon",
+          "security_form": "common_stock"
+        },
+        "VER AV": {
+          "name": "VERBUND AG",
+          "market": "Vienna",
+          "security_form": "local_listed_equity"
+        },
+        "AES US": {
+          "name": "AES CORP/THE",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "ELE SQ": {
+          "name": "Endesa",
+          "market": "SIBE",
+          "security_form": "local_listed_equity"
+        },
+        "AEIS US": {
+          "name": "ADVANCED ENERGY INDUSTRIES",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "ORSTED DC": {
+          "name": "ORSTED AS",
+          "market": "Nasdaq Copenhagen",
+          "security_form": "local_listed_equity"
+        },
+        "RED SQ": {
+          "name": "REDEIA CORP SA",
+          "market": "SIBE",
+          "security_form": "local_listed_equity"
+        },
+        "ELPC US": {
+          "name": "CIA PARANAENSE DE ENERGIA - CO",
+          "market": "NYSE",
+          "security_form": "ADS"
+        },
+        "051910 KS": {
+          "name": "LG CHEM LTD",
+          "market": "KRX KOSPI",
+          "security_form": "share_class_unknown"
+        },
+        "ELI BB": {
+          "name": "ELIA GROUP SA/NV",
+          "market": "Euronext Brussels",
+          "security_form": "local_listed_equity"
+        },
+        "ENLT IT": {
+          "name": "ENLIGHT RENEWABLE ENERGY LTD",
+          "market": "TASE",
+          "security_form": "ordinary_shares"
+        },
+        "ORA US": {
+          "name": "ORMAT TECHNOLOGIES INC",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "ENS US": {
+          "name": "ENERSYS",
+          "market": "NYSE",
+          "security_form": "common_stock"
+        },
+        "NDX1 GY": {
+          "name": "NORDEX SE",
+          "market": "XETRA",
+          "security_form": "local_listed_equity"
+        },
+        "VICR US": {
+          "name": "VICOR CORP",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "BEPC US": {
+          "name": "BROOKFIELD RENEWABLE CORP",
+          "market": "NYSE",
+          "security_form": "Class A subordinate voting shares"
+        },
+        "ENIC US": {
+          "name": "ENEL CHILE SA",
+          "market": "NYSE",
+          "security_form": "ADS"
+        },
+        "ENPH US": {
+          "name": "ENPHASE ENERGY INC",
+          "market": "NASDAQ",
+          "security_form": "common_stock"
+        },
+        "CPX CN": {
+          "name": "CAPITAL POWER CORP",
+          "market": "TSX",
+          "security_form": "common_shares"
+        },
+        "NPI CN": {
+          "name": "NORTHLAND POWER INC",
+          "market": "Toronto Stock Exchange",
+          "security_form": "common_shares"
+        },
+        "PAM US": {
+          "name": "PAMPA ENERGIA SA",
+          "market": "NYSE",
+          "security_form": "ADS"
+        }
+      },
+      "canonical_provenance": {
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "equity_basis": "Complete disclosed stock rows and same-panel whole-fund TWD NAV; all native percentages retained without normalization.",
+        "taiwan_amount_is_independent_reported_book_value": false,
+        "Taiwan_amount_definition": "Sum of the disclosed book amounts for the independently identified TWSE rows; not a separately reported Taiwan aggregate.",
+        "equity_limitations": [
+          "00920候選來源：持股日期取完整資產表；查詢控制日期不是持股日期。尚未啟用每日更新。",
+          "保留官方原生NAV百分比；與同頁金額/NAV差異在一個0.0001百分點內，未證實差異原因，不重放大。",
+          "股票總表原生99.0457%與總市值/NAV的99.04696307918543617226614180%有差異；逐列界限只能限制差額，不能證明總表捨入原因，保留未知警告。",
+          "市場按保存交易所／發行人證據核對；ELPC US、ENIC US、PAM US是ADS，ENLT IT為TASE普通股，均不併入台股。歷史掛牌證據不冒稱當日存續或停復牌證明。",
+          "全基金NAV減股票市值為4470675 TWD，仍未分配；現金／保證金幣別與換算口徑未全核，不補零或會計平衡。",
+          "373220 KS與051910 KS市場已核，精確股份類別仍未知；不補成普通股或ADR。候選資料不是正式發布資格。",
+          "NXT US官方名錄為Nextpower Inc.，基金原文NEXPOWER INC保留；依唯一代號與市場對應，名稱差異保留警示。",
+          "SIBE代碼依歷史BME公告與發行人／交易所資料配對；託管PDF文字未與本地原檔逐位元綁定，保留證據限制。"
+        ],
+        "nonstock_limitations": [
+          "官方非股原值：現金 (TWD) 1,115,350；NAV權重未知。",
+          "官方非股原值：現金 (USD) 3,870,795；NAV權重未知。"
+        ],
+        "direct_stock_scope_only": true,
+        "full_asset_liability_reconciliation_verified": false,
+        "source_projection": "Existing reviewed financial HTML copy with ephemeral form values removed; source hash is the copy hash, not the original HTTP HTML hash."
+      },
+      "fund_id": "00920"
+    },
+    "00400A": {
+      "issuer": "cathay",
+      "fund_id": "EEA",
+      "is_active": true,
+      "source_url": "https://www.cathaysite.com.tw/fund-details/EEA?tab=portfolio",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-22",
+      "snapshot_sha256": "65e75891d176d33bb8c87bf9a64d2b7a86ba997888fb21f8b22047b1b7a97346",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Exact saved expanded modern DOM; complete native percentages, unique official-directory names or same-fund/day legacy native code/name pairs. Offline fixed publication only; not the Cathay API collector.",
+      "contract_evidence": "docs/etf-discovery/2026-11-01-00400A-00701-fixed-publication/README.md",
+      "markets": {
+        "2330": {
+          "name": "台積電",
+          "market": "TWSE"
+        },
+        "2454": {
+          "name": "聯發科",
+          "market": "TWSE"
+        },
+        "2383": {
+          "name": "台光電",
+          "market": "TWSE"
+        },
+        "1303": {
+          "name": "南亞",
+          "market": "TWSE"
+        },
+        "3037": {
+          "name": "欣興",
+          "market": "TWSE"
+        },
+        "2059": {
+          "name": "川湖",
+          "market": "TWSE"
+        },
+        "3017": {
+          "name": "奇鋐",
+          "market": "TWSE"
+        },
+        "3653": {
+          "name": "健策",
+          "market": "TWSE"
+        },
+        "2360": {
+          "name": "致茂",
+          "market": "TWSE"
+        },
+        "6223": {
+          "name": "旺矽",
+          "market": "TPEx"
+        },
+        "6278": {
+          "name": "台表科",
+          "market": "TWSE"
+        },
+        "2368": {
+          "name": "金像電",
+          "market": "TWSE"
+        },
+        "2308": {
+          "name": "台達電",
+          "market": "TWSE"
+        },
+        "3443": {
+          "name": "創意",
+          "market": "TWSE"
+        },
+        "6488": {
+          "name": "環球晶",
+          "market": "TPEx"
+        },
+        "3044": {
+          "name": "健鼎",
+          "market": "TWSE"
+        },
+        "3661": {
+          "name": "世芯-KY",
+          "market": "TWSE"
+        },
+        "2303": {
+          "name": "聯電",
+          "market": "TWSE"
+        },
+        "2881": {
+          "name": "富邦金",
+          "market": "TWSE"
+        },
+        "2891": {
+          "name": "中信金",
+          "market": "TWSE"
+        },
+        "2603": {
+          "name": "長榮",
+          "market": "TWSE"
+        },
+        "3036": {
+          "name": "文曄",
+          "market": "TWSE"
+        },
+        "3008": {
+          "name": "大立光",
+          "market": "TWSE"
+        },
+        "6505": {
+          "name": "台塑化",
+          "market": "TWSE"
+        },
+        "5274": {
+          "name": "信 驊",
+          "market": "TPEx"
+        },
+        "2345": {
+          "name": "智邦",
+          "market": "TWSE"
+        },
+        "3665": {
+          "name": "貿聯-KY",
+          "market": "TWSE"
+        },
+        "6274": {
+          "name": "台 燿",
+          "market": "TPEx"
+        },
+        "2327": {
+          "name": "國巨",
+          "market": "TWSE"
+        },
+        "3529": {
+          "name": "力旺",
+          "market": "TPEx"
+        },
+        "6187": {
+          "name": "萬 潤",
+          "market": "TPEx"
+        },
+        "3231": {
+          "name": "緯創",
+          "market": "TWSE"
+        },
+        "3711": {
+          "name": "日月光投控",
+          "market": "TWSE"
+        },
+        "3406": {
+          "name": "玉晶光",
+          "market": "TWSE"
+        },
+        "3533": {
+          "name": "Lotes Co Ltd",
+          "market": "TWSE"
+        },
+        "6147": {
+          "name": "頎邦",
+          "market": "TPEx"
+        },
+        "2449": {
+          "name": "京元電子",
+          "market": "TWSE"
+        },
+        "2313": {
+          "name": "華通",
+          "market": "TWSE"
+        },
+        "2317": {
+          "name": "鴻海",
+          "market": "TWSE"
+        },
+        "7750": {
+          "name": "新 代",
+          "market": "TWSE"
+        },
+        "7769": {
+          "name": "鴻 勁",
+          "market": "TWSE"
+        },
+        "3081": {
+          "name": "聯 亞",
+          "market": "TPEx"
+        },
+        "4958": {
+          "name": "臻鼎-KY",
+          "market": "TWSE"
+        },
+        "2637": {
+          "name": "慧洋-KY",
+          "market": "TWSE"
+        },
+        "5434": {
+          "name": "崇越",
+          "market": "TWSE"
+        },
+        "3167": {
+          "name": "大 量",
+          "market": "TWSE"
+        },
+        "3293": {
+          "name": "鈊 象",
+          "market": "TPEx"
+        },
+        "3090": {
+          "name": "日電貿",
+          "market": "TWSE"
+        },
+        "6271": {
+          "name": "同欣電",
+          "market": "TWSE"
+        },
+        "6121": {
+          "name": "新 普",
+          "market": "TPEx"
+        },
+        "9939": {
+          "name": "宏全",
+          "market": "TWSE"
+        },
+        "1476": {
+          "name": "儒鴻",
+          "market": "TWSE"
+        },
+        "1215": {
+          "name": "卜蜂",
+          "market": "TWSE"
+        }
+      },
+      "canonical_provenance": {
+        "representation": "saved expanded public DOM; not byte-exact HTTP or XLSX",
+        "weight_basis": "native portfolio percentages under disclosed NAV-allocation context; denominator formula unverified",
+        "total_nav_twd": null,
+        "nonstock_weights_known": false,
+        "directory_as_of": "2026-10-25",
+        "identity_basis": "exact unique names; 00400A 2327/3533 additionally linked by same-fund/day native code/name",
+        "source_rights": "explicit redistribution license not established; only necessary factual canonical projection"
+      }
+    },
+    "00701": {
+      "issuer": "cathay",
+      "fund_id": "EAD",
+      "is_active": false,
+      "source_url": "https://www.cathaysite.com.tw/fund-details/EAD?tab=portfolio",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-22",
+      "snapshot_sha256": "57da5c92c41e4bd808e0d325f7a289b225440398a0b6c60fd39174aadcf8c042",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Exact saved expanded modern DOM; complete native percentages, unique official-directory names or same-fund/day legacy native code/name pairs. Offline fixed publication only; not the Cathay API collector.",
+      "contract_evidence": "docs/etf-discovery/2026-11-01-00400A-00701-fixed-publication/README.md",
+      "markets": {
+        "2884": {
+          "name": "玉山金",
+          "market": "TWSE"
+        },
+        "2412": {
+          "name": "中華電",
+          "market": "TWSE"
+        },
+        "2886": {
+          "name": "兆豐金",
+          "market": "TWSE"
+        },
+        "2892": {
+          "name": "第一金",
+          "market": "TWSE"
+        },
+        "1216": {
+          "name": "統一",
+          "market": "TWSE"
+        },
+        "5880": {
+          "name": "合庫金",
+          "market": "TWSE"
+        },
+        "3045": {
+          "name": "台灣大",
+          "market": "TWSE"
+        },
+        "4904": {
+          "name": "遠傳",
+          "market": "TWSE"
+        },
+        "2801": {
+          "name": "彰銀",
+          "market": "TWSE"
+        },
+        "2002": {
+          "name": "中鋼",
+          "market": "TWSE"
+        },
+        "5876": {
+          "name": "上海商銀",
+          "market": "TWSE"
+        },
+        "1101": {
+          "name": "台泥",
+          "market": "TWSE"
+        },
+        "2834": {
+          "name": "臺企銀",
+          "market": "TWSE"
+        },
+        "1102": {
+          "name": "亞泥",
+          "market": "TWSE"
+        },
+        "2812": {
+          "name": "台中銀",
+          "market": "TWSE"
+        },
+        "9904": {
+          "name": "寶成",
+          "market": "TWSE"
+        },
+        "2845": {
+          "name": "遠東銀",
+          "market": "TWSE"
+        },
+        "2105": {
+          "name": "正新",
+          "market": "TWSE"
+        },
+        "2889": {
+          "name": "國票金",
+          "market": "TWSE"
+        },
+        "2633": {
+          "name": "台灣高鐵",
+          "market": "TWSE"
+        },
+        "1477": {
+          "name": "聚 陽",
+          "market": "TWSE"
+        },
+        "4915": {
+          "name": "致伸",
+          "market": "TWSE"
+        },
+        "2548": {
+          "name": "華固",
+          "market": "TWSE"
+        },
+        "6177": {
+          "name": "達麗",
+          "market": "TWSE"
+        },
+        "2897": {
+          "name": "王道銀行",
+          "market": "TWSE"
+        },
+        "2727": {
+          "name": "王品",
+          "market": "TWSE"
+        },
+        "2439": {
+          "name": "美律",
+          "market": "TWSE"
+        },
+        "2731": {
+          "name": "雄獅",
+          "market": "TWSE"
+        },
+        "9938": {
+          "name": "百和",
+          "market": "TWSE"
+        },
+        "2617": {
+          "name": "台航",
+          "market": "TWSE"
+        }
+      },
+      "canonical_provenance": {
+        "representation": "saved expanded public DOM; not byte-exact HTTP or XLSX",
+        "weight_basis": "native portfolio percentages under disclosed NAV-allocation context; denominator formula unverified",
+        "total_nav_twd": null,
+        "nonstock_weights_known": false,
+        "directory_as_of": "2026-10-25",
+        "identity_basis": "exact unique names; 00400A 2327/3533 additionally linked by same-fund/day native code/name",
+        "source_rights": "explicit redistribution license not established; only necessary factual canonical projection"
+      }
+    },
+    "00985A": {
+      "issuer": "nomura",
+      "fund_id": "00985A",
+      "is_active": true,
+      "source_url": "https://www.nomurafunds.com.tw/API/ETFAPI/api/Fund/GetFundAssets",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-29",
+      "snapshot_sha256": "0c88f15b46eafe675ead02a462ac62ae3b081ccb549381dec6d93a9ed95b3c12",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Saved own complete domestic active-equity API originals, native stock percentages and same-day whole-fund TWD NAV; fixed dated publication only. Existing issuer parser unchanged.",
+      "contract_evidence": "docs/etf-discovery/2026-11-01-00985A-00984A-fixed-publication/README.md",
+      "markets": {
+        "2330": {
+          "name": "台灣積體電路製造",
+          "market": "TWSE"
+        },
+        "3653": {
+          "name": "健策精密工業",
+          "market": "TWSE"
+        },
+        "6446": {
+          "name": "藥華醫藥",
+          "market": "TWSE"
+        },
+        "3036": {
+          "name": "文曄科技",
+          "market": "TWSE"
+        },
+        "6669": {
+          "name": "緯穎科技服務",
+          "market": "TWSE"
+        },
+        "7769": {
+          "name": "鴻勁精密",
+          "market": "TWSE"
+        },
+        "2383": {
+          "name": "台光電子材料",
+          "market": "TWSE"
+        },
+        "2308": {
+          "name": "台達電子工業",
+          "market": "TWSE"
+        },
+        "4904": {
+          "name": "遠傳電信",
+          "market": "TWSE"
+        },
+        "2345": {
+          "name": "智邦科技",
+          "market": "TWSE"
+        },
+        "2059": {
+          "name": "川湖科技",
+          "market": "TWSE"
+        },
+        "2412": {
+          "name": "中華電信",
+          "market": "TWSE"
+        },
+        "1216": {
+          "name": "統一企業",
+          "market": "TWSE"
+        },
+        "2376": {
+          "name": "技嘉科技",
+          "market": "TWSE"
+        },
+        "3081": {
+          "name": "聯亞光電工業",
+          "market": "TPEx"
+        },
+        "2027": {
+          "name": "大成不銹鋼工業",
+          "market": "TWSE"
+        },
+        "3037": {
+          "name": "欣興電子",
+          "market": "TWSE"
+        },
+        "2317": {
+          "name": "鴻海精密工業",
+          "market": "TWSE"
+        },
+        "2327": {
+          "name": "國巨",
+          "market": "TWSE"
+        },
+        "1101": {
+          "name": "臺灣水泥",
+          "market": "TWSE"
+        },
+        "2610": {
+          "name": "中華航空",
+          "market": "TWSE"
+        },
+        "2454": {
+          "name": "聯發科技",
+          "market": "TWSE"
+        },
+        "1402": {
+          "name": "遠東新世紀",
+          "market": "TWSE"
+        },
+        "2303": {
+          "name": "聯華電子",
+          "market": "TWSE"
+        },
+        "3008": {
+          "name": "大立光電",
+          "market": "TWSE"
+        },
+        "3711": {
+          "name": "日月光投資控股",
+          "market": "TWSE"
+        },
+        "2344": {
+          "name": "華邦電子",
+          "market": "TWSE"
+        },
+        "3665": {
+          "name": "貿聯控股（BizLink Holding In",
+          "market": "TWSE"
+        },
+        "1605": {
+          "name": "華新麗華",
+          "market": "TWSE"
+        },
+        "2603": {
+          "name": "長榮海運",
+          "market": "TWSE"
+        },
+        "2609": {
+          "name": "陽明海運",
+          "market": "TWSE"
+        },
+        "6488": {
+          "name": "環球晶圓",
+          "market": "TPEx"
+        },
+        "2408": {
+          "name": "南亞科技",
+          "market": "TWSE"
+        },
+        "6531": {
+          "name": "愛普科技",
+          "market": "TWSE"
+        },
+        "7750": {
+          "name": "新代科技",
+          "market": "TWSE"
+        },
+        "2368": {
+          "name": "金像電子（股）公司",
+          "market": "TWSE"
+        },
+        "3017": {
+          "name": "奇鋐科技",
+          "market": "TWSE"
+        },
+        "3231": {
+          "name": "緯創資通",
+          "market": "TWSE"
+        },
+        "6442": {
+          "name": "光紅建聖",
+          "market": "TWSE"
+        },
+        "2377": {
+          "name": "微星科技",
+          "market": "TWSE"
+        },
+        "6526": {
+          "name": "達發科技",
+          "market": "TWSE"
+        },
+        "6285": {
+          "name": "啟碁科技",
+          "market": "TWSE"
+        },
+        "3661": {
+          "name": "世芯電子",
+          "market": "TWSE"
+        },
+        "1504": {
+          "name": "東元電機",
+          "market": "TWSE"
+        },
+        "3189": {
+          "name": "景碩科技",
+          "market": "TWSE"
+        },
+        "1301": {
+          "name": "台灣塑膠工業",
+          "market": "TWSE"
+        },
+        "3491": {
+          "name": "昇達科技",
+          "market": "TPEx"
+        },
+        "3105": {
+          "name": "穩懋半導體",
+          "market": "TPEx"
+        },
+        "8046": {
+          "name": "南亞電路板",
+          "market": "TWSE"
+        },
+        "8996": {
+          "name": "高力熱處理工業",
+          "market": "TWSE"
+        }
+      },
+      "canonical_provenance": {
+        "representation": "exact saved original public API responses replayed with existing issuer parser",
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "directory_as_of": "2026-10-25",
+        "identity_basis": "native official domestic code plus unique official market directory; full/truncated names retained with source warnings",
+        "full_balance_sheet_reconciled": false,
+        "futures_notional_verified": false,
+        "source_rights": "explicit redistribution license unknown; minimal factual canonical projection only"
+      }
+    },
+    "00984A": {
+      "issuer": "allianz",
+      "fund_id": "E0001",
+      "is_active": true,
+      "source_url": "https://etf.allianzgi.com.tw/webapi/api/Fund/GetFundAssets",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-29",
+      "snapshot_sha256": "612dba908392afb830204d7be7632d7d31df7efc273607d291dac206e27700d8",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Saved own complete domestic active-equity API originals, native stock percentages and same-day whole-fund TWD NAV; fixed dated publication only. Existing issuer parser unchanged.",
+      "contract_evidence": "docs/etf-discovery/2026-11-01-00985A-00984A-fixed-publication/README.md",
+      "markets": {
+        "2881": {
+          "name": "富邦金控",
+          "market": "TWSE"
+        },
+        "2330": {
+          "name": "台積電",
+          "market": "TWSE"
+        },
+        "3017": {
+          "name": "奇鋐",
+          "market": "TWSE"
+        },
+        "2887": {
+          "name": "台新新光金",
+          "market": "TWSE"
+        },
+        "2885": {
+          "name": "元大金",
+          "market": "TWSE"
+        },
+        "2882": {
+          "name": "國泰金",
+          "market": "TWSE"
+        },
+        "1303": {
+          "name": "南亞",
+          "market": "TWSE"
+        },
+        "6505": {
+          "name": "台塑石化",
+          "market": "TWSE"
+        },
+        "2883": {
+          "name": "凱基金控",
+          "market": "TWSE"
+        },
+        "2890": {
+          "name": "永豐金控",
+          "market": "TWSE"
+        },
+        "2395": {
+          "name": "研華",
+          "market": "TWSE"
+        },
+        "2884": {
+          "name": "玉山金控",
+          "market": "TWSE"
+        },
+        "2886": {
+          "name": "兆豐金控",
+          "market": "TWSE"
+        },
+        "2408": {
+          "name": "南亞科",
+          "market": "TWSE"
+        },
+        "2059": {
+          "name": "川湖",
+          "market": "TWSE"
+        },
+        "6187": {
+          "name": "萬潤科技",
+          "market": "TPEx"
+        },
+        "2603": {
+          "name": "長榮海運",
+          "market": "TWSE"
+        },
+        "3045": {
+          "name": "台灣大",
+          "market": "TWSE"
+        },
+        "3264": {
+          "name": "欣銓",
+          "market": "TPEx"
+        },
+        "3653": {
+          "name": "健策",
+          "market": "TWSE"
+        },
+        "2880": {
+          "name": "華南金控",
+          "market": "TWSE"
+        },
+        "6446": {
+          "name": "藥華醫藥",
+          "market": "TWSE"
+        },
+        "3037": {
+          "name": "欣興",
+          "market": "TWSE"
+        },
+        "3008": {
+          "name": "大立光電",
+          "market": "TWSE"
+        },
+        "3189": {
+          "name": "景碩科技",
+          "market": "TWSE"
+        },
+        "6213": {
+          "name": "聯茂",
+          "market": "TWSE"
+        },
+        "2892": {
+          "name": "第一金",
+          "market": "TWSE"
+        },
+        "2383": {
+          "name": "台光電子",
+          "market": "TWSE"
+        },
+        "1560": {
+          "name": "中砂",
+          "market": "TWSE"
+        },
+        "2464": {
+          "name": "盟立",
+          "market": "TWSE"
+        },
+        "3443": {
+          "name": "創意電子",
+          "market": "TWSE"
+        },
+        "5274": {
+          "name": "信驊科技",
+          "market": "TPEx"
+        },
+        "2409": {
+          "name": "友達",
+          "market": "TWSE"
+        },
+        "1326": {
+          "name": "台化",
+          "market": "TWSE"
+        },
+        "5904": {
+          "name": "寶雅*",
+          "market": "TPEx"
+        },
+        "2615": {
+          "name": "萬海",
+          "market": "TWSE"
+        },
+        "2454": {
+          "name": "聯發科",
+          "market": "TWSE"
+        },
+        "6669": {
+          "name": "緯穎",
+          "market": "TWSE"
+        },
+        "2344": {
+          "name": "華邦電子",
+          "market": "TWSE"
+        },
+        "7750": {
+          "name": "新代",
+          "market": "TWSE"
+        },
+        "2851": {
+          "name": "中央再保",
+          "market": "TWSE"
+        },
+        "6214": {
+          "name": "精誠資訊",
+          "market": "TWSE"
+        },
+        "5351": {
+          "name": "鈺創",
+          "market": "TPEx"
+        },
+        "2303": {
+          "name": "聯電",
+          "market": "TWSE"
+        },
+        "1709": {
+          "name": "和益",
+          "market": "TWSE"
+        },
+        "2855": {
+          "name": "統一證券",
+          "market": "TWSE"
+        },
+        "3006": {
+          "name": "晶豪",
+          "market": "TWSE"
+        },
+        "3231": {
+          "name": "緯創",
+          "market": "TWSE"
+        },
+        "3605": {
+          "name": "宏致",
+          "market": "TWSE"
+        },
+        "1409": {
+          "name": "新纖",
+          "market": "TWSE"
+        },
+        "2357": {
+          "name": "華碩",
+          "market": "TWSE"
+        },
+        "3450": {
+          "name": "聯鈞",
+          "market": "TWSE"
+        },
+        "6197": {
+          "name": "佳必琪",
+          "market": "TWSE"
+        },
+        "3711": {
+          "name": "日月光投控",
+          "market": "TWSE"
+        },
+        "2351": {
+          "name": "順德",
+          "market": "TWSE"
+        },
+        "4958": {
+          "name": "臻鼎-KY",
+          "market": "TWSE"
+        },
+        "8039": {
+          "name": "台虹科技",
+          "market": "TWSE"
+        },
+        "8046": {
+          "name": "南電",
+          "market": "TWSE"
+        },
+        "2301": {
+          "name": "光寶科技",
+          "market": "TWSE"
+        },
+        "3714": {
+          "name": "富采",
+          "market": "TWSE"
+        },
+        "6691": {
+          "name": "洋基工程",
+          "market": "TWSE"
+        },
+        "3665": {
+          "name": "貿聯-KY",
+          "market": "TWSE"
+        },
+        "2404": {
+          "name": "漢唐",
+          "market": "TWSE"
+        },
+        "2801": {
+          "name": "彰銀",
+          "market": "TWSE"
+        },
+        "5876": {
+          "name": "上海商銀",
+          "market": "TWSE"
+        },
+        "1216": {
+          "name": "統一",
+          "market": "TWSE"
+        },
+        "2006": {
+          "name": "東和鋼鐵",
+          "market": "TWSE"
+        },
+        "3034": {
+          "name": "聯詠",
+          "market": "TWSE"
+        },
+        "2379": {
+          "name": "瑞昱",
+          "market": "TWSE"
+        },
+        "2637": {
+          "name": "慧洋-KY",
+          "market": "TWSE"
+        },
+        "2618": {
+          "name": "長榮航",
+          "market": "TWSE"
+        },
+        "5871": {
+          "name": "中租-KY",
+          "market": "TWSE"
+        },
+        "5434": {
+          "name": "崇越",
+          "market": "TWSE"
+        },
+        "6670": {
+          "name": "復盛應用",
+          "market": "TWSE"
+        },
+        "2634": {
+          "name": "漢翔公司",
+          "market": "TWSE"
+        },
+        "3661": {
+          "name": "世芯-KY",
+          "market": "TWSE"
+        },
+        "2313": {
+          "name": "華通",
+          "market": "TWSE"
+        },
+        "6223": {
+          "name": "旺矽",
+          "market": "TPEx"
+        },
+        "6274": {
+          "name": "台燿",
+          "market": "TPEx"
+        },
+        "6531": {
+          "name": "愛普科技",
+          "market": "TWSE"
+        }
+      },
+      "canonical_provenance": {
+        "representation": "exact saved original public API responses replayed with existing issuer parser",
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "directory_as_of": "2026-10-25",
+        "identity_basis": "native official domestic code plus unique official market directory; full/truncated names retained with source warnings",
+        "full_balance_sheet_reconciled": false,
+        "futures_notional_verified": false,
+        "source_rights": "explicit redistribution license unknown; minimal factual canonical projection only"
+      }
+    },
+    "00993A": {
+      "issuer": "allianz",
+      "fund_id": "E0002",
+      "is_active": true,
+      "source_url": "https://etf.allianzgi.com.tw/webapi/api/Fund/GetFundAssets",
+      "automatic_update": false,
+      "runner_accepted": false,
+      "reviewed_holdings_date": "2026-10-29",
+      "snapshot_sha256": "4d39a1b684240fca88ed735c8ecd2a3076ad99585b3dd26a571e6dccf1ce0edc",
+      "quality_note_scope": "equity_and_nonstock",
+      "contract": "Saved own complete domestic active-equity API originals, native stock percentages and same-day whole-fund TWD NAV; fixed dated publication only. Existing issuer parser unchanged.",
+      "contract_evidence": "docs/etf-discovery/2026-11-01-00993A-fixed-publication/README.md",
+      "markets": {
+        "2330": {
+          "name": "台積電",
+          "market": "TWSE"
+        },
+        "3443": {
+          "name": "創意電子",
+          "market": "TWSE"
+        },
+        "3189": {
+          "name": "景碩科技",
+          "market": "TWSE"
+        },
+        "1303": {
+          "name": "南亞",
+          "market": "TWSE"
+        },
+        "5274": {
+          "name": "信驊科技",
+          "market": "TPEx"
+        },
+        "3037": {
+          "name": "欣興",
+          "market": "TWSE"
+        },
+        "2383": {
+          "name": "台光電子",
+          "market": "TWSE"
+        },
+        "3017": {
+          "name": "奇鋐",
+          "market": "TWSE"
+        },
+        "3081": {
+          "name": "聯亞光電",
+          "market": "TPEx"
+        },
+        "2454": {
+          "name": "聯發科",
+          "market": "TWSE"
+        },
+        "6213": {
+          "name": "聯茂",
+          "market": "TWSE"
+        },
+        "8046": {
+          "name": "南電",
+          "market": "TWSE"
+        },
+        "6223": {
+          "name": "旺矽",
+          "market": "TPEx"
+        },
+        "2059": {
+          "name": "川湖",
+          "market": "TWSE"
+        },
+        "3406": {
+          "name": "玉晶光",
+          "market": "TWSE"
+        },
+        "2303": {
+          "name": "聯電",
+          "market": "TWSE"
+        },
+        "1560": {
+          "name": "中砂",
+          "market": "TWSE"
+        },
+        "6274": {
+          "name": "台燿",
+          "market": "TPEx"
+        },
+        "3711": {
+          "name": "日月光投控",
+          "market": "TWSE"
+        },
+        "2408": {
+          "name": "南亞科",
+          "market": "TWSE"
+        },
+        "4958": {
+          "name": "臻鼎-KY",
+          "market": "TWSE"
+        },
+        "3653": {
+          "name": "健策",
+          "market": "TWSE"
+        },
+        "2347": {
+          "name": "聯強",
+          "market": "TWSE"
+        },
+        "2327": {
+          "name": "國巨*",
+          "market": "TWSE"
+        },
+        "3105": {
+          "name": "穩懋",
+          "market": "TPEx"
+        },
+        "2455": {
+          "name": "全新",
+          "market": "TWSE"
+        },
+        "2368": {
+          "name": "金像電子",
+          "market": "TWSE"
+        },
+        "6805": {
+          "name": "富世達",
+          "market": "TWSE"
+        },
+        "6669": {
+          "name": "緯穎",
+          "market": "TWSE"
+        },
+        "6196": {
+          "name": "帆宣",
+          "market": "TWSE"
+        },
+        "2395": {
+          "name": "研華",
+          "market": "TWSE"
+        },
+        "2308": {
+          "name": "台達電子",
+          "market": "TWSE"
+        },
+        "3008": {
+          "name": "大立光電",
+          "market": "TWSE"
+        },
+        "8996": {
+          "name": "高力",
+          "market": "TWSE"
+        },
+        "2345": {
+          "name": "智邦",
+          "market": "TWSE"
+        },
+        "3665": {
+          "name": "貿聯-KY",
+          "market": "TWSE"
+        },
+        "2313": {
+          "name": "華通",
+          "market": "TWSE"
+        },
+        "2603": {
+          "name": "長榮海運",
+          "market": "TWSE"
+        },
+        "6505": {
+          "name": "台塑石化",
+          "market": "TWSE"
+        },
+        "2360": {
+          "name": "致茂",
+          "market": "TWSE"
+        },
+        "2027": {
+          "name": "大成鋼",
+          "market": "TWSE"
+        },
+        "6147": {
+          "name": "頎邦",
+          "market": "TPEx"
+        },
+        "2006": {
+          "name": "東和鋼鐵",
+          "market": "TWSE"
+        },
+        "3044": {
+          "name": "健鼎科技",
+          "market": "TWSE"
+        },
+        "2344": {
+          "name": "華邦電子",
+          "market": "TWSE"
+        },
+        "4904": {
+          "name": "遠傳",
+          "market": "TWSE"
+        },
+        "3491": {
+          "name": "昇達科技",
+          "market": "TPEx"
+        },
+        "3042": {
+          "name": "晶技",
+          "market": "TWSE"
+        },
+        "2606": {
+          "name": "裕民",
+          "market": "TWSE"
+        },
+        "6782": {
+          "name": "視陽",
+          "market": "TWSE"
+        }
+      },
+      "canonical_provenance": {
+        "representation": "exact saved original public API responses replayed with existing issuer parser",
+        "equity_weight_basis": "sum_of_official_native_NAV_weights",
+        "directory_as_of": "2026-10-25",
+        "identity_basis": "native official domestic code plus unique official market directory; full/truncated names retained with source warnings",
+        "full_balance_sheet_reconciled": false,
+        "futures_notional_verified": false,
+        "source_rights": "explicit redistribution license unknown; minimal factual canonical projection only"
+      }
+    }
+  }
+}

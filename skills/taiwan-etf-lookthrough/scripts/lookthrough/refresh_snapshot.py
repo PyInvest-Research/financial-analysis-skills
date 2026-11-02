@@ -4,7 +4,7 @@ from decimal import Decimal
 import hashlib
 
 from .models import EquityEvidence, Holding, Snapshot
-from .refresh_contract import products, resolve_security
+from .refresh_contract import reviewed_products, resolve_security
 from .refresh_inventory import Inventory
 from .refresh_prices import read_prices
 
@@ -32,7 +32,7 @@ def build_snapshot(
     weights remain None. A market is never inferred from a ticker suffix
     except the reviewed issuer-specific TT normalization.
     """
-    product = products()[symbol]
+    product = reviewed_products()[symbol]
     prices = {market: read_prices(raw, market, inventory.day)
               for market, raw in quote_sources.items()}
     holdings = list(inventory.assets)

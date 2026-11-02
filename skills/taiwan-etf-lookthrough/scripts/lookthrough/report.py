@@ -1,6 +1,7 @@
 """Build deterministic offline JSON, Markdown and source-level CSV reports."""
 
 import csv
+from copy import deepcopy
 from dataclasses import asdict
 from html import escape
 import json
@@ -16,8 +17,10 @@ from .metrics import Metrics
 from .mixed_contract import qualifies_mixed
 from .models import snapshot_sha256, merge_duplicate_holdings
 from .portfolio import Portfolio
-from .research import qualifies_research, research_record
-from .refresh_contract import qualifies_refresh
+from .research import (
+    qualifies_research, research_record, qualifies_published_candidate,
+)
+from .refresh_contract import candidate_products, qualifies_refresh
 
 
 OVERLAP_DISCLAIMER = "持股重疊不等於報酬相關，也不能單憑重疊判定分散失效。"
@@ -30,6 +33,27 @@ LIMITATIONS = (OVERLAP_DISCLAIMER, EFFECTIVE_N_NOTE, ESTIMATE_NOTE,
                ACTIVE_NOTE, FUTURES_NOTE, NOT_ADVICE)
 CSV_FIELDS = ("issuer_code", "name", "industry_code", "amount_twd", "share",
               "source", "security_code", "source_amount_twd")
+
+
+def _candidate_provenance(snapshot) -> dict[str, Any] | None:
+    """Keep stock-evidence limits attached only to the exact reviewed content."""
+    if snapshot is None or not qualifies_refresh(snapshot):
+        return None
+    product = candidate_products().get(snapshot.etf_symbol, {})
+    evidence = product.get("canonical_provenance")
+    if not isinstance(evidence, dict):
+        return None
+    evidence = deepcopy(evidence)
+    evidence.update(
+        bound_snapshot_sha256=product["snapshot_sha256"],
+        actual_holdings_date=snapshot.holdings_date.isoformat(),
+        direct_Taiwan_NAV_weight_sum=fsum(
+            h.weight for h in snapshot.holdings
+            if h.kind == "stock" and h.weight is not None))
+    evidence["derived_Taiwan_stock_value_twd"] = (
+        snapshot.equity_evidence.taiwan_stock_value_twd
+        if snapshot.equity_evidence else None)
+    return evidence
 
 
 def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
@@ -53,7 +77,14 @@ def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
         "date_status": position.date_status,
         "result_quality": _quality(position),
     }
-    if snapshot and qualifies_research(snapshot):
+    if snapshot and qualifies_published_candidate(snapshot):
+        payload.update(automatic_update=False, runner_verified=False,
+                       qualification_scope="reviewed_fixed_research_snapshot")
+        payload["source_note"] = (
+            "這是固定日期的研究快照，非每日更新。保留指定持股日與原始官方請求時間。"
+            "內容已按核准的日期、雜湊與候選合約核對，尚未通過同版自動抓取驗證。"
+            "股票層結果與非股票部位的外匯換算、資產負債調節分開判斷；未知值維持未知。")
+    elif snapshot and qualifies_research(snapshot):
         record = research_record(snapshot.etf_symbol)
         payload["source_note"] = (
             "固定研究快照，非每日更新；沿用研究方已審核的官方資料與原持股日。"
@@ -62,9 +93,19 @@ def _snapshot_metadata(position: PositionStatus) -> dict[str, Any]:
                else "取得時間沿用研究包記錄的官方請求時間。"))
         payload["research_qualification"] = record["qualification"]
     elif snapshot and qualifies_refresh(snapshot):
-        payload["source_note"] = (
-            "自動取得官方揭露持股；依公布NAV權重或同日官方收盤價／基金NAV估值。"
-            "持股日不以下載日替代；無法估值或確認市場的列保留未知。")
+        if snapshot.etf_symbol in candidate_products():
+            payload.update(automatic_update=False, runner_verified=False,
+                           qualification_scope="reviewed_dated_local_candidate")
+            payload["source_note"] = (
+                "本地候選資料，依指定日期的官方原始檔核對；尚未通過同版自動抓取驗證，不會每日更新。"
+                "台股現貨持股完整性與非股票部位的外匯換算、資產負債調節分開判斷；未知值維持未知。")
+        else:
+            payload["source_note"] = (
+                "自動取得官方揭露持股；依公布NAV權重或同日官方收盤價／基金NAV估值。"
+                "持股日不以下載日替代；無法估值或確認市場的列保留未知。")
+    provenance = _candidate_provenance(snapshot)
+    if provenance is not None:
+        payload["candidate_provenance"] = provenance
     return payload
 
 
@@ -74,6 +115,12 @@ def _quality(position: PositionStatus) -> str:
         return "unavailable"
     snapshot = position.snapshot
     warned = {c.name for c in position.validation.checks if c.status == "warn"}
+    candidate = candidate_products().get(snapshot.etf_symbol)
+    if (candidate and candidate.get("quality_note_scope") == "nonstock_only"
+            and qualifies_refresh(snapshot)):
+        # Exact content digest binds this note scope to independently reviewed
+        # complete stock evidence. Validation still retains the original warning.
+        warned.discard("source_quality_notes")
     if (warned & {"stock_weight_sum", "not_top_n_only",
                   "annotated_equity_evidence", "refresh_partial_inventory",
                   "source_quality_notes"}
@@ -88,6 +135,34 @@ def _quality(position: PositionStatus) -> str:
     if "holdings_date_sane" in warned:
         return "historical_estimate"
     return "validated_dated"
+
+
+def _nav_bucket_availability(result: LookthroughResult) -> dict[str, Any]:
+    """Separate known NAV subtotals from totals with unvalued source rows."""
+    counts = {"cash": 0, "other": 0}
+    for position in result.positions:
+        if position.status != "looked_through" or position.snapshot is None:
+            continue
+        holdings = position.snapshot.holdings
+        if result.policy == "annotated":
+            holdings = merge_duplicate_holdings(holdings)
+        for holding in holdings:
+            kind = "other" if holding.kind == "derivative_nav" else holding.kind
+            if kind in counts and holding.weight is None:
+                counts[kind] += 1
+    return {
+        kind: {
+            "known_amount_twd": amount,
+            "known_share": amount / result.total_value if result.total_value else 0,
+            "unknown_count": counts[kind],
+            "total_known": counts[kind] == 0,
+            "total_amount_twd": None if counts[kind] else amount,
+            "total_share": (None if counts[kind] else
+                            amount / result.total_value if result.total_value else 0),
+        }
+        for kind, amount in (("cash", result.cash_value),
+                             ("other", result.other_value))
+    }
 
 
 def build_result_json(
@@ -114,8 +189,11 @@ def build_result_json(
                                                    s.amount))],
     } for c in sorted(result.companies,
                       key=lambda c: (-c.amount, c.issuer_code))]
+    nav_buckets = _nav_bucket_availability(result)
+    schema_version = ("1" if all(bucket["total_known"]
+                                 for bucket in nav_buckets.values()) else "2")
     payload = {
-        "schema_version": "1", "code_version": __version__,
+        "schema_version": schema_version, "code_version": __version__,
         "generated_at": generated_at, "input_sha256": portfolio.input_sha256,
         "valuation_date": portfolio.valuation_date.isoformat(),
         "currency": "TWD", "snapshots": snapshots,
@@ -124,8 +202,9 @@ def build_result_json(
             "identified_stock_value": result.identified_stock_value,
             "coverage": result.coverage,
             "unresolved_value": result.unresolved_value,
-            "cash_value": result.cash_value,
-            "other_value": result.other_value,
+            "cash_value": nav_buckets["cash"]["total_amount_twd"],
+            "other_value": nav_buckets["other"]["total_amount_twd"],
+            "nav_buckets": nav_buckets,
             "unclassified_gap_value": result.unclassified_gap_value,
             "not_looked_through_value": result.not_looked_through_value,
             "futures": [{"security_code": code, "amount_twd": amount}
@@ -158,6 +237,9 @@ def build_result_json(
         "warnings": list(result.warnings),
         "limitations": list(LIMITATIONS),
     }
+    for row in snapshots:
+        for note in row.get("candidate_provenance", {}).get("equity_limitations", []):
+            payload["limitations"].append(f"{row['symbol']}：{note}")
     if any(p.snapshot and p.snapshot.schema_version == "2"
            for p in result.positions):
         payload["taiwan_equity"] = _taiwan_equity(result)
@@ -209,7 +291,8 @@ def _quality_level(position: PositionStatus, estimates: set[str]) -> str:
         return "exact" if position.reason is None else "unavailable"
     if position.status == "not_looked_through" or not position.snapshot:
         return "unavailable"
-    if qualifies_research(position.snapshot):
+    if (qualifies_research(position.snapshot)
+            or qualifies_published_candidate(position.snapshot)):
         return "research"
     return "annotated" if position.validation.status == "warn" else "exact"
 
@@ -267,6 +350,11 @@ def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
                  if aggregate is not None else printed)
         basis = ("same_day_stock_value_over_fund_NAV"
                  if aggregate is not None else "sum_of_displayed_NAV_weights")
+        provenance = _candidate_provenance(snapshot)
+        if (provenance is not None and provenance.get("equity_weight_basis")
+                == "sum_of_official_native_NAV_weights"):
+            ratio = printed
+            basis = "sum_of_official_native_NAV_weights"
         unknown_zero = (
             result.policy == "annotated" and ratio == 0
             and not (qualifies_research(snapshot) or qualifies_mixed(snapshot)
@@ -285,7 +373,9 @@ def _taiwan_equity(result: LookthroughResult) -> dict[str, Any]:
         metadata.append(dict(symbol=position.symbol, share=ratio,
                              displayed_share=printed, basis=basis,
                              result_quality=_quality(position),
-                             snapshot_schema=snapshot.schema_version))
+                             snapshot_schema=snapshot.schema_version,
+                             **({"candidate_provenance": provenance}
+                                if provenance is not None else {})))
     amount = fsum(values)
     displayed = fsum(display_values)
     total = result.total_value
@@ -413,12 +503,22 @@ def render_report_md(result_json: dict[str, Any]) -> str:
                 ("未穿透", "not_looked_through_value")]
     if "provisional_stock_value" in totals:
         coverage.insert(2, ("名錄外暫列股票", "provisional_stock_value"))
+    coverage_rows = []
+    for label, key in coverage:
+        bucket = totals.get("nav_buckets", {}).get(
+            {"cash_value": "cash", "other_value": "other"}.get(key), {})
+        if bucket.get("unknown_count", 0):
+            coverage_rows.append([
+                label, f"已知部分 {_amount(bucket['known_amount_twd'])}；"
+                f"總額未知（{bucket['unknown_count']}列）",
+                f"已知部分 {_percent(bucket['known_share'], 2)}；總比例未知"])
+        else:
+            amount = totals[key]
+            share = (None if amount is None else amount / total if total else 0)
+            coverage_rows.append([label, _amount(amount), _percent(share, 2)])
     sections = ["# ETF 持股穿透報告", "## 摘要\n\n" + "\n\n".join(summary),
                 "## 資料涵蓋\n\n" + _table(
-                    ("分類", "金額（TWD）", "占總市值比例"), [
-                        [label, _amount(totals[key]),
-                         f"{totals[key] / total if total else 0:.2%}"]
-                        for label, key in coverage])]
+                    ("分類", "金額（TWD）", "占總市值比例"), coverage_rows)]
     if any("result_quality" in p for p in result_json["positions"]):
         sections.insert(1, "## 各部位資料等級\n\n" + _table(
             ("部位", "等級", "持股日", "主要警告"), [
@@ -543,6 +643,8 @@ def render_report_md(result_json: dict[str, Any]) -> str:
               f"被動型日期容忍 {PASSIVE_TOLERANCE_WEEKDAYS} 個平日；主動式為 0。"
               "交易日以週一至週五近似，不扣國定假日，判定偏保守。",
               "各金額與比例僅於畫面四捨五入；未辨識、未穿透與未分類差額均保留，未補零或放大。"]
+    limits.extend(_cell(note) for note in result_json.get("limitations", [])
+                  if note not in LIMITATIONS)
     limits.extend("警告：" + _cell(w) for w in result_json["warnings"])
     sections.append("## 限制與說明\n\n" + "\n\n".join(limits))
     return "\n\n".join(sections) + "\n"

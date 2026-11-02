@@ -59,10 +59,12 @@ annotated 的字串、零值、cash／other_asset 擴充見文末 v1.5.0。
 
 | 路徑 | 型別／意義 |
 | --- | --- |
-| schema_version, code_version | string，schema 固定 `"1"`，程式版本由 runtime 提供 |
+| schema_version, code_version | string；現金與其他總額皆已知時為 `"1"`，任一總額未知時為 `"2"`；程式版本由 runtime 提供 |
 | generated_at, input_sha256, valuation_date, currency | string；UTC timestamp、輸入雜湊、ISO 估值日、`TWD` |
 | snapshots | metadata object array，包含未取得快照的 ETF |
-| totals | object；`total_value`, `identified_stock_value`, `coverage`, `unresolved_value`, `cash_value`, `other_value`, `unclassified_gap_value`, `not_looked_through_value` 均 finite number；coverage 為 fraction，其他為 TWD |
+| totals | object；`total_value`, `identified_stock_value`, `coverage`, `unresolved_value`, `unclassified_gap_value`, `not_looked_through_value` 均 finite number；coverage 為 fraction，其他為 TWD |
+| totals.cash_value, totals.other_value | TWD finite number；result schema 2 允許 null，表示至少一列 NAV 權重未知，無法確認總額 |
+| totals.nav_buckets.cash, totals.nav_buckets.other | object；`known_amount_twd`、`known_share` 為 finite number，分別為已知小計與占組合總市值比例；`unknown_count` 為未知列數，`total_known` 為 boolean；`total_amount_twd`、`total_share` 在總額未知時為 null，否則等於已知小計及比例 |
 | totals.futures | array，`security_code` string、`amount_twd` finite number / null；額外曝險不併入 NAV 分桶 |
 | companies | array，`issuer_code`, `name`, `industry_code` string；`amount_twd`, `share` number；`occurrences` integer（不同 ETF／直接來源數）；`sources` array |
 | companies[].sources[] | `source`, `security_code` string；`amount_twd` number |
@@ -75,6 +77,17 @@ annotated 的字串、零值、cash／other_asset 擴充見文末 v1.5.0。
 Snapshot metadata 欄位為 `symbol` string；`holdings_date`, `issuer`, `fetched_at`, `source_kind`, `source_url`, `snapshot_sha256`, `validation_status` 可為 string / null；`is_active` boolean / null；`date_status` 為 `common`, `within_tolerance`, `stale`, `active_mismatch` 或 null。未取得快照保留 null，不填假日期。validation 為 `{status, checks}`，status 是 `pass` / `warn` / `fail`，checks 每筆 `{name, status, detail}` 為 string。
 
 `run_lookthrough(portfolio_path, out_dir, *, local_snapshot_dir=None, official_files=None, use_network=True, today=None, base_url=..., opener=None)` 回傳以 `result.json`, `report.md`, `exposures.csv` 為 key 的 `dict[str, Path]`。不要把回傳 mapping 當結果 JSON；需讀取對應檔案。CSV 是 UTF-8 BOM，欄位為 `issuer_code,name,industry_code,amount_twd,share,source,security_code,source_amount_twd`；來源貢獻才可加總。
+
+### 未知總額與格式遷移
+
+結果格式依總額是否完整選擇，strict 與 annotated 均適用。有任一現金或其他
+NAV 權重未知時，結果宣告 `schema_version="2"`，未知類別的總額與總比例
+為 null；已知小計另放在 `nav_buckets`，不可當成完整總額。全部已知時
+維持 schema 1 與原數值欄位。Snapshot 與發布 index 的版本不受影響。
+
+讀取端應先檢查結果版本：只支援 schema 1 時，須明確拒絕 schema 2；支援
+schema 2 時，應顯示未知總額，並將已知小計與完整總額分開處理，不可將
+null 補成零。舊版結果檔保持原樣，Markdown 報告可讀取兩種結果格式。
 
 ## 發布 index 與 pins（格式合約，尚無公開資料）
 
@@ -105,5 +118,6 @@ Snapshot 可含 `quality_notes` 字串陣列；省略表示沒有額外原生 pa
 
 `run_lookthrough(..., validation_policy="annotated", ca_verified=False)` 預設開啟新行為。
 字串金額、零市值略過、cash／other_asset、預告日、來源退階與輸出新欄位的完整合約見
-[estimation-first.md](estimation-first.md)。原 strict 輸入與輸出欄位不變；
+[estimation-first.md](estimation-first.md)。strict 輸入不變；總額完整時沿用
+原數值輸出，未知總額使用上述 result schema 2 合約；
 Snapshot schema 仍是 1／2，原始檔與來源雜湊不變。

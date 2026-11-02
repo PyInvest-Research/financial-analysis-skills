@@ -274,7 +274,8 @@ class ReportTests(unittest.TestCase):
         payload["industries"] = []
         payload["snapshots"] = []
         payload["positions"] = []
-        payload["totals"] = {k: ([] if k == "futures" else 0)
+        payload["totals"] = {k: ([] if k == "futures" else
+                                {} if k == "nav_buckets" else 0)
                              for k in payload["totals"]}
         payload["metrics"]["effective_holdings"] = None
         md = render_report_md(payload)

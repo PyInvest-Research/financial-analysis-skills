@@ -83,14 +83,73 @@ v1.4.0 的每日 publisher 同樣明確採用 annotated，總額、四捨五入�
 
 ## 每日更新與資源
 
-現行公開快照與官方備援數量、商品名單及資料時間統一見
-[snapshot-coverage.md](snapshot-coverage.md)。套件中的歷史研究副本仍固定不變，
-每日快照另以官方實際持股日發布。新來源失敗時保留前次快照與錯誤狀態，
-agent 可依官方備援流程取得資料，不能把抓取時間當成持股日。
+目前有 96 個可用快照：88 檔設定每日抓取、8 檔為固定研究。00984A、00993A、00903、00920 於 2026-11-02 通過來源與發布驗收，接入每日抓取；未知值及原生權重限制仍保留。詳見 [已核對的持股來源](data-sources.md) 與 [snapshot-coverage.md](snapshot-coverage.md)。
 
-v1.3／1.4 使用標準庫與 openpyxl；v1.5 另固定新增 xlrd 2.0.2 讀 BIFF XLS，沒有 GPU 工作。
-固定資料約數百 KB、程序只載入一次；不為每個部位重讀大型研究包。
-每日更新依已核對的個別商品路線順序抓取，同日官方價格共用快取；
-新增路線設請求數、回應大小與總時間上限，不重抓整份全市場研究包。
+### PR42–46 固定發布歷史
 
-預告日不限天數且附註、同日去重、逐列容錯與完整五級合約見 [estimation-first.md](estimation-first.md)。
+PR42–46 整合當時為 84 筆每日來源與 12 筆固定研究。以下保留當時的固定日期資料與限制；其中四檔後續接入每日抓取，其新快照另有日期與來源驗收，不能把新資格套回舊版本。「—」表示本節未記載。
+
+| 代碼 | 持股日 | 股票列 | 原生權重 | 股票層 | 主要限制 |
+|---|---|---|---|---|---|
+| 00881 | 2026-10-30 | 30 | 98.87% | validated_dated | 非期貨帳面合計減 NAV 為 −10,490,867 TWD |
+| 00922 | 2026-10-29 | 49 | 99.09% | partial_estimate | 非期貨帳面合計減 NAV 為 +4,774,707,741 TWD；2327 需歷史名稱橋接 |
+| 00903 | 2026-10-28 | 30 | 98.0486% | partial_estimate | 現金、外幣與期貨未知 |
+| 00920 | 2026-10-28 | 34 | 99.0457% | partial_estimate | 兩檔韓股的股份子類、歷史市場證據及 PDF 文字對應仍受限 |
+| 00400A | 2026-10-22 | 53 | 94.93% | partial_estimate | 基金 NAV 未知；權重依原頁 NAV 配置語境暫估 |
+| 00701 | 2026-10-22 | 30 | 99.40% | partial_estimate | 同 00400A |
+| 00985A | 2026-10-29 | 50 | 91.85% | partial_estimate | NAV 減全部已列非期貨資產為 −2,988,426,739 TWD，此值不是非股票部位總額；期貨曝險未知 |
+| 00984A | 2026-10-29 | 80 | 98.05% | partial_estimate | 非股票組成未知 |
+| 00993A | 2026-10-29 | 50 | 96.81% | partial_estimate | 299,848,886 TWD 的非股票／負債組成未知；來源原生記錄 TX 期貨 19 口、1.90%，但經驗證的 NAV 期貨權重與底層曝險未知 |
+| 00875 | 2026-10-29 | 61 | — | — | 原有快照 |
+| 00636 | 2026-10-30 | 48 | — | partial_estimate | 原有快照 |
+| 00830 | 2026-10-29 | 30 | — | — | 原有快照 |
+
+上表 12 份歷史版本的狀態如下：
+
+- 來源均為 `research`，`automatic_update=false`、`runner_verified=false`。
+- annotated 結果為 warn；strict 因 `source_quality_notes` 判為 fail。
+- 00881 以外的 8 檔新快照與 00636 皆為 `whole_portfolio_ratio_known=false`，即完整組合比例未知。
+
+### 解讀原則
+
+- 權重沿用來源原值，不歸一化。
+- 未知值不補零。
+- 期貨名目本金不視為 NAV 資產，也不計入台灣現貨股票。
+- 快照不代表當期持倉，也不代表全市場 AUM 排名。
+- 本批只公開必要的事實投影，未據此主張來源提供一般再散布授權。
+
+### 產生方式
+
+- 00881 與 00922 重用 PR32 原件，只補上 catalog 明列、原為 official_only 的空索引，不覆蓋既有快照或每日路線。
+- 00903 與 00920 以既有 Fubon parser 重播已審核的財務投影。
+- 00400A 與 00701 使用已保存、完整展開的官方 DOM。證券代碼由精確官方名錄或同日原生代碼推導。
+- 只有精確日期、候選 hash、發布 hash 與逐證券身分全部通過的快照，才會進入 research route。
+- 每日更新只保留 hash 完全相符的研究列，不抓取其來源，也不改動原取得時間。
+
+各批審閱紀錄位於 repo：
+
+- `docs/etf-discovery/2026-11-01-00881-00922-fixed-publication/README.md`
+- `docs/etf-discovery/2026-11-01-00903-00920-fixed-publication/README.md`
+- `docs/etf-discovery/2026-11-01-00400A-00701-fixed-publication/README.md`
+- `docs/etf-discovery/2026-11-01-00985A-00984A-fixed-publication/README.md`
+- `docs/etf-discovery/2026-11-01-00993A-fixed-publication/README.md`
+
+### 發布與索引
+
+`research-publications.json` 記錄各快照的日期與完整 SHA256。下載時會核對候選商品、逐證券身分與金融驗證，不沿用舊研究包的豁免。這些固定發布版本沒有另附套件 fallback 副本；原有歷史研究 catalog 與離線副本維持不變。
+
+```
+python -m lookthrough.publish_research --out <root> <snapshot.json> ...
+```
+
+此命令只讀取明確指定的本機快照，整批驗證後才寫入 dated、latest 與 index，不會連線至來源。
+
+### 每日更新
+
+- 每日快照以官方實際持股日發布，不以抓取時間作為持股日。
+- 新來源失敗時，保留前次快照與錯誤狀態。
+- 新增路線設有請求數、回應大小與總時間上限。
+- 同一天的官方價格共用快取。
+- 不重抓整份全市場研究包。
+
+v1.3／1.4 使用標準庫與 openpyxl；v1.5 另固定新增 xlrd 2.0.2 讀 BIFF XLS，沒有 GPU 工作。預告日附註、同日去重與五級合約規則見 [estimation-first.md](estimation-first.md)。

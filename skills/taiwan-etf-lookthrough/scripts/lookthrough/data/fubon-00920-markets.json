@@ -1,0 +1,280 @@
+{
+  "symbol": "00920",
+  "candidate_only": true,
+  "live_collector_verified": false,
+  "scope": "Full native equity rows; market binding does not imply exact share class or complete nonstock accounting.",
+  "securities": {
+    "IBE SQ": {
+      "source_name": "IBERDROLA SA",
+      "market": "Madrid",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "GEV US": {
+      "source_name": "GE VERNOVA INC",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "BE US": {
+      "source_name": "BLOOM ENERGY CORP",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "2308": {
+      "source_name": "台達電",
+      "market": "TWSE",
+      "security_type": "Taiwan_listed_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "6762 JP": {
+      "source_name": "TDK Corp",
+      "market": "Tokyo Stock Exchange",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "3017": {
+      "source_name": "奇鋐",
+      "market": "TWSE",
+      "security_type": "Taiwan_listed_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "006400 KS": {
+      "source_name": "SAMSUNG SDI CO LTD",
+      "market": "KRX",
+      "security_type": "common_shares",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Published in Samsung official page iframe; issuer embedded IR provider, not an independent KRX feed. DR explicitly separate."
+    },
+    "RWE GY": {
+      "source_name": "RWE AG",
+      "market": "Xetra",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "VWS DC": {
+      "source_name": "VESTAS WIND SYSTEM",
+      "market": "Nasdaq Copenhagen",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "FSLR US": {
+      "source_name": "FIRST SOLAR INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "TRN IM": {
+      "source_name": "TERNA SPA",
+      "market": "Euronext Milan",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "NXT US": {
+      "source_name": "NEXPOWER INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Fund NEXPOWER INC differs from Nasdaq Nextpower Inc.; preserve native name, exact unique NXT code and market match."
+    },
+    "373220 KS": {
+      "source_name": "LG ENERGY SOLUTION LTD",
+      "market": "KRX",
+      "security_type": "share_class_unknown",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Issuer release dated 2024-07-02 binds code/market; not a current trading-status check or explicit share-class proof."
+    },
+    "EDP PL": {
+      "source_name": "EDP SA",
+      "market": "Euronext Lisbon",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Instrument-specific HTML description meta; not a rendered live quote."
+    },
+    "VER AV": {
+      "source_name": "VERBUND AG",
+      "market": "Vienna",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "AES US": {
+      "source_name": "AES CORP/THE",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "ELE SQ": {
+      "source_name": "Endesa",
+      "market": "SIBE",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Historical SIBE ISIN/ticker notice plus issuer/current exchange context; hosted PDF text not cryptographically bound to local bytes, no fresh halt check."
+    },
+    "AEIS US": {
+      "source_name": "ADVANCED ENERGY INDUSTRIES",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "ORSTED DC": {
+      "source_name": "ORSTED AS",
+      "market": "Nasdaq Copenhagen",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "RED SQ": {
+      "source_name": "REDEIA CORP SA",
+      "market": "SIBE",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Historical SIBE ISIN/ticker notice plus issuer/current exchange context; hosted PDF text not cryptographically bound to local bytes, no fresh halt check."
+    },
+    "ELPC US": {
+      "source_name": "CIA PARANAENSE DE ENERGIA - CO",
+      "market": "NYSE",
+      "security_type": "ADS",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "051910 KS": {
+      "source_name": "LG CHEM LTD",
+      "market": "KRX KOSPI",
+      "security_type": "share_class_unknown",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Public issuer article identifies KOSPI:051910. Exact common/preferred class not established; no class invented."
+    },
+    "ELI BB": {
+      "source_name": "ELIA GROUP SA/NV",
+      "market": "Euronext Brussels",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "ENLT IT": {
+      "source_name": "ENLIGHT RENEWABLE ENERGY LTD",
+      "market": "TASE",
+      "security_type": "ordinary_shares",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "2023 issuer-authored primary release plus round32 current issuer dual-listing evidence; not a fresh halt check."
+    },
+    "ORA US": {
+      "source_name": "ORMAT TECHNOLOGIES INC",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "ENS US": {
+      "source_name": "ENERSYS",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "NDX1 GY": {
+      "source_name": "NORDEX SE",
+      "market": "XETRA",
+      "security_type": "local_listed_equity",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "VICR US": {
+      "source_name": "VICOR CORP",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "BEPC US": {
+      "source_name": "BROOKFIELD RENEWABLE CORP",
+      "market": "NYSE",
+      "security_type": "Class A subordinate voting shares",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "ENIC US": {
+      "source_name": "ENEL CHILE SA",
+      "market": "NYSE",
+      "security_type": "ADS",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "ENPH US": {
+      "source_name": "ENPHASE ENERGY INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "CPX CN": {
+      "source_name": "CAPITAL POWER CORP",
+      "market": "TSX",
+      "security_type": "common_shares",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": "Issuer-authored release hosted by distribution service; not an exchange quote."
+    },
+    "NPI CN": {
+      "source_name": "NORTHLAND POWER INC",
+      "market": "Toronto Stock Exchange",
+      "security_type": "common_shares",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    },
+    "PAM US": {
+      "source_name": "PAMPA ENERGIA SA",
+      "market": "NYSE",
+      "security_type": "ADS",
+      "evidence_file": "docs/etf-discovery/2026-10-29-round33/market-evidence.json",
+      "evidence_sha256": "1f0019884b309a1424e4b6433662bf759f4344e158d5f523202e26828806cc57",
+      "warning": null
+    }
+  }
+}

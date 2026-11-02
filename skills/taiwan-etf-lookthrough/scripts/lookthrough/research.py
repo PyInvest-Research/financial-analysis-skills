@@ -14,6 +14,32 @@ DATA_ROOT = Path(__file__).parent / "data"
 
 
 @lru_cache(maxsize=1)
+def publication_catalog() -> dict:
+    """Explicit fixed-date publications, separate from daily acquisition."""
+    path = DATA_ROOT / "research-publications.json"
+    return json.loads(path.read_text())["snapshots"]
+
+
+def qualifies_published_candidate(snapshot: Snapshot) -> bool:
+    """Bind publication to both its reviewed digest and candidate contract.
+
+    This is a research-route permission, not a financial validator override.
+    Legacy research and refresh evidence retain their existing checks.
+    """
+    from .refresh_contract import candidate_products, qualifies_refresh
+
+    record = publication_catalog().get(snapshot.etf_symbol)
+    if (record is None or snapshot.etf_symbol not in candidate_products()
+            or str(snapshot.holdings_date) != record["holdings_date"]):
+        return False
+    try:
+        return (snapshot_sha256(snapshot) == record["snapshot_sha256"]
+                and qualifies_refresh(snapshot))
+    except (ValueError, TypeError, OverflowError):
+        return False
+
+
+@lru_cache(maxsize=1)
 def research_catalog() -> dict:
     """Return research provenance and dated capabilities, not live status."""
     return json.loads((DATA_ROOT / "research-20261028.json").read_text())

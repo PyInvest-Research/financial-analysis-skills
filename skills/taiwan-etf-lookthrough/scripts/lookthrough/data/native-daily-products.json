@@ -1,0 +1,81 @@
+{
+  "schema_version": "1",
+  "products": {
+    "00984A": {
+      "issuer": "allianz",
+      "is_active": true,
+      "source_url": "https://etf.allianzgi.com.tw/webapi/api/Fund/GetFundAssets",
+      "first_holdings_date": "2026-10-30",
+      "accepted_after": "2026-11-02T04:38:06.763759+00:00",
+      "enabled": true,
+      "source_acceptance": {
+        "run_id": 41389518380,
+        "commit": "9a3ea64a218cdc2ea0026679bb15462d459ab0f2",
+        "program_sha256": "b0ca6243d7e3c996aca06e3e04315d2cba21c9896801dc26286d2b2a78a5187f"
+      },
+      "publication_acceptance": {
+        "run_id": 41390750593,
+        "commit": "d2a2a9609c9020deb9ec966d47c13bb6346051c1",
+        "latest_file_sha256": "a4a5045586d41e23cda1aa05e87ff860c0f4cf87dcc3f4f32c578012ad0d19f2",
+        "failure_retention_passed": true
+      }
+    },
+    "00993A": {
+      "issuer": "allianz",
+      "is_active": true,
+      "source_url": "https://etf.allianzgi.com.tw/webapi/api/Fund/GetFundAssets",
+      "first_holdings_date": "2026-10-30",
+      "accepted_after": "2026-11-02T04:38:06.763759+00:00",
+      "enabled": true,
+      "source_acceptance": {
+        "run_id": 41389518380,
+        "commit": "9a3ea64a218cdc2ea0026679bb15462d459ab0f2",
+        "program_sha256": "b0ca6243d7e3c996aca06e3e04315d2cba21c9896801dc26286d2b2a78a5187f"
+      },
+      "publication_acceptance": {
+        "run_id": 41390750593,
+        "commit": "d2a2a9609c9020deb9ec966d47c13bb6346051c1",
+        "latest_file_sha256": "44333677dcd56febf17a7c259a30b6b8658a13da4e2d642fb0da4599c734573a",
+        "failure_retention_passed": true
+      }
+    },
+    "00903": {
+      "issuer": "fubon",
+      "is_active": false,
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?stkId=00903&lan=TW",
+      "first_holdings_date": "2026-10-30",
+      "accepted_after": "2026-11-02T04:38:04.419545+00:00",
+      "enabled": true,
+      "source_acceptance": {
+        "run_id": 41389522394,
+        "commit": "9a3ea64a218cdc2ea0026679bb15462d459ab0f2",
+        "program_sha256": "11920b10cc48b8e9f6f180aa02603e023cf0d414ce47d533091b9ac4247b7e0d"
+      },
+      "publication_acceptance": {
+        "run_id": 41390753624,
+        "commit": "d2a2a9609c9020deb9ec966d47c13bb6346051c1",
+        "latest_file_sha256": "c12ea5382eaba1f38afe525c33c52b977db6ae676fd85788edc3a1a5b1920e93",
+        "failure_retention_passed": true
+      }
+    },
+    "00920": {
+      "issuer": "fubon",
+      "is_active": false,
+      "source_url": "https://websys.fsit.com.tw/FubonETF/Trade/Assets.aspx?stkId=00920&lan=TW",
+      "first_holdings_date": "2026-10-30",
+      "accepted_after": "2026-11-02T04:38:04.419545+00:00",
+      "enabled": true,
+      "source_acceptance": {
+        "run_id": 41389522394,
+        "commit": "9a3ea64a218cdc2ea0026679bb15462d459ab0f2",
+        "program_sha256": "11920b10cc48b8e9f6f180aa02603e023cf0d414ce47d533091b9ac4247b7e0d"
+      },
+      "publication_acceptance": {
+        "run_id": 41390753624,
+        "commit": "d2a2a9609c9020deb9ec966d47c13bb6346051c1",
+        "latest_file_sha256": "173df32086619f812299bf7b6bda5e249fb3aa1d1f442f072e7adeab250dce18",
+        "failure_retention_passed": true
+      }
+    }
+  }
+}

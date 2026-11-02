@@ -19,7 +19,9 @@ from .metrics import compute_metrics
 from .models import Snapshot, snapshot_from_dict, snapshot_to_dict
 from .portfolio import load_portfolio
 from .report import build_result_json, write_outputs
-from .research import bundled_snapshot, qualifies_research
+from .research import (
+    bundled_snapshot, qualifies_research, qualifies_published_candidate,
+)
 from .sources import (
     PYINVEST_BASE_URL, SourceUnavailable, fetch_index,
     fetch_pyinvest_snapshot, load_local_snapshot, open_public_json,
@@ -174,7 +176,8 @@ def _remote_candidates(
                     row.get('symbol') == symbol
                     and row.get('route') == 'research'
                     for row in index['etfs'] if isinstance(row, dict))
-                if research_route and not qualifies_research(snapshot):
+                if research_route and not (qualifies_research(snapshot)
+                                           or qualifies_published_candidate(snapshot)):
                     raise ValueError('Published research hash mismatch')
                 candidate = _candidate(snapshot, symbol, directory, today, day,
                                        policy=policy)
@@ -333,7 +336,7 @@ def run_lookthrough(
 
 def _tier(snapshot: Snapshot, today: date) -> int:
     """Rank current official holdings before stale and fixed research data."""
-    if qualifies_research(snapshot):
+    if qualifies_research(snapshot) or qualifies_published_candidate(snapshot):
         return 2
     return int((today - snapshot.holdings_date).days > 30)
 

@@ -21,16 +21,18 @@ from zoneinfo import ZoneInfo
 from .directory import CompanyDirectory
 from .issuers import capital, fhtrust, ftft
 from .issuers import (
-    ab, esun, fsitc, jpmorgan, mega, mixed, nomura, sinopac, tsit,
+    ab, esun, fsitc, jpmorgan, kgi, mega, mixed, nomura, sinopac, tsit, union,
 )
 from .issuers._assets import asset_day, read_json
 from .issuers.registry import PARSERS, SUPPORTED_ETFS, SupportedEtf
 from .models import Snapshot, snapshot_from_dict, snapshot_to_dict
+from .research import qualifies_published_candidate
 from .validate import validate_snapshot
 from .refresh import RefreshSession, acquire as acquire_refresh
 from .transport_evidence import TransportEvidence
 from .refresh_contract import products as refresh_products
 from .source_quality import parse_annotated
+from .native_daily import NativeSession, products as native_products
 
 
 RETENTION_DAILY = 30
@@ -50,6 +52,7 @@ _ROUTES = frozenset({"http", "playwright", "official_only", "research"})
 _STATUSES = frozenset({"pass", "warn", "fail", "fetch_error", "official_only"})
 Saved = tuple[Snapshot, bytes]
 _refresh_session: RefreshSession | None = None
+_native_session: NativeSession | None = None
 _source_transport: TransportEvidence | None = None
 
 
@@ -309,14 +312,20 @@ def _publish_all(
         failure_records: dict | None = None,
 ) -> dict:
     """Share real acquisition/validation between writing and read-only runs."""
-    global _refresh_session
+    global _refresh_session, _native_session
     if fetch is fetch_official:
         _refresh_session = None
+        _native_session = None
     root = _safe_root(out_root)
     _timestamp(fetched_at)
     rows = _read_index(root)
     dated, latest = _existing(root, rows, directory)
-    registry = sorted(SUPPORTED_ETFS, key=lambda row: row.symbol)
+    # Preserve legacy order and keep each native issuer's window contiguous.
+    registry = sorted((row for row in SUPPORTED_ETFS
+                       if row.symbol not in native_products()),
+                      key=lambda row: row.symbol) + sorted(
+        (row for row in SUPPORTED_ETFS if row.symbol in native_products()),
+        key=lambda row: (row.issuer, row.symbol))
     if selected is not None:
         if (not isinstance(selected, set) or not selected
                 or not selected <= {row.symbol for row in registry}):
@@ -328,8 +337,36 @@ def _publish_all(
         if symbol in symbols or etf.route not in _ROUTES:
             raise ValueError(f"Duplicate symbol or invalid route: {symbol}")
         symbols.add(symbol)
+    # A collector's official-only route must not revoke a separately reviewed
+    # fixed publication. Preflight the exact content before any daily writes.
+    fixed_research: set[str] = set()
+    for etf in registry:
+        previous = rows.get(etf.symbol)
+        if (etf.route != "official_only" or previous is None
+                or previous["route"] != "research"):
+            continue
+        current = latest.get(etf.symbol)
+        day = current[0].holdings_date.isoformat() if current else None
+        if (current is None
+                or not qualifies_published_candidate(current[0])
+                or current[0].issuer != etf.issuer
+                or current[0].is_active != etf.is_active
+                or previous["source_url"] != current[0].source_url
+                or previous["latest_date"] != day
+                or previous["dates"] != [day]
+                or set(dated.get(etf.symbol, {})) != {day}
+                or not qualifies_published_candidate(
+                    dated[etf.symbol][day][0])):
+            raise ValueError(
+                f"Invalid fixed research publication: {etf.symbol}")
+        fixed_research.add(etf.symbol)
     for etf in registry:
         symbol = etf.symbol
+        if symbol in fixed_research:
+            # Acquisition stays official-only; retain publication metadata and
+            # original attempt time instead of implying a daily refresh.
+            observations.append((symbol, "official_only", None, None))
+            continue
         dates = dated.setdefault(symbol, {})
         old_latest = latest.get(symbol)
         previous_row = rows.get(symbol)
@@ -374,6 +411,9 @@ def _publish_all(
                                    if check.status == "fail")
                 raise ValueError(detail)
         except Exception as error:
+            if (fetch is fetch_official and _native_session is not None
+                    and symbol in native_products()):
+                _native_session.blocked.add(etf.issuer)
             row.update(previous_row or {}, last_status="fail",
                        last_error=f"{type(error).__name__}: {error}",
                        last_attempt_at=fetched_at)
@@ -540,7 +580,7 @@ def _capital_post(opener: Any, etf: SupportedEtf,
     request = Request(
         etf.source_url,
         data=json.dumps({"fundId": fund_id, "date": query_day}).encode(),
-        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.5.4",
+        headers={"User-Agent": "PyInvest-ETF-Lookthrough/1.5.5",
                  "Content-Type": "application/json"}, method="POST",
     )
     def check(response):
@@ -585,7 +625,7 @@ def _source_request(opener: Any, url: str, host: str,
                     payload: dict | None = None) -> bytes:
     """Read one exact qualified URL with verified TLS and fixed limits."""
     _check_url(url, host)
-    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.5.4"}
+    headers = {"User-Agent": "PyInvest-ETF-Lookthrough/1.5.5"}
     data = None
     if payload is not None:
         data = json.dumps(payload, allow_nan=False).encode("utf-8")
@@ -704,13 +744,21 @@ def fetch_official(etf: SupportedEtf) -> bytes:
     """Fetch an HTTP route with verified TLS, 30s timeout and 10MiB cap.
 
     Before live use, audit the actual runtime CA according to
-    references/runtime-safety.md. No proxy environment, cookies, credentials,
+    references/runtime-safety.md. No proxy environment, personal credentials,
     browser state, script execution or TLS bypass is used. Browser routes
     fail explicitly until a verified transport exists.
     """
-    global _refresh_session
+    global _refresh_session, _native_session
     if etf.route != "http":
         raise ValueError(f"Unsupported acquisition route: {etf.route}")
+    if etf.symbol in native_products():
+        if _native_session is None:
+            _native_session = NativeSession(transport=_source_transport)
+        return _native_session.fetch(etf)
+    if etf.symbol in ("009804", "00915"):
+        if _refresh_session is None:
+            _refresh_session = RefreshSession(transport=_source_transport)
+        return (union if etf.symbol == "009804" else kgi).acquire(_refresh_session, etf)
     if etf.symbol in refresh_products():
         if etf.source_url != refresh_products()[etf.symbol]["source_url"]:
             raise ValueError("Unqualified refresh source URL")
@@ -728,7 +776,7 @@ def fetch_official(etf: SupportedEtf) -> bytes:
         return _fetch_capital(etf)
     opener = build_opener(ProxyHandler({}), _OfficialRedirect(host))
     request = Request(etf.source_url, headers={
-        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.4",
+        "User-Agent": "PyInvest-ETF-Lookthrough/1.5.5",
     })
     def check(response):
         _check_url(response.geturl(), host)

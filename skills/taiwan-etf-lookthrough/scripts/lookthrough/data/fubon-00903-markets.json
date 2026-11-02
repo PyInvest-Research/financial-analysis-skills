@@ -1,0 +1,569 @@
+{
+  "symbol": "00903",
+  "market_evidence_observed_at": "2026-10-29/30",
+  "holdings_date": "2026-10-28",
+  "historical_listing_time_travel_not_claimed": true,
+  "nasdaq_file_times": {
+    "nasdaq_web": "File Creation Time: 1029202618:01|||||||",
+    "other_web": "File Creation Time: 1029202618:01||||||"
+  },
+  "hkex_updated_at": "Updated as at 30/10/2026",
+  "identity_note": "Exact native ticker plus market; issuer full/short name differences retained, never map US ADS to Taiwan code",
+  "securities": {
+    "AAPL US": {
+      "source_name": "APPLE INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Apple Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "AAPL",
+        "Security Name": "Apple Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "40",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "MU US": {
+      "source_name": "MICRON TECHNOLOGY INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Micron Technology, Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "MU",
+        "Security Name": "Micron Technology, Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "40",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "NVDA US": {
+      "source_name": "NVIDIA CORP",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "NVIDIA Corporation - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "NVDA",
+        "Security Name": "NVIDIA Corporation - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "META US": {
+      "source_name": "META PLATFORMS INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Meta Platforms, Inc. - Class A Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "META",
+        "Security Name": "Meta Platforms, Inc. - Class A Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "40",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "AMZN US": {
+      "source_name": "AMAZON.COM INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Amazon.com, Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "AMZN",
+        "Security Name": "Amazon.com, Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "GOOGL US": {
+      "source_name": "Alphabet Inc-CL A",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Alphabet Inc. - Class A Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "GOOGL",
+        "Security Name": "Alphabet Inc. - Class A Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "40",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "PLTR US": {
+      "source_name": "PALANTIR TECHNOLOGIES INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Palantir Technologies Inc. - Class A Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "PLTR",
+        "Security Name": "Palantir Technologies Inc. - Class A Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "AI US": {
+      "source_name": "C3.AI INC",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "official_name": "C3.ai, Inc. Class A Common Stock",
+      "source_file": "other_web.bin",
+      "source_sha256": "9631ed279295fcc8f560fda3ab6d8344922928fb77b1091ec7b7be930489ed0b",
+      "official_row": {
+        "ACT Symbol": "AI",
+        "Security Name": "C3.ai, Inc. Class A Common Stock",
+        "Exchange": "N",
+        "CQS Symbol": "AI",
+        "ETF": "N",
+        "Round Lot Size": "100",
+        "Test Issue": "N",
+        "NASDAQ Symbol": "AI"
+      }
+    },
+    "AMBQ US": {
+      "source_name": "AMBIQ MICRO INC",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "official_name": "Ambiq Micro, Inc. Common Stock",
+      "source_file": "other_web.bin",
+      "source_sha256": "9631ed279295fcc8f560fda3ab6d8344922928fb77b1091ec7b7be930489ed0b",
+      "official_row": {
+        "ACT Symbol": "AMBQ",
+        "Security Name": "Ambiq Micro, Inc. Common Stock",
+        "Exchange": "N",
+        "CQS Symbol": "AMBQ",
+        "ETF": "N",
+        "Round Lot Size": "100",
+        "Test Issue": "N",
+        "NASDAQ Symbol": "AMBQ"
+      }
+    },
+    "KOPN US": {
+      "source_name": "KOPIN CORP",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Kopin Corporation - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "KOPN",
+        "Security Name": "Kopin Corporation - Common Stock",
+        "Market Category": "S",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "HIMX US": {
+      "source_name": "HIMAX TECHNOLOGIES INC",
+      "market": "NASDAQ",
+      "security_type": "ADS",
+      "official_name": "Himax Technologies, Inc. - American depositary shares, each of which represents two ordinary shares.",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "HIMX",
+        "Security Name": "Himax Technologies, Inc. - American depositary shares, each of which represents two ordinary shares.",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "ADBE US": {
+      "source_name": "ADOBE INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Adobe Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "ADBE",
+        "Security Name": "Adobe Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "40",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "2498": {
+      "source_name": "宏達電",
+      "market": "TWSE",
+      "security_type": "Taiwan_listed_stock",
+      "official_name": "宏達電",
+      "source_file": "skills/taiwan-etf-lookthrough/scripts/lookthrough/data/company-directory.json",
+      "source_sha256": "4b6fe4db2c8cd311c3b09dc9e9dd445c0a11b4a20d1c1fc0c840fd2d10c0d8d4",
+      "official_row": {
+        "code": "2498",
+        "name": "宏達電",
+        "market": "TWSE",
+        "industry_code": "27",
+        "industry_name": "通信網路業"
+      }
+    },
+    "AMBA US": {
+      "source_name": "AMBARELLA INC",
+      "market": "NASDAQ",
+      "security_type": "ordinary_share",
+      "official_name": "Ambarella, Inc. - Ordinary Shares",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "AMBA",
+        "Security Name": "Ambarella, Inc. - Ordinary Shares",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "MSFT US": {
+      "source_name": "MICROSOFT CORP",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Microsoft Corporation - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "MSFT",
+        "Security Name": "Microsoft Corporation - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "40",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "SNAP US": {
+      "source_name": "SNAP INC",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "official_name": "Snap Inc. Class A Common Stock",
+      "source_file": "other_web.bin",
+      "source_sha256": "9631ed279295fcc8f560fda3ab6d8344922928fb77b1091ec7b7be930489ed0b",
+      "official_row": {
+        "ACT Symbol": "SNAP",
+        "Security Name": "Snap Inc. Class A Common Stock",
+        "Exchange": "N",
+        "CQS Symbol": "SNAP",
+        "ETF": "N",
+        "Round Lot Size": "100",
+        "Test Issue": "N",
+        "NASDAQ Symbol": "SNAP"
+      }
+    },
+    "FIG US": {
+      "source_name": "FIGMA INC",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "official_name": "Figma, Inc. Class A Common Stock",
+      "source_file": "other_web.bin",
+      "source_sha256": "9631ed279295fcc8f560fda3ab6d8344922928fb77b1091ec7b7be930489ed0b",
+      "official_row": {
+        "ACT Symbol": "FIG",
+        "Security Name": "Figma, Inc. Class A Common Stock",
+        "Exchange": "N",
+        "CQS Symbol": "FIG",
+        "ETF": "N",
+        "Round Lot Size": "100",
+        "Test Issue": "N",
+        "NASDAQ Symbol": "FIG"
+      }
+    },
+    "6613 HK": {
+      "source_name": "藍思科技",
+      "market": "HKEX",
+      "security_type": "listed_equity",
+      "official_name": "LENS",
+      "source_file": "hkex.bin",
+      "source_sha256": "891963084666a528ca31945a837b1b659752e899fa27475d5a42eb056a1b0eb4",
+      "official_row": [
+        "06613",
+        "LENS",
+        "Equity",
+        "Equity Securities (Main Board)",
+        "200",
+        "CNE1000070N6",
+        null,
+        "Y",
+        "Y",
+        "Y",
+        " ",
+        "Y",
+        null,
+        null,
+        "Y",
+        "1 ",
+        "HKD",
+        null
+      ]
+    },
+    "OLED US": {
+      "source_name": "UNIVERSAL DISPLAY CORP",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Universal Display Corporation - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "OLED",
+        "Security Name": "Universal Display Corporation - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "AMD US": {
+      "source_name": "ADVANCED MICRO DEVICES",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Advanced Micro Devices, Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "AMD",
+        "Security Name": "Advanced Micro Devices, Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "CRWV US": {
+      "source_name": "COREWEAVE INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "CoreWeave, Inc. - Class A Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "CRWV",
+        "Security Name": "CoreWeave, Inc. - Class A Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "CRUS US": {
+      "source_name": "CIRRUS LOGIC INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Cirrus Logic, Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "CRUS",
+        "Security Name": "Cirrus Logic, Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "3896 HK": {
+      "source_name": "金山雲",
+      "market": "HKEX",
+      "security_type": "listed_equity",
+      "official_name": "KINGSOFT CLOUD",
+      "source_file": "hkex.bin",
+      "source_sha256": "891963084666a528ca31945a837b1b659752e899fa27475d5a42eb056a1b0eb4",
+      "official_row": [
+        "03896",
+        "KINGSOFT CLOUD",
+        "Equity",
+        "Equity Securities (Main Board)",
+        "2,000",
+        "KYG5264S1012",
+        null,
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        null,
+        null,
+        "Y",
+        "1 ",
+        "HKD",
+        null
+      ]
+    },
+    "6752 JP": {
+      "source_name": "Panasonic Corp",
+      "market": "TSE",
+      "security_type": "Japan_listed_shares",
+      "official_name": "Panasonic Holdings Corporation",
+      "source_file": "panasonic.bin",
+      "source_sha256": "76fe4f2860463ef4aa9da966d9aeef6a485bab4997611f91baeecef42c38978f",
+      "official_statement": "Japan securities code 6752; shares listed Japan: Tokyo"
+    },
+    "AKAM US": {
+      "source_name": "AKAMAI TECHNOLOGIES INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "Akamai Technologies, Inc. - Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "AKAM",
+        "Security Name": "Akamai Technologies, Inc. - Common Stock",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "SOUN US": {
+      "source_name": "SOUNDHOUND AI INC",
+      "market": "NASDAQ",
+      "security_type": "common_stock",
+      "official_name": "SoundHound AI, Inc. - Class A Common Stock",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "SOUN",
+        "Security Name": "SoundHound AI, Inc. - Class A Common Stock",
+        "Market Category": "G",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "RBLX US": {
+      "source_name": "ROBLOX CORP",
+      "market": "NYSE",
+      "security_type": "common_stock",
+      "official_name": "Roblox Corporation Class A Common Stock",
+      "source_file": "other_web.bin",
+      "source_sha256": "9631ed279295fcc8f560fda3ab6d8344922928fb77b1091ec7b7be930489ed0b",
+      "official_row": {
+        "ACT Symbol": "RBLX",
+        "Security Name": "Roblox Corporation Class A Common Stock",
+        "Exchange": "N",
+        "CQS Symbol": "RBLX",
+        "ETF": "N",
+        "Round Lot Size": "100",
+        "Test Issue": "N",
+        "NASDAQ Symbol": "RBLX"
+      }
+    },
+    "2330": {
+      "source_name": "台積電",
+      "market": "TWSE",
+      "security_type": "Taiwan_listed_stock",
+      "official_name": "台積電",
+      "source_file": "skills/taiwan-etf-lookthrough/scripts/lookthrough/data/company-directory.json",
+      "source_sha256": "4b6fe4db2c8cd311c3b09dc9e9dd445c0a11b4a20d1c1fc0c840fd2d10c0d8d4",
+      "official_row": {
+        "code": "2330",
+        "name": "台積電",
+        "market": "TWSE",
+        "industry_code": "24",
+        "industry_name": "半導體業"
+      }
+    },
+    "IQ US": {
+      "source_name": "IQIYI INC",
+      "market": "NASDAQ",
+      "security_type": "ADS",
+      "official_name": "iQIYI, Inc. - American Depositary Shares",
+      "source_file": "nasdaq_web.bin",
+      "source_sha256": "f173b4ab6c722eba0ff91d019be3f14223ad0a8e7f96c0e3a90a89a946734c77",
+      "official_row": {
+        "Symbol": "IQ",
+        "Security Name": "iQIYI, Inc. - American Depositary Shares",
+        "Market Category": "Q",
+        "Test Issue": "N",
+        "Financial Status": "N",
+        "Round Lot Size": "100",
+        "ETF": "N",
+        "NextShares": "N"
+      }
+    },
+    "2635 HK": {
+      "source_name": "諾比侃",
+      "market": "HKEX",
+      "security_type": "listed_equity",
+      "official_name": "NUOBIKAN",
+      "source_file": "hkex.bin",
+      "source_sha256": "891963084666a528ca31945a837b1b659752e899fa27475d5a42eb056a1b0eb4",
+      "official_row": [
+        "02635",
+        "NUOBIKAN",
+        "Equity",
+        "Equity Securities (Main Board)",
+        "100",
+        "CNE100007C42",
+        null,
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        "Y",
+        null,
+        null,
+        "Y",
+        "1 ",
+        "HKD",
+        null
+      ]
+    }
+  }
+}

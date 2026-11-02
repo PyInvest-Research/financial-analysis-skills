@@ -6,6 +6,7 @@ from typing import Literal
 
 from ..models import Snapshot
 from ..refresh_contract import products as refresh_products
+from ..native_daily import products as native_products
 from .capital import SOURCE_URL as CAPITAL_SOURCE_URL, parse as parse_capital
 from .cathay import parse as parse_cathay
 from .fubon import parse as parse_fubon
@@ -13,7 +14,7 @@ from .fhtrust import SOURCE_URL as FH_SOURCE_URL, parse as parse_fhtrust
 from .ftft import SOURCE_URL as FTFT_SOURCE_URL, parse as parse_ftft
 from .yuanta import parse as parse_yuanta
 from . import (
-    ab, esun, fsitc, jpmorgan, kgi, mega, mixed, nomura, sinopac, tsit, union,
+    ab, allianz, esun, fsitc, jpmorgan, kgi, mega, mixed, nomura, sinopac, tsit, union,
 )
 
 
@@ -25,7 +26,7 @@ class SupportedEtf:
     issuer: Literal[
         "yuanta", "fubon", "cathay", "capital", "fhtrust", "ftft", "sinopac",
         "tsit", "mega", "nomura", "esun", "fsitc", "jpmorgan", "ab",
-        "kgi", "union"]
+        "kgi", "union", "allianz"]
     is_active: bool
     route: Literal["http", "playwright", "official_only"]
     source_url: str
@@ -105,18 +106,18 @@ SUPPORTED_ETFS += tuple(
 SUPPORTED_ETFS += tuple(
     SupportedEtf(symbol, issuer, active, route, module.SOURCE_URL)
     for symbol, issuer, active, route, module in (
-        ("00888", "sinopac", False, "official_only", sinopac),
+        ("00888", "sinopac", False, "http", sinopac),
         ("00936", "tsit", False, "http", tsit),
         ("00932", "mega", False, "http", mega),
-        ("00935", "nomura", False, "official_only", nomura),
+        ("00935", "nomura", False, "http", nomura),
         ("00944", "nomura", False, "http", nomura),
         ("00980A", "nomura", True, "http", nomura),
+        ("00999A", "nomura", True, "http", nomura),
         ("009803", "esun", False, "http", esun),
         ("00728", "fsitc", False, "http", fsitc),
         ("00401A", "jpmorgan", True, "http", jpmorgan),
         ("00404A", "ab", True, "http", ab),
-        ("00915", "kgi", False, "official_only", kgi),
-        ("009804", "union", False, "official_only", union),
+        ("009804", "union", False, "http", union),
     )
 )
 
@@ -144,12 +145,14 @@ SUPPORTED_ETFS += tuple(
 )
 
 SUPPORTED_ETFS += (
+    SupportedEtf("00915", "kgi", False, "http", kgi.ACTUAL_SOURCE_URL),
     SupportedEtf("00929", "fhtrust", False, "http", FH_SOURCE_URL),
     SupportedEtf("00905", "ftft", False, "http", FTFT_SOURCE_URL),
 )
 
 Parser = Callable[[bytes, SupportedEtf, str], Snapshot]
 PARSERS: dict[str, Parser] = {
+    "allianz": allianz.parse,  # Candidate only; no SUPPORTED_ETFS entry.
     "fubon": parse_fubon, "cathay": parse_cathay, "yuanta": parse_yuanta,
     "capital": parse_capital,
     "fhtrust": parse_fhtrust, "ftft": parse_ftft,
@@ -197,6 +200,29 @@ def _refresh_dispatch(legacy: Parser) -> Parser:
 
 for _issuer in {p["issuer"] for p in refresh_products().values()}:
     PARSERS[_issuer] = _refresh_dispatch(PARSERS[_issuer])
+
+
+
+SUPPORTED_ETFS += tuple(
+    SupportedEtf(symbol, row['issuer'], row['is_active'], 'http',
+                 row['source_url'])
+    for symbol, row in sorted(native_products().items())
+)
+
+
+def _native_dispatch(legacy: Parser) -> Parser:
+    """Keep qualified native routes separate from fixed candidate replay."""
+    def parse(raw: bytes, etf: SupportedEtf, fetched_at: str) -> Snapshot:
+        """Use native parsing only for an explicitly enabled daily route."""
+        if etf.symbol in native_products():
+            from ..native_daily import parse as parse_native
+            return parse_native(raw, etf, fetched_at)
+        return legacy(raw, etf, fetched_at)
+    return parse
+
+
+for _issuer in {p['issuer'] for p in native_products().values()}:
+    PARSERS[_issuer] = _native_dispatch(PARSERS[_issuer])
 
 
 def get_supported(symbol: str) -> SupportedEtf | None:
