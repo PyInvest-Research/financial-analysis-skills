@@ -110,6 +110,7 @@
     "scripts/lookthrough/data/native-daily-products.json",
     "scripts/lookthrough/bundled.py",
     "scripts/lookthrough/data/snapshots/00401A.json",
+    "scripts/lookthrough/data/snapshots/00404A.json",
     "scripts/lookthrough/data/snapshots/00405A.json",
     "scripts/lookthrough/data/snapshots/00407A.json",
     "scripts/lookthrough/data/snapshots/00409A.json",
@@ -144,6 +145,7 @@
     "scripts/lookthrough/data/snapshots/00900.json",
     "scripts/lookthrough/data/snapshots/00901.json",
     "scripts/lookthrough/data/snapshots/00903.json",
+    "scripts/lookthrough/data/snapshots/00905.json",
     "scripts/lookthrough/data/snapshots/00907.json",
     "scripts/lookthrough/data/snapshots/00909.json",
     "scripts/lookthrough/data/snapshots/00915.json",
@@ -155,6 +157,7 @@
     "scripts/lookthrough/data/snapshots/00929.json",
     "scripts/lookthrough/data/snapshots/00930.json",
     "scripts/lookthrough/data/snapshots/00935.json",
+    "scripts/lookthrough/data/snapshots/00936.json",
     "scripts/lookthrough/data/snapshots/00938.json",
     "scripts/lookthrough/data/snapshots/00940.json",
     "scripts/lookthrough/data/snapshots/00944.json",
@@ -211,8 +214,8 @@
     "validationPolicy": "annotated reports and daily publication; preserve unknowns and source dates"
   },
   "data_bundle": {
-    "id": "2026-11-02-da16ae328287",
-    "date": "2026-11-02",
-    "sha256": "da16ae328287d893bdbd92f156e5d2443d10f0f23ffbe436c113d6413ab7c038"
+    "id": "2026-11-03-649abfae0d24",
+    "date": "2026-11-03",
+    "sha256": "649abfae0d24e1eb4e01e0b70aad19ac80f6dfbbc7c8237a13c8ba7ddd0bb8a1"
   }
 }
