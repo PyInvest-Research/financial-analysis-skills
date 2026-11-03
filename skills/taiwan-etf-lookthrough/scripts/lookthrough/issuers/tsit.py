@@ -60,12 +60,12 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         raise ValueError("Mismatched TSIT hidden fund identity")
     panel = by_id(root, "paneFive1")
     hidden = by_id(root, "NAV_DATE")
-    match = re.fullmatch(r"(\d{4}/\d{2}/\d{2}) 上午 12:00:00",
+    match = re.fullmatch(r"(\d{4}/\d{1,2}/\d{1,2}) 上午 12:00:00",
                          hidden.attrs.get("value") or "")
     if hidden.attrs.get("type") != "hidden" or match is None:
         raise ValueError("Missing TSIT investment NAV date")
     day_text = match.group(1)
-    day = date.fromisoformat(day_text.replace("/", "-"))
+    day = date(*(int(part) for part in day_text.split("/")))
     cards = [node for node in panel.find("div")
              if has_class(node, "card-header")]
     if (len(cards) != len(CARD_HEADERS)
@@ -95,11 +95,14 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     if not nav_rows[0][1].startswith("TWD "):
         raise ValueError("Missing TSIT TWD NAV unit")
     nav = nav_number(nav_rows[0][1][4:])
-    dates = [re.fullmatch(r"(\d{4}/\d{2}/\d{2})每基數(?:實際申購總價金|申購總價金差額)\(元\)",
+    dates = [re.fullmatch(r"(\d{4}/\d{1,2}/\d{1,2})每基數"
+                          r"(?:實際申購總價金|申購總價金差額)\(元\)",
                           row[0]) for row in nav_rows
              if re.match(r"\d{4}/", row[0])]
     if (len(dates) != 2
-            or any(m is None or m.group(1) != day_text for m in dates)):
+            or any(m is None or date(*(int(part) for part in
+                                       m.group(1).split("/"))) != day
+                   for m in dates)):
         raise ValueError("TSIT actual asset and dated NAV fields disagree")
     current = tables["current"]
     if len(current) != 2 or len(current[1]) != 2:

@@ -25,6 +25,9 @@ _KEYS = {"FundID", "StockCode", "FundName", "AssetDate",
 _EMPTY = ("Equities", "Futures", "ETFs", "RePurchases", "Bonds",
           "BondsDiffs", "AreaSec")
 _ASSETS = {"股票": "stock", "現金": "cash", "保證金": "other"}
+# Observed in the saved 2026-11-02 source. The published positive amount
+# does not establish its signed NAV contribution; retain it without a weight.
+_SETTLEMENT = "申贖應付款"
 
 
 def latest_day(raw: bytes) -> date:
@@ -71,20 +74,26 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         raise ValueError("Missing FTFT asset totals")
     totals: dict[str, Decimal] = {}
     holdings: list[Holding] = []
+    notes: list[str] = []
     for row in categories:
         _context(row, timestamp)
         label = row.get("AssetCategory")
-        if (label not in _ASSETS or label in totals
+        if (label not in {*_ASSETS, _SETTLEMENT} or label in totals
                 or row.get("AssetCurrency") != "TWD"):
             raise ValueError("Unknown/duplicate FTFT asset or currency")
         amount = number(row.get("AssetValue"), native=True)
         if not -nav <= amount <= nav:
             raise ValueError("FTFT asset outside NAV range")
         totals[label] = amount
-        if label != "股票":
+        if label == _SETTLEMENT:
+            holdings.append(Holding(label, label, "other", None))
+            notes.append(
+                f"官方申贖應付款原值 {amount} TWD；已保留原正負號，"
+                "對 NAV 的增減方向尚未核實，權重未知；不反轉正負號或補平差額。")
+        elif label != "股票":
             holdings.append(Holding(label, label, _ASSETS[label],
                                     float(amount / nav)))
-    if set(totals) != set(_ASSETS):
+    if not set(_ASSETS) <= set(totals):
         raise ValueError("Missing qualified FTFT asset category")
     stocks = payload["Secs"]
     if not isinstance(stocks, list) or not 1 <= len(stocks) <= 5000:
@@ -129,5 +138,6 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
             code, f'{name} {row["ContractDate"]}', "futures", None))
     snapshot = Snapshot(
         "1", etf.symbol, etf.issuer, False, day, fetched_at,
-        f"{SHARES_URL}?date={day:%Y%m%d}", "official", tuple(holdings))
+        f"{SHARES_URL}?date={day:%Y%m%d}", "official", tuple(holdings),
+        quality_notes=tuple(notes))
     return snapshot_from_dict(snapshot_to_dict(snapshot))
