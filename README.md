@@ -12,3 +12,11 @@ Each skill includes instructions, references, and tools under the [MIT License](
 資料包日期是台北時間的打包日，不是 ETF 持股日。每檔 ETF 請依各自持股日解讀；未知權重不補零，完整組合分母不縮小，海外股票另列。見[內建快照清單](skills/taiwan-etf-lookthrough/references/snapshot-coverage.md)及[研究與註記模式](skills/taiwan-etf-lookthrough/references/research-and-annotations.md)。固定歷史示範與當期資料分開。
 
 下載副本不會自動更新，需要較新的資料請重新下載。重現研究時保存程式版本、資料包 ID、輸入檔與生成的 result.json。請遵守套件環境與 TLS 指引；本工具供資料整理與研究，不構成投資建議。
+
+## Kelly Event Sizer
+
+[凱利事件下注框架 v1.0.0](skills/kelly-event-sizer/SKILL.md) 將使用者提供的二元事件機率、外部基準、可成交賠率與成本，交給 Python 計算部位。支援分數凱利、向基準收縮、YES／NO 選邊、最多三個相關事件的聯合配置，以及歷史預測的 λ 校準。
+
+腳本提供 `normalize`、`single`、`joint`、`calibrate` 四個 JSON 指令；輸入格式、公式與可重現範例隨套件提供。
+
+下載與固定示範：[pyecontech.com/skills/kelly-event-sizer/](https://pyecontech.com/skills/kelly-event-sizer/)。計算不依賴特定平台、不取價、不下單；沒有優勢就不提供下注金額。不推薦市場、不替使用者估機率，不構成投資建議，在地法規請自行確認。

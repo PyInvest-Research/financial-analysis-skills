@@ -1,0 +1,21 @@
+{
+  "p": 0.55,
+  "q": 0.4,
+  "mode": "lambda",
+  "lambda": 0.5,
+  "bankroll": 1000,
+  "outcomes": [
+    {
+      "name": "YES",
+      "format": "contract",
+      "price": 0.4
+    }
+  ],
+  "q_source": "Synthetic fair quote; no spread or fees",
+  "event": {
+    "definition": "Synthetic binary event E; YES iff the settlement record for E is true",
+    "settlement_at": "2026-12-01T00:00:00Z",
+    "resolver": "Synthetic scenario ledger",
+    "probability_reason": "User-supplied illustrative assumption; not an estimated forecast"
+  }
+}
