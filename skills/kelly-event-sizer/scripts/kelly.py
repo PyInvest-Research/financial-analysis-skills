@@ -125,23 +125,10 @@ def normalized_outcome(row: Json) -> Json:
     }
 
 
-def normalize(data: Json) -> Json:
-    """Normalize one/two quoted binary sides and a separate external baseline.
-
-    A midpoint uses YES bid/ask; de-vig uses pre-fee implied probabilities.
-    No missing complementary execution price is invented.
-    """
-    from kelly_intake import assess_inputs
-    ready = assess_inputs(data, "normalize")
-    if ready["status"] != "ready":
-        return ready
-    rows = data.get("outcomes")
-    if not isinstance(rows, list) or not 1 <= len(rows) <= 2:
-        raise ValueError("outcomes must contain one or two binary quotes")
-    outcomes = [normalized_outcome(row) for row in rows]
+def normalized_baseline(data: Json, outcomes: list[Json]) -> tuple[
+        float | None, str | None]:
+    """Resolve and validate a supplied benchmark using normalized quotes."""
     by_name = {row["name"]: row for row in outcomes}
-    if len(by_name) != len(rows):
-        raise ValueError("Duplicate outcome names")
     q = None
     source = None
     if data.get("q") is not None:
@@ -170,6 +157,27 @@ def normalize(data: Json) -> Json:
         else:
             raise ValueError("Unknown benchmark kind")
         source = benchmark.get("source", kind)
+    return q, source
+
+
+def normalize(data: Json) -> Json:
+    """Normalize one/two quoted binary sides and a separate external baseline.
+
+    A midpoint uses YES bid/ask; de-vig uses pre-fee implied probabilities.
+    No missing complementary execution price is invented.
+    """
+    from kelly_intake import assess_inputs
+    ready = assess_inputs(data, "normalize")
+    if ready["status"] != "ready":
+        return ready
+    rows = data.get("outcomes")
+    if not isinstance(rows, list) or not 1 <= len(rows) <= 2:
+        raise ValueError("outcomes must contain one or two binary quotes")
+    outcomes = [normalized_outcome(row) for row in rows]
+    by_name = {row["name"]: row for row in outcomes}
+    if len(by_name) != len(rows):
+        raise ValueError("Duplicate outcome names")
+    q, source = normalized_baseline(data, outcomes)
     arbitrage = False
     if len(outcomes) == 2:
         arbitrage = sum(row["break_even"] for row in outcomes) < 1 - TOLERANCE

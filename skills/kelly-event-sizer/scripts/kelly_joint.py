@@ -111,6 +111,50 @@ def optimize(probabilities: np.ndarray, returns: np.ndarray,
     return weights
 
 
+def joint_scenarios(data: Json, events: list[Json],
+                    normalized: list[Json]) -> tuple[
+                        np.ndarray, np.ndarray, np.ndarray | None]:
+    """Validate event identities, scenario mass, and benchmark marginals."""
+    names = [event.get("name") for event in events]
+    if (any(not isinstance(name, str) or not name for name in names)
+            or len(set(names)) != len(names)):
+        raise ValueError("Event names must be nonempty and unique")
+    p = np.array([probability(event.get("p"), "event p")
+                  for event in events])
+    count = len(events)
+    states = np.array(list(product((0, 1), repeat=count)))
+    user = user_distribution(data, p, states)
+    q_values = [row["q"] for row in normalized]
+    benchmark = None
+    if all(value is not None for value in q_values):
+        q = np.array(q_values, dtype=float)
+        if "benchmark_probabilities" in data:
+            benchmark = distribution(data["benchmark_probabilities"], count,
+                                     "benchmark_probabilities")
+            if not np.allclose(benchmark @ states, q, rtol=0, atol=EPSILON):
+                raise ValueError("Benchmark marginals do not match event q")
+        else:
+            benchmark = independent(q, states)
+    elif "benchmark_probabilities" in data:
+        raise ValueError("A joint benchmark also requires all marginal q")
+    return states, user, benchmark
+
+
+def joint_exposure(data: Json, events: list[Json],
+                   cap: float) -> tuple[np.ndarray, np.ndarray]:
+    """Validate fixed holdings, caps, reserve, and supported holding mode."""
+    mode = data.get("mode", "lambda")
+    held = np.array([probability(event.get("existing_fraction", 0),
+                                 "existing_fraction") for event in events])
+    caps = np.array([probability(event.get("cap", cap), "event cap")
+                     for event in events])
+    if float(held.sum()) > 1 - EPSILON or np.any(held > caps):
+        raise ValueError("Existing holdings exceed the cash reserve or caps")
+    if mode == "k" and np.any(held > 0):
+        raise ValueError("Use lambda mode for fixed existing positions")
+    return held, caps
+
+
 def size_joint(data: Json) -> Json:
     """Size selected sides using correlated scenarios and optional holdings.
 
@@ -127,10 +171,6 @@ def size_joint(data: Json) -> Json:
         raise ValueError("Joint mode supports one to three binary events")
     if any(not isinstance(event, dict) for event in events):
         raise ValueError("Each event must be an object")
-    names = [event.get("name") for event in events]
-    if (any(not isinstance(name, str) or not name for name in names)
-            or len(set(names)) != len(names)):
-        raise ValueError("Event names must be nonempty and unique")
     bankroll, cap, days = common(data)
     normalized = [normalize(event) for event in events]
     mode, weight = settings(data, all(row["q"] is not None
@@ -154,35 +194,14 @@ def size_joint(data: Json) -> Json:
             raise ValueError("Each selected side requires its execution quote")
         quotes.append(quote)
     count = len(events)
-    states = np.array(list(product((0, 1), repeat=count)))
-    user = user_distribution(data, p, states)
-    q_values = [row["q"] for row in normalized]
-    benchmark = None
-    if all(value is not None for value in q_values):
-        q = np.array(q_values, dtype=float)
-        if "benchmark_probabilities" in data:
-            benchmark = distribution(data["benchmark_probabilities"], count,
-                                     "benchmark_probabilities")
-            if not np.allclose(benchmark @ states, q, rtol=0, atol=EPSILON):
-                raise ValueError("Benchmark marginals do not match event q")
-        else:
-            benchmark = independent(q, states)
-    elif "benchmark_probabilities" in data:
-        raise ValueError("A joint benchmark also requires all marginal q")
+    states, user, benchmark = joint_scenarios(data, events, normalized)
     adjusted = (weight * user + (1 - weight) * benchmark
                 if mode == "lambda" else user)
     yes_sides = np.array([event["side"] == "YES" for event in events])
     wins = states == yes_sides
     odds = np.array([row["b"] for row in quotes])
     returns = np.where(wins, odds, -1)
-    held = np.array([probability(event.get("existing_fraction", 0),
-                                 "existing_fraction") for event in events])
-    caps = np.array([probability(event.get("cap", cap), "event cap")
-                     for event in events])
-    if float(held.sum()) > 1 - EPSILON or np.any(held > caps):
-        raise ValueError("Existing holdings exceed the cash reserve or caps")
-    if mode == "k" and np.any(held > 0):
-        raise ValueError("Use lambda mode for fixed existing positions")
+    held, caps = joint_exposure(data, events, cap)
     raw = optimize(user, returns, np.ones(count), held)
     uncapped = (optimize(adjusted, returns, np.ones(count), held)
                 if mode == "lambda" else weight * raw)

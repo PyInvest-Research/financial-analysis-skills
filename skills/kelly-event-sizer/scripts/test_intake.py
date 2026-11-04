@@ -231,6 +231,16 @@ class IntakeTests(unittest.TestCase):
         data.pop("q_source")
         self.assertEqual(kelly.intake(data)["status"], "ready")
         self.assertEqual(kelly.single(data)["status"], "ok")
+        data["q"] = 0.7
+        self.assertEqual(kelly.intake(data)["status"], "ready")
+        self.assertEqual(kelly.single(data)["status"], "ok")
+        joint = confirmed_joint()
+        joint.update(mode="k", k=0.5)
+        for event in joint["events"]:
+            event.pop("q_source")
+        self.assertEqual(kelly.intake({**joint, "operation": "joint"})[
+            "status"], "ready")
+        self.assertEqual(kelly.joint(joint)["status"], "ok")
 
     def test_invalid_midpoint_cannot_report_ready(self) -> None:
         """Readiness and sizing use the same complete benchmark validator."""
@@ -238,8 +248,19 @@ class IntakeTests(unittest.TestCase):
         data.pop("q")
         data["benchmark"] = {"kind": "midpoint", "bid": 0.8, "ask": 0.6,
                              "source": "Invalid synthetic quote"}
-        with self.assertRaises(ValueError):
-            kelly.intake(data)
+        for operation in ("single", "normalize"):
+            with self.subTest(operation=operation), self.assertRaises(
+                    ValueError):
+                kelly.intake({**data, "operation": operation})
+
+    def test_invalid_joint_tables_cannot_report_ready(self) -> None:
+        """Readiness validates scenario shape, mass, and matching marginals."""
+        for table in ([], [0.2] * 4, [0.25] * 4):
+            data = confirmed_joint()
+            data.pop("independent")
+            data["scenario_probabilities"] = table
+            with self.subTest(table=table), self.assertRaises(ValueError):
+                kelly.intake({**data, "operation": "joint"})
 
     def test_intake_cli_stops_with_one_json_document(self) -> None:
         """Missing inputs are an ordinary waiting state, not guessed advice."""

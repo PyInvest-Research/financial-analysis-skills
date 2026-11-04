@@ -128,9 +128,9 @@ def baseline_missing(data: Json, mode: str, prefix: str) -> dict[str, str]:
     """Distinguish a sourced benchmark from execution odds and prices."""
     if data.get("q") is not None:
         probability(data["q"], field(prefix, "q"))
-    benchmark = data.get("benchmark")
-    if mode == "k" and data.get("q") is None and benchmark is None:
+    if mode == "k":
         return {}
+    benchmark = data.get("benchmark")
     if data.get("q") is not None:
         if benchmark is not None:
             raise ValueError("Supply either q or a benchmark object")
@@ -235,8 +235,7 @@ def assess_inputs(data: Json, operation: str) -> Json:
         missing.update(quotes_missing(event, prefix))
         if operation != "normalize":
             missing.update(event_missing(event, prefix))
-        if (operation != "normalize" or event.get("q") is not None
-                or event.get("benchmark") is not None):
+        if operation != "normalize" or event.get("benchmark") is not None:
             missing.update(baseline_missing(event, mode, prefix))
         if operation == "joint":
             if not text_present(event.get("name")):
@@ -273,13 +272,20 @@ def assess_inputs(data: Json, operation: str) -> Json:
                 "questions": questions[:2]}
     # Reuse numerical validation after checking presence. No investment
     # figures are exposed by this readiness result.
-    from kelly import normalize, normalized_outcome
+    from kelly import (common, normalized_baseline, normalized_outcome,
+                       settings)
+    normalized = []
     for event in events:
-        if operation == "normalize":
-            for row in event["outcomes"]:
-                normalized_outcome(row)
-        else:
-            normalize(event)
+        quotes = [normalized_outcome(row) for row in event["outcomes"]]
+        q, source = normalized_baseline(event, quotes)
+        normalized.append({"outcomes": quotes, "q": q, "q_source": source})
+    if operation != "normalize":
+        _, cap, _ = common(data)
+        settings(data, all(row["q"] is not None for row in normalized))
+        if operation == "joint":
+            from kelly_joint import joint_exposure, joint_scenarios
+            joint_scenarios(data, events, normalized)
+            joint_exposure(data, events, cap)
     result: Json = {"schema_version": 1, "status": "ready",
                     "operation": operation, "missing_fields": [],
                     "questions": []}
