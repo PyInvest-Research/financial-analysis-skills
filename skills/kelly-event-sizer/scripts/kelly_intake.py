@@ -128,9 +128,9 @@ def baseline_missing(data: Json, mode: str, prefix: str) -> dict[str, str]:
     """Distinguish a sourced benchmark from execution odds and prices."""
     if data.get("q") is not None:
         probability(data["q"], field(prefix, "q"))
-    if mode == "k":
-        return {}
     benchmark = data.get("benchmark")
+    if mode == "k" and data.get("q") is None and benchmark is None:
+        return {}
     if data.get("q") is not None:
         if benchmark is not None:
             raise ValueError("Supply either q or a benchmark object")
@@ -146,6 +146,11 @@ def baseline_missing(data: Json, mode: str, prefix: str) -> dict[str, str]:
     if not isinstance(kind, str) or kind not in required:
         raise ValueError("Unknown benchmark kind")
     missing: dict[str, str] = {}
+    if kind == "devig":
+        names = {row.get("name") for row in (data.get("outcomes") or [])}
+        for name in ("YES", "NO"):
+            if name not in names:
+                missing[field(prefix, "outcomes." + name)] = "quotes"
     for name in required[kind]:
         value = benchmark.get(name)
         if value is None:
@@ -230,6 +235,8 @@ def assess_inputs(data: Json, operation: str) -> Json:
         missing.update(quotes_missing(event, prefix))
         if operation != "normalize":
             missing.update(event_missing(event, prefix))
+        if (operation != "normalize" or event.get("q") is not None
+                or event.get("benchmark") is not None):
             missing.update(baseline_missing(event, mode, prefix))
         if operation == "joint":
             if not text_present(event.get("name")):
@@ -251,8 +258,8 @@ def assess_inputs(data: Json, operation: str) -> Json:
         if purpose == "example" and data.get("example_requested") is not True:
             missing["example_requested"] = "example"
         if (operation == "joint" and len(events) > 1
-                and "scenario_probabilities" not in data
-                and "conditional_b_given_a" not in data
+                and data.get("scenario_probabilities") is None
+                and data.get("conditional_b_given_a") is None
                 and data.get("independent") is not True):
             missing["scenario_probabilities"] = "joint"
     if missing:
@@ -264,12 +271,15 @@ def assess_inputs(data: Json, operation: str) -> Json:
         return {"schema_version": 1, "status": "awaiting_input",
                 "operation": operation, "missing_fields": list(missing),
                 "questions": questions[:2]}
-    # Validate complete quotes through the same numerical converter. No
-    # investment figures are exposed by this readiness result.
-    from kelly import normalized_outcome
+    # Reuse numerical validation after checking presence. No investment
+    # figures are exposed by this readiness result.
+    from kelly import normalize, normalized_outcome
     for event in events:
-        for row in event["outcomes"]:
-            normalized_outcome(row)
+        if operation == "normalize":
+            for row in event["outcomes"]:
+                normalized_outcome(row)
+        else:
+            normalize(event)
     result: Json = {"schema_version": 1, "status": "ready",
                     "operation": operation, "missing_fields": [],
                     "questions": []}

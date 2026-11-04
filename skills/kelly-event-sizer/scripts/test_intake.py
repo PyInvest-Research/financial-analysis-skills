@@ -202,6 +202,45 @@ class IntakeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             kelly.intake({"p": float("nan"), "q": 0.7})
 
+    def test_devig_waits_for_its_missing_execution_side(self) -> None:
+        """A one-sided quote cannot supply a two-sided de-vig baseline."""
+        data = confirmed_request()
+        data.pop("q")
+        data.pop("q_source")
+        data["benchmark"] = {"kind": "devig", "source": "Synthetic book"}
+        for result in (kelly.intake(data), kelly.single(data),
+                       kelly.normalize(data)):
+            self.assert_waiting(result)
+            self.assertIn("outcomes.YES", result["missing_fields"])
+
+    def test_null_joint_scenarios_are_missing_not_ready(self) -> None:
+        """Null is not a supplied joint table or a conditional probability."""
+        for field in ("scenario_probabilities", "conditional_b_given_a"):
+            data = confirmed_joint()
+            data.pop("independent")
+            data[field] = None
+            self.assert_waiting(kelly.intake({**data, "operation": "joint"}))
+            self.assert_waiting(kelly.joint(data))
+            data["independent"] = True
+            self.assertEqual(kelly.joint(data)["status"], "ok")
+
+    def test_k_with_null_q_needs_no_invented_baseline(self) -> None:
+        """An explicitly chosen k mode works with a missing optional q."""
+        data = confirmed_request()
+        data.update(mode="k", k=0.5, q=None)
+        data.pop("q_source")
+        self.assertEqual(kelly.intake(data)["status"], "ready")
+        self.assertEqual(kelly.single(data)["status"], "ok")
+
+    def test_invalid_midpoint_cannot_report_ready(self) -> None:
+        """Readiness and sizing use the same complete benchmark validator."""
+        data = confirmed_request()
+        data.pop("q")
+        data["benchmark"] = {"kind": "midpoint", "bid": 0.8, "ask": 0.6,
+                             "source": "Invalid synthetic quote"}
+        with self.assertRaises(ValueError):
+            kelly.intake(data)
+
     def test_intake_cli_stops_with_one_json_document(self) -> None:
         """Missing inputs are an ordinary waiting state, not guessed advice."""
         script = Path(__file__).with_name("kelly.py")

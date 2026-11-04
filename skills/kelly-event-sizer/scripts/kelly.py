@@ -144,7 +144,7 @@ def normalize(data: Json) -> Json:
         raise ValueError("Duplicate outcome names")
     q = None
     source = None
-    if "q" in data:
+    if data.get("q") is not None:
         q = probability(data["q"], "q")
         source = data.get("q_source", "user-provided baseline")
     benchmark = data.get("benchmark")

@@ -32,16 +32,16 @@ def user_distribution(data: Json, marginals: np.ndarray,
                       states: np.ndarray) -> np.ndarray:
     """Resolve an explicit table, a two-event conditional, or independence."""
     count = len(marginals)
-    modes = sum(("scenario_probabilities" in data,
-                 "conditional_b_given_a" in data,
+    modes = sum((data.get("scenario_probabilities") is not None,
+                 data.get("conditional_b_given_a") is not None,
                  data.get("independent") is True))
     if modes > 1 or (modes != 1 and count > 1):
         raise ValueError(
             "Choose one joint table, conditional, or independence")
-    if "scenario_probabilities" in data:
+    if data.get("scenario_probabilities") is not None:
         probabilities = distribution(data["scenario_probabilities"], count,
                                      "scenario_probabilities")
-    elif "conditional_b_given_a" in data:
+    elif data.get("conditional_b_given_a") is not None:
         if count != 2:
             raise ValueError("P(B|A) is available only for two events")
         conditional = probability(data["conditional_b_given_a"], "P(B|A)")
