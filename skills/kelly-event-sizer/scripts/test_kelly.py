@@ -82,11 +82,14 @@ class PropertyTests(unittest.TestCase):
             price = rng.uniform(0.05, 0.9)
             other = rng.uniform(1 - price, 0.99)
             result = kelly.single({
+                **case_input(CASES[0]),
                 "p": float(rng.uniform()), "q": float(price),
                 "lambda": float(rng.uniform()), "bankroll": 1000,
                 "outcomes": [
-                    {"name": "YES", "format": "contract", "price": price},
-                    {"name": "NO", "format": "contract", "price": other},
+                    {"name": "YES", "format": "contract", "price": price,
+                     "purchase_fee": 0, "profit_commission": 0},
+                    {"name": "NO", "format": "contract", "price": other,
+                     "purchase_fee": 0, "profit_commission": 0},
                 ],
             })
             positives = [row["fraction"] > 1e-12
@@ -97,6 +100,7 @@ class PropertyTests(unittest.TestCase):
         """Joint positions are symmetric and below standalone size."""
         event = case_input(CASES[12])["events"][0]
         result = kelly.joint({"lambda": 1, "bankroll": 1000,
+                              "related_positions": "none",
                               "independent": True,
                               "events": [event, {**event, "name": "B"}]})
         self.assertGreater(result["fractions"][0], 0)
@@ -121,10 +125,12 @@ class PropertyTests(unittest.TestCase):
         for _ in range(150):
             q, p, weight = rng.uniform(0.05, 0.95, size=3)
             result = kelly.single({
+                **case_input(CASES[0]),
                 "p": float(p), "q": float(q), "lambda": float(weight),
                 "bankroll": 1000,
                 "outcomes": [{"name": "YES", "format": "contract",
-                              "price": float(q)}],
+                              "price": float(q), "purchase_fee": 0,
+                              "profit_commission": 0}],
             })["sides"][0]
             self.assertTrue(result["equivalent"])
             self.assertAlmostEqual(result["candidate_fraction"],
@@ -140,26 +146,30 @@ class BoundaryTests(unittest.TestCase):
             result = kelly.normalize({"outcomes": [{
                 "name": "YES", "format": "stake", "stake": 100,
                 "payout": 150, "payout_kind": payout,
+                "purchase_fee": 0, "profit_commission": 0,
             }]})
             self.assertAlmostEqual(result["outcomes"][0]["b"], expected)
-        with self.assertRaises(ValueError):
-            kelly.normalize({"outcomes": [{
-                "name": "YES", "format": "stake", "stake": 100,
-                "payout": 150,
-            }]})
+        missing = kelly.normalize({"outcomes": [{
+            "name": "YES", "format": "stake", "stake": 100,
+            "payout": 150, "purchase_fee": 0, "profit_commission": 0,
+        }]})
+        self.assertEqual(missing["status"], "awaiting_input")
+        self.assertIn("outcomes[0].payout_kind", missing["missing_fields"])
         row = {"name": "YES", "format": "contract", "price": 0.4,
                "purchase_fee": 0.5, "net_odds": 1.5}
         self.assertEqual(kelly.normalize({"outcomes": [row]})[
             "outcomes"][0]["b"], 1.5)
 
     def test_invalid_and_missing_inputs(self) -> None:
-        """Reject invalid types, modes, probabilities, and missing q."""
+        """Reject invalid values and wait for a missing baseline."""
         base = case_input(CASES[0])
         for change in ({"p": float("nan")}, {"p": True}, {"p": 1.01},
                        {"mode": "wrong"}, {"lambda": -0.1}, {"bankroll": 0},
-                       {"days": 0}, {"q": None}, {"cap": 1.1}):
+                       {"days": 0}, {"cap": 1.1}):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 kelly.single({**base, **change})
+        self.assertEqual(kelly.single({**base, "q": None})["status"],
+                         "awaiting_input")
 
     def test_no_edge_never_gives_amount(self) -> None:
         """Nonpositive sizes end without an actionable money field."""
@@ -204,9 +214,10 @@ class BoundaryTests(unittest.TestCase):
         events[0] = {**events[0], "side": "NO", "p": 0.3,
                      "existing_fraction": 0.05,
                      "outcomes": [{"name": "NO", "format": "contract",
-                                   "price": 0.6}]}
+                                   "price": 0.6, "purchase_fee": 0,
+                                   "profit_commission": 0}]}
         data = {"events": events, "bankroll": 1000, "lambda": 1,
-                "independent": True}
+                "independent": True, "related_positions": ["A"]}
         result = kelly.joint(data)
         self.assertLessEqual(sum(result["total_fractions"]), 1 - 1e-6)
         self.assertTrue(all(row["wealth"] > 0 for row in result["scenarios"]))

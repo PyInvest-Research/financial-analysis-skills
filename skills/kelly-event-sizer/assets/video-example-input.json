@@ -8,14 +8,30 @@
     {
       "name": "YES",
       "format": "contract",
-      "price": 0.4
+      "price": 0.4,
+      "purchase_fee": 0,
+      "profit_commission": 0
     }
   ],
-  "q_source": "Synthetic fair quote; no spread or fees",
+  "q_source": "Explicit synthetic benchmark assumption",
   "event": {
-    "definition": "Synthetic binary event E; YES iff the settlement record for E is true",
+    "definition": "Synthetic binary event E; YES iff its settlement record is true",
     "settlement_at": "2026-12-01T00:00:00Z",
     "resolver": "Synthetic scenario ledger",
-    "probability_reason": "User-supplied illustrative assumption; not an estimated forecast"
+    "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+  },
+  "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+  "related_positions": "none",
+  "purpose": "example",
+  "example_requested": true,
+  "assumptions": {
+    "event": "Synthetic event, settlement time, resolver, and no-refund rule",
+    "p": "Assumed personal probability 0.55 and illustrative reason",
+    "q": "Assumed baseline 0.4, not a live market quote",
+    "outcomes": "Assumed executable YES contract price 0.4; winning payout is 1 per unit",
+    "fees": "Assumed purchase fee 0 and profit commission 0",
+    "bankroll": "Assumed total bankroll 1000",
+    "related_positions": "Assumed no related positions",
+    "lambda": "Illustrative weight 0.5"
   }
 }

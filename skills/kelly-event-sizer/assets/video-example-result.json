@@ -2,10 +2,11 @@
   "schema_version": 1,
   "status": "ok",
   "mode": "lambda",
+  "purpose": "example",
   "weight": 0.5,
   "p": 0.55,
   "q": 0.4,
-  "q_source": "Synthetic fair quote; no spread or fees",
+  "q_source": "Explicit synthetic benchmark assumption",
   "reminders": [
     "Read the settlement rules before acting.",
     "Check correlation with your other positions.",

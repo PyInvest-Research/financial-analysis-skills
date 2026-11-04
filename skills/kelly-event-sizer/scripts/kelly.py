@@ -1,6 +1,6 @@
-"""Normalize binary odds and size stakes; expose four JSON-only commands.
+"""Check inputs, normalize binary odds, and size stakes using JSON commands.
 
-Import normalize, single, joint, or calibrate with a JSON-compatible dict.
+Import intake, normalize, single, joint, or calibrate with a JSON dict.
 The CLI reads stdin or --input FILE and writes one JSON object to stdout.
 No command fetches prices, estimates probabilities, or places orders.
 """
@@ -61,12 +61,18 @@ def normalized_outcome(row: Json) -> Json:
     both fee models. Unit counts require an actual all-in contract cost.
     Raise ValueError for ambiguous payout semantics or impossible prices.
     """
+    from kelly_intake import quote_missing
+    missing = quote_missing(row, "outcome")
+    if missing:
+        raise ValueError("Incomplete execution inputs: " + ", ".join(missing))
     if not isinstance(row, dict) or row.get("name") not in ("YES", "NO"):
         raise ValueError("Each outcome must have name YES or NO")
     kind = row.get("format")
     price = None
     if kind == "contract":
-        price = number(row.get("price"), "price", 0, 1)
+        supplied = row.get("price")
+        price = number(supplied if supplied is not None else row["total_cost"],
+                       "price", 0, 1)
         if not 0 < price < 1:
             raise ValueError("Contract price must be strictly between 0 and 1")
         base_b = (1 - price) / price
@@ -125,8 +131,10 @@ def normalize(data: Json) -> Json:
     A midpoint uses YES bid/ask; de-vig uses pre-fee implied probabilities.
     No missing complementary execution price is invented.
     """
-    if not isinstance(data, dict):
-        raise ValueError("Input must be a JSON object")
+    from kelly_intake import assess_inputs
+    ready = assess_inputs(data, "normalize")
+    if ready["status"] != "ready":
+        return ready
     rows = data.get("outcomes")
     if not isinstance(rows, list) or not 1 <= len(rows) <= 2:
         raise ValueError("outcomes must contain one or two binary quotes")
@@ -222,12 +230,17 @@ def single(data: Json) -> Json:
     Invalid inputs raise ValueError. No-edge, arbitrage, and unconfirmed
     certainty return structured stop states without an actionable amount.
     """
+    from kelly_intake import assess_inputs
+    ready = assess_inputs(data, "single")
+    if ready["status"] != "ready":
+        return ready
     normalized = normalize(data)
     p = probability(data.get("p"), "p")
     mode, weight = settings(data, normalized["q"] is not None)
     bankroll, cap, days = common(data)
     result: Json = {
         "schema_version": 1, "status": "ok", "mode": mode,
+        "purpose": data.get("purpose", "decision"),
         "weight": weight, "p": p, "q": normalized["q"],
         "q_source": normalized["q_source"], "reminders": REMINDERS,
         "warnings": [],
@@ -303,6 +316,14 @@ def single(data: Json) -> Json:
             "reason": "Positive edge at the supplied executable net odds"}
 
 
+def intake(data: Json) -> Json:
+    """Check accumulated confirmed inputs without guessing or giving advice."""
+    from kelly_intake import assess_inputs
+    if not isinstance(data, dict):
+        raise ValueError("Input must be a JSON object")
+    return assess_inputs(data, data.get("operation", "single"))
+
+
 def joint(data: Json) -> Json:
     """Delegate correlated-event sizing to the local numerical module."""
     from kelly_joint import size_joint
@@ -317,11 +338,11 @@ def calibrate(data: Json) -> Json:
 
 def dispatch(command: str, data: Json) -> Json:
     """Dispatch one supported operation and reject non-object JSON input."""
-    commands = {"normalize": normalize, "single": single,
+    commands = {"intake": intake, "normalize": normalize, "single": single,
                 "joint": joint, "calibrate": calibrate}
     if command not in commands:
         raise ValueError(
-            "Unknown command: normalize, single, joint, calibrate")
+            "Unknown command: intake, normalize, single, joint, calibrate")
     if not isinstance(data, dict):
         raise ValueError("Input must be a JSON object")
     return commands[command](data)

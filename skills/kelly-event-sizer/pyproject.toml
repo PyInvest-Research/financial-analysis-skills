@@ -1,6 +1,6 @@
 [project]
 name = "kelly-event-sizer"
-version = "1.0.0"
+version = "1.1.0"
 description = "JSON tools for binary-event Kelly sizing and calibration"
 requires-python = ">=3.12"
 dependencies = ["numpy>=2.3,<3", "scipy>=1.16,<2"]

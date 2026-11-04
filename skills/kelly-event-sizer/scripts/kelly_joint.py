@@ -118,6 +118,10 @@ def size_joint(data: Json) -> Json:
     Existing positions are fixed long exposures; k mode with holdings is
     rejected because scaling the whole portfolio would sell fixed holdings.
     """
+    from kelly_intake import assess_inputs
+    ready = assess_inputs(data, "joint")
+    if ready["status"] != "ready":
+        return ready
     events = data.get("events")
     if not isinstance(events, list) or not 1 <= len(events) <= 3:
         raise ValueError("Joint mode supports one to three binary events")
@@ -132,6 +136,7 @@ def size_joint(data: Json) -> Json:
     mode, weight = settings(data, all(row["q"] is not None
                                       for row in normalized))
     base: Json = {"schema_version": 1, "mode": mode, "weight": weight,
+                  "purpose": data.get("purpose", "decision"),
                   "reminders": REMINDERS}
     if any(row["arbitrage"] for row in normalized):
         return {**base, "status": "arbitrage_out_of_scope"}

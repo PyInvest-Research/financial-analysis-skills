@@ -15,8 +15,8 @@ Each skill includes instructions, references, and tools under the [MIT License](
 
 ## Kelly Event Sizer
 
-[Kelly Event Sizer v1.0.0](skills/kelly-event-sizer/SKILL.md) 將使用者提供的二元事件機率、外部基準、可成交賠率與成本，交給 Python 計算部位。支援分數凱利、向基準收縮、YES／NO 選邊、最多三個相關事件的聯合配置，以及歷史預測的 λ 校準。
+[Kelly Event Sizer v1.1.0](skills/kelly-event-sizer/SKILL.md) 逐步確認事件與結算規則、個人機率與理由、市場基準及來源、可成交報價與報酬、費用、本金及相關部位，資料齊全後才交給 Python 計算。資料未齊時只列缺項，每輪最多問兩件事，已提供的內容不重問；不先給方向或結果卡，也不自行猜測報酬、NO 成交價格、成本或本金。若已明確提供含全部費用的總成本或最終淨賠率，就不再詢問費用。支援分數凱利、向基準收縮、YES／NO 選邊、最多三個相關事件的聯合配置，以及歷史預測的 λ 校準；λ 模式可預設為 0.5，但這項預設不會延伸到其他欄位。
 
-腳本提供 `normalize`、`single`、`joint`、`calibrate` 四個 JSON 指令；輸入格式、公式與可重現範例隨套件提供。
+腳本提供 `intake`、`normalize`、`single`、`joint`、`calibrate` 五個 JSON 指令；缺少費用時不視為零，也不以 YES 的補數推測 NO 成交價。輸入格式、公式，以及逐項列明假設的合成範例，均隨套件提供。
 
-下載與固定示範：[pyecontech.com/skills/kelly-event-sizer/](https://pyecontech.com/skills/kelly-event-sizer/)。計算不依賴特定平台、不取價、不下單；沒有優勢就不提供下注金額。不推薦市場、不替使用者估機率，不構成投資建議，在地法規請自行確認。
+下載與固定示範：[pyecontech.com/skills/kelly-event-sizer/](https://pyecontech.com/skills/kelly-event-sizer/)。網站上的範例是固定的合成資料，不提供即時試算。計算不依賴特定平台、不取價、不下單；沒有優勢時不提供下注金額。本工具不推薦市場、不替使用者估計機率，不構成投資建議，在地法規請自行確認。

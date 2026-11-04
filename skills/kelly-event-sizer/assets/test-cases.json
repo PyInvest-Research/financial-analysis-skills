@@ -1,18 +1,645 @@
 [
-  {"id":1,"label":"video example","command":"single","input":{"p":0.55,"q":0.4,"mode":"lambda","lambda":0.5,"bankroll":1000,"outcomes":[{"name":"YES","format":"contract","price":0.4}]},"expected":{"direction":"YES","full_fraction":0.25,"fraction":0.125,"amount":125,"units":312.5,"wealth_if_yes":1187.5,"wealth_if_no":875}},
-  {"id":2,"label":"fractional equivalence","command":"single","input":{"p":0.55,"mode":"k","k":0.5,"bankroll":1000,"outcomes":[{"name":"YES","format":"contract","price":0.4}]},"expected":{"fraction":0.125}},
-  {"id":3,"label":"coin game","command":"single","input":{"p":0.6,"mode":"k","k":1,"bankroll":1000,"outcomes":[{"name":"YES","format":"decimal","odds":2}]},"expected":{"fraction":0.2,"growth":0.0201355135506889}},
-  {"id":4,"label":"buy NO","command":"single","input":{"p":0.3,"q":0.4,"lambda":1,"bankroll":1000,"outcomes":[{"name":"YES","format":"contract","price":0.4},{"name":"NO","format":"contract","price":0.6}]},"expected":{"direction":"NO","fraction":0.25}},
-  {"id":5,"label":"no edge","command":"single","input":{"p":0.41,"lambda":1,"bankroll":1000,"benchmark":{"kind":"midpoint","bid":0.38,"ask":0.42},"outcomes":[{"name":"YES","format":"contract","price":0.42},{"name":"NO","format":"contract","price":0.6}]},"expected":{"status":"no_edge","direction":"NONE"}},
-  {"id":6,"label":"spread with shrinkage","command":"single","input":{"p":0.55,"lambda":0.5,"bankroll":1000,"benchmark":{"kind":"midpoint","bid":0.38,"ask":0.42},"outcomes":[{"name":"YES","format":"contract","price":0.42}]},"expected":{"fraction":0.0948275862068966,"equivalent":false,"scaled_full_fraction":0.112068965517241}},
-  {"id":7,"label":"decimal odds","command":"single","input":{"p":0.5,"mode":"k","k":1,"bankroll":1000,"outcomes":[{"name":"YES","format":"decimal","odds":2.5}]},"expected":{"fraction":0.166666666666667}},
-  {"id":8,"label":"American odds","command":"single","input":{"p":0.7,"mode":"k","k":1,"bankroll":1000,"outcomes":[{"name":"YES","format":"american","odds":-200}]},"expected":{"b":0.5,"fraction":0.1}},
-  {"id":9,"label":"purchase fee","command":"single","input":{"p":0.55,"q":0.4,"lambda":1,"bankroll":1000,"outcomes":[{"name":"YES","format":"contract","price":0.4,"purchase_fee":0.02}]},"expected":{"effective_price":0.408,"fraction":0.239864864864865}},
-  {"id":10,"label":"profit commission","command":"single","input":{"p":0.6,"mode":"k","k":1,"bankroll":1000,"outcomes":[{"name":"YES","format":"decimal","odds":2,"profit_commission":0.05}]},"expected":{"b":0.95,"fraction":0.178947368421053}},
-  {"id":11,"label":"de-vig","command":"normalize","input":{"benchmark":{"kind":"devig"},"outcomes":[{"name":"YES","format":"decimal","odds":1.9},{"name":"NO","format":"decimal","odds":1.9}]},"expected":{"q":0.5}},
-  {"id":12,"label":"arbitrage","command":"single","input":{"p":0.55,"q":0.4,"bankroll":1000,"outcomes":[{"name":"YES","format":"contract","price":0.4},{"name":"NO","format":"contract","price":0.55}]},"expected":{"status":"arbitrage_out_of_scope"}},
-  {"id":13,"label":"one-event joint","command":"joint","input":{"mode":"lambda","lambda":1,"bankroll":1000,"independent":true,"events":[{"name":"A","p":0.55,"q":0.4,"side":"YES","outcomes":[{"name":"YES","format":"contract","price":0.4}]}]},"expected":{"fractions":[0.25]}},
-  {"id":14,"label":"perfect correlation","command":"joint","input":{"lambda":1,"bankroll":1000,"conditional_b_given_a":1,"events":[{"name":"A","p":0.55,"q":0.4,"side":"YES","outcomes":[{"name":"YES","format":"contract","price":0.4}]},{"name":"B","p":0.55,"q":0.4,"side":"YES","outcomes":[{"name":"YES","format":"contract","price":0.4}]}]},"expected":{"total_fraction":0.25}},
-  {"id":15,"label":"insufficient calibration","command":"calibrate","input":{"repeat":{"count":20,"record":{"p":0.6,"q":0.5,"y":1}}},"expected":{"status":"insufficient_samples"}},
-  {"id":16,"label":"uninformative calibration","command":"calibrate","input":{"repeat":{"count":100,"record":{"p":0.5,"q":0.5,"y":1}}},"expected":{"lambda_hat":0}}
+  {
+    "id": 1,
+    "label": "video example",
+    "command": "single",
+    "input": {
+      "p": 0.55,
+      "q": 0.4,
+      "mode": "lambda",
+      "lambda": 0.5,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.4,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-1; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "q_source": "Explicit synthetic benchmark assumption",
+      "related_positions": "none"
+    },
+    "expected": {
+      "direction": "YES",
+      "full_fraction": 0.25,
+      "fraction": 0.125,
+      "amount": 125,
+      "units": 312.5,
+      "wealth_if_yes": 1187.5,
+      "wealth_if_no": 875
+    }
+  },
+  {
+    "id": 2,
+    "label": "fractional equivalence",
+    "command": "single",
+    "input": {
+      "p": 0.55,
+      "mode": "k",
+      "k": 0.5,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.4,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-2; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "fraction": 0.125
+    }
+  },
+  {
+    "id": 3,
+    "label": "coin game",
+    "command": "single",
+    "input": {
+      "p": 0.6,
+      "mode": "k",
+      "k": 1,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "decimal",
+          "odds": 2,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-3; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "fraction": 0.2,
+      "growth": 0.0201355135506889
+    }
+  },
+  {
+    "id": 4,
+    "label": "buy NO",
+    "command": "single",
+    "input": {
+      "p": 0.3,
+      "q": 0.4,
+      "lambda": 1,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.4,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        },
+        {
+          "name": "NO",
+          "format": "contract",
+          "price": 0.6,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-4; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "q_source": "Explicit synthetic benchmark assumption",
+      "related_positions": "none"
+    },
+    "expected": {
+      "direction": "NO",
+      "fraction": 0.25
+    }
+  },
+  {
+    "id": 5,
+    "label": "no edge",
+    "command": "single",
+    "input": {
+      "p": 0.41,
+      "lambda": 1,
+      "bankroll": 1000,
+      "benchmark": {
+        "kind": "midpoint",
+        "bid": 0.38,
+        "ask": 0.42,
+        "source": "Explicit synthetic two-sided quote assumption"
+      },
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.42,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        },
+        {
+          "name": "NO",
+          "format": "contract",
+          "price": 0.6,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-5; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "status": "no_edge",
+      "direction": "NONE"
+    }
+  },
+  {
+    "id": 6,
+    "label": "spread with shrinkage",
+    "command": "single",
+    "input": {
+      "p": 0.55,
+      "lambda": 0.5,
+      "bankroll": 1000,
+      "benchmark": {
+        "kind": "midpoint",
+        "bid": 0.38,
+        "ask": 0.42,
+        "source": "Explicit synthetic two-sided quote assumption"
+      },
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.42,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-6; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "fraction": 0.0948275862068966,
+      "equivalent": false,
+      "scaled_full_fraction": 0.112068965517241
+    }
+  },
+  {
+    "id": 7,
+    "label": "decimal odds",
+    "command": "single",
+    "input": {
+      "p": 0.5,
+      "mode": "k",
+      "k": 1,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "decimal",
+          "odds": 2.5,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-7; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "fraction": 0.166666666666667
+    }
+  },
+  {
+    "id": 8,
+    "label": "American odds",
+    "command": "single",
+    "input": {
+      "p": 0.7,
+      "mode": "k",
+      "k": 1,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "american",
+          "odds": -200,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-8; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "b": 0.5,
+      "fraction": 0.1
+    }
+  },
+  {
+    "id": 9,
+    "label": "purchase fee",
+    "command": "single",
+    "input": {
+      "p": 0.55,
+      "q": 0.4,
+      "lambda": 1,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.4,
+          "purchase_fee": 0.02,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-9; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "q_source": "Explicit synthetic benchmark assumption",
+      "related_positions": "none"
+    },
+    "expected": {
+      "effective_price": 0.408,
+      "fraction": 0.239864864864865
+    }
+  },
+  {
+    "id": 10,
+    "label": "profit commission",
+    "command": "single",
+    "input": {
+      "p": 0.6,
+      "mode": "k",
+      "k": 1,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "decimal",
+          "odds": 2,
+          "profit_commission": 0.05,
+          "purchase_fee": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-10; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "related_positions": "none"
+    },
+    "expected": {
+      "b": 0.95,
+      "fraction": 0.178947368421053
+    }
+  },
+  {
+    "id": 11,
+    "label": "de-vig",
+    "command": "normalize",
+    "input": {
+      "benchmark": {
+        "kind": "devig",
+        "source": "Explicit synthetic two-sided quote assumption"
+      },
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "decimal",
+          "odds": 1.9,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        },
+        {
+          "name": "NO",
+          "format": "decimal",
+          "odds": 1.9,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ]
+    },
+    "expected": {
+      "q": 0.5
+    }
+  },
+  {
+    "id": 12,
+    "label": "arbitrage",
+    "command": "single",
+    "input": {
+      "p": 0.55,
+      "q": 0.4,
+      "bankroll": 1000,
+      "outcomes": [
+        {
+          "name": "YES",
+          "format": "contract",
+          "price": 0.4,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        },
+        {
+          "name": "NO",
+          "format": "contract",
+          "price": 0.55,
+          "purchase_fee": 0,
+          "profit_commission": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "event": {
+        "definition": "Synthetic binary event case-12; YES iff its settlement record is true",
+        "settlement_at": "2026-12-01T00:00:00Z",
+        "resolver": "Synthetic scenario ledger",
+        "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+      },
+      "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+      "q_source": "Explicit synthetic benchmark assumption",
+      "related_positions": "none"
+    },
+    "expected": {
+      "status": "arbitrage_out_of_scope"
+    }
+  },
+  {
+    "id": 13,
+    "label": "one-event joint",
+    "command": "joint",
+    "input": {
+      "mode": "lambda",
+      "lambda": 1,
+      "bankroll": 1000,
+      "independent": true,
+      "events": [
+        {
+          "name": "A",
+          "p": 0.55,
+          "q": 0.4,
+          "side": "YES",
+          "outcomes": [
+            {
+              "name": "YES",
+              "format": "contract",
+              "price": 0.4,
+              "purchase_fee": 0,
+              "profit_commission": 0
+            }
+          ],
+          "event": {
+            "definition": "Synthetic binary event case-13-A; YES iff its settlement record is true",
+            "settlement_at": "2026-12-01T00:00:00Z",
+            "resolver": "Synthetic scenario ledger",
+            "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+          },
+          "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+          "q_source": "Explicit synthetic benchmark assumption",
+          "existing_fraction": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "related_positions": "none"
+    },
+    "expected": {
+      "fractions": [
+        0.25
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "label": "perfect correlation",
+    "command": "joint",
+    "input": {
+      "lambda": 1,
+      "bankroll": 1000,
+      "conditional_b_given_a": 1,
+      "events": [
+        {
+          "name": "A",
+          "p": 0.55,
+          "q": 0.4,
+          "side": "YES",
+          "outcomes": [
+            {
+              "name": "YES",
+              "format": "contract",
+              "price": 0.4,
+              "purchase_fee": 0,
+              "profit_commission": 0
+            }
+          ],
+          "event": {
+            "definition": "Synthetic binary event case-14-A; YES iff its settlement record is true",
+            "settlement_at": "2026-12-01T00:00:00Z",
+            "resolver": "Synthetic scenario ledger",
+            "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+          },
+          "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+          "q_source": "Explicit synthetic benchmark assumption",
+          "existing_fraction": 0
+        },
+        {
+          "name": "B",
+          "p": 0.55,
+          "q": 0.4,
+          "side": "YES",
+          "outcomes": [
+            {
+              "name": "YES",
+              "format": "contract",
+              "price": 0.4,
+              "purchase_fee": 0,
+              "profit_commission": 0
+            }
+          ],
+          "event": {
+            "definition": "Synthetic binary event case-14-B; YES iff its settlement record is true",
+            "settlement_at": "2026-12-01T00:00:00Z",
+            "resolver": "Synthetic scenario ledger",
+            "cancellation_rule": "No cancellation or refund outcome in this synthetic case"
+          },
+          "probability_reason": "Explicit synthetic probability assumption, not a real forecast",
+          "q_source": "Explicit synthetic benchmark assumption",
+          "existing_fraction": 0
+        }
+      ],
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ],
+      "related_positions": "none"
+    },
+    "expected": {
+      "total_fraction": 0.25
+    }
+  },
+  {
+    "id": 15,
+    "label": "insufficient calibration",
+    "command": "calibrate",
+    "input": {
+      "repeat": {
+        "count": 20,
+        "record": {
+          "p": 0.6,
+          "q": 0.5,
+          "y": 1
+        }
+      },
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ]
+    },
+    "expected": {
+      "status": "insufficient_samples"
+    }
+  },
+  {
+    "id": 16,
+    "label": "uninformative calibration",
+    "command": "calibrate",
+    "input": {
+      "repeat": {
+        "count": 100,
+        "record": {
+          "p": 0.5,
+          "q": 0.5,
+          "y": 1
+        }
+      },
+      "purpose": "example",
+      "example_requested": true,
+      "assumptions": [
+        "All event rules, probabilities, benchmark quotes, execution terms, fee values, bankroll, and position disclosures in this fixture are synthetic test assumptions."
+      ]
+    },
+    "expected": {
+      "lambda_hat": 0
+    }
+  }
 ]

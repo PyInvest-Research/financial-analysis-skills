@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "status": "awaiting_input",
+  "operation": "single",
+  "missing_fields": [
+    "outcomes",
+    "event.definition",
+    "event.settlement_at",
+    "event.resolver",
+    "event.cancellation_rule",
+    "probability_reason",
+    "q_source",
+    "bankroll",
+    "related_positions"
+  ],
+  "questions": [
+    {
+      "field": "event",
+      "prompt": "Provide the missing event or settlement fields listed here.",
+      "missing_fields": [
+        "event.definition",
+        "event.settlement_at",
+        "event.resolver",
+        "event.cancellation_rule"
+      ]
+    },
+    {
+      "field": "quotes",
+      "prompt": "Provide the missing executable quote or payout terms listed.",
+      "missing_fields": [
+        "outcomes"
+      ]
+    }
+  ]
+}

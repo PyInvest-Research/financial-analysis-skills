@@ -1,8 +1,8 @@
 {
   "slug": "kelly-event-sizer",
   "name": "Kelly Event Sizer",
-  "version": "1.0.0",
-  "summary": "下載 Python Skill，把你對二元事件的機率判斷、賠率與成本交給腳本，計算凱利部位；支援向基準收縮、相關事件聯合配置與 λ 校準。",
+  "version": "1.1.0",
+  "summary": "下載 Python Skill，逐步確認二元事件的機率、報酬、成本與本金；資料齊全後才計算凱利部位，支援相關事件聯合配置與 λ 校準。",
   "status": "published",
   "license": "MIT",
   "githubOwner": "PyInvest-Research",
@@ -16,13 +16,17 @@
     ".python-version",
     "uv.lock",
     "scripts/kelly.py",
+    "scripts/kelly_intake.py",
     "scripts/kelly_joint.py",
     "scripts/kelly_calibration.py",
     "scripts/test_kelly.py",
+    "scripts/test_intake.py",
     "references/schema.md",
     "references/formulas.md",
     "assets/test-cases.json",
     "assets/video-example-input.json",
-    "assets/video-example-result.json"
+    "assets/video-example-result.json",
+    "assets/incomplete-input.json",
+    "assets/incomplete-result.json"
   ]
 }
