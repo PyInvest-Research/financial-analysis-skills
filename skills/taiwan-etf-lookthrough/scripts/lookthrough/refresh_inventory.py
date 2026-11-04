@@ -57,6 +57,13 @@ def _day(text: str) -> date:
     return date.fromisoformat(text.replace("/", "-"))
 
 
+def _tsit_day(text: str) -> date:
+    """Accept native zero padding without accepting invalid calendar dates."""
+    if not re.fullmatch(r"[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}", text):
+        raise ValueError("Invalid Taishin calendar date")
+    return date(*(int(part) for part in text.split("/")))
+
+
 def _stock_rows(records: list[list[str]]) -> list[SecurityRow]:
     """Require every source stock row and preserve its original symbol."""
     result = []
@@ -90,7 +97,10 @@ def read_tsit(raw: bytes, symbol: str) -> Inventory:
     if symbol not in title.text:
         raise ValueError("Missing Taishin visible fund identity")
     stamp = by_id(root, "NAV_DATE").attrs.get("value", "")
-    day = _day(_match(r"^(\d{4}/\d{2}/\d{2}) 上午 12:00:00$", stamp)[1])
+    day = _tsit_day(
+        _match(
+            r"^([0-9]{4}/[0-9]{1,2}/[0-9]{1,2}) 上午 12:00:00$",
+            stamp)[1])
     panel = by_id(root, "paneFive1")
     tables = [rows(t) for t in panel.find("table")]
     nav_rows = _single([t for t in tables if t[0][0] == "基金淨資產價值(元)"],
@@ -98,8 +108,13 @@ def read_tsit(raw: bytes, symbol: str) -> Inventory:
     if not nav_rows[0][1].startswith("TWD "):
         raise ValueError("Taishin NAV currency is not TWD")
     nav = nav_number(nav_rows[0][1][4:])
-    stamps = re.findall(r"(\d{4}/\d{2}/\d{2})每基數", panel.text)
-    if not stamps or any(_day(s) != day for s in stamps):
+    labels = [row[0] for row in nav_rows if "每基數" in row[0]]
+    stamps = [re.fullmatch(r"([0-9]{4}/[0-9]{1,2}/[0-9]{1,2})每基數"
+                           r"(實際申購總價金|申購總價金差額)\(元\)", label)
+              for label in labels]
+    if (len(stamps) != 2 or any(m is None for m in stamps)
+            or {m[2] for m in stamps} != {"實際申購總價金", "申購總價金差額"}
+            or any(_tsit_day(m[1]) != day for m in stamps)):
         raise ValueError("Taishin holdings and NAV dates disagree")
     table = _single([t for t in tables if t[0] ==
                      ["代號", "名稱", "股數", "持股權重"]], "Taishin stocks")

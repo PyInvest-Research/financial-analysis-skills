@@ -66,6 +66,14 @@ class RefreshSession:
         self.events: list[dict] = []
         self.transport = transport or TransportEvidence()
 
+    def _budget_message(self, exhausted: list[str], elapsed: float) -> str:
+        """Describe exhausted limits and current shared-session counters."""
+        limits = ",".join(exhausted)
+        return (
+            f"Official refresh resource budget exhausted: {limits} "
+            f"(requests={self.requests}/100, bytes={self.bytes}/83886080, "
+            f"elapsed={elapsed:.3f}/240 seconds)")
+
     def get(self, url: str, form: dict | None = None) -> bytes:
         """Fetch an exact allowlisted HTTPS URL or a public query form."""
         parts = urlsplit(url)
@@ -78,9 +86,13 @@ class RefreshSession:
         if host in self.blocked:
             raise ValueError("Official host stopped after transport failure")
         self.transport.denials.check(url)
-        if (self.requests >= 100 or self.bytes >= 80 * 1024**2
-                or monotonic() - self.started >= 240):
-            raise ValueError("Official refresh resource budget exhausted")
+        elapsed = monotonic() - self.started
+        exhausted = [name for name, used, limit in (
+            ("requests", self.requests, 100),
+            ("bytes", self.bytes, 80 * 1024**2),
+            ("elapsed", elapsed, 240)) if used >= limit]
+        if exhausted:
+            raise ValueError(self._budget_message(exhausted, elapsed))
         self.requests += 1
         body = urlencode(form).encode() if form is not None else None
         request = Request(url, data=body, headers={
@@ -93,14 +105,17 @@ class RefreshSession:
         try:
             opener = build_opener(ProxyHandler({}), NoRedirect())
             remaining = 240 - (monotonic() - self.started)
+
             def check(r):
                 if r.geturl() != url or r.getcode() != 200:
                     raise ValueError("Changed official URL/status")
-            raw = self.transport.read(opener, request, timeout=min(20, max(1, remaining)),
-                                      limit=MAX_BYTES, check_response=check)
+            raw = self.transport.read(
+                opener, request, timeout=min(20, max(1, remaining)),
+                limit=MAX_BYTES, check_response=check)
             self.bytes += len(raw)
             if self.bytes > 80 * 1024**2:
-                raise ValueError("Official source response byte limit")
+                raise ValueError(self._budget_message(
+                    ["bytes"], monotonic() - self.started))
             event.update(status="ok", bytes=len(raw))
             return raw
         except Exception as error:
@@ -143,7 +158,8 @@ def _inventory(symbol: str, sources: dict[str, bytes], *,
         if symbol == "00731" and "assets" in sources:
             if sources.keys() != {"assets", "workbook"}:
                 raise ValueError("Ambiguous FH API capture sources")
-            return refresh_fh.read_inventory(sources["assets"], sources["workbook"])
+            return refresh_fh.read_inventory(
+                sources["assets"], sources["workbook"])
         return read_fhtrust(sources["page"], sources["workbook"], symbol, fund)
     if issuer == "ftft":
         inventory = read_ftft(sources["assets"], symbol, fund)
@@ -177,7 +193,8 @@ def capture(symbol: str, sources: dict[str, bytes],
 def acquire(symbol: str, session: RefreshSession) -> bytes:
     """Collect the reviewed current source and reuse date-specific prices."""
     if symbol not in products():
-        raise ValueError("No acquisition route before same-program runner acceptance")
+        raise ValueError(
+            "No acquisition route before same-program runner acceptance")
     product = products()[symbol]
     issuer, fund = product["issuer"], product["fund_id"]
     sources = {}
@@ -190,7 +207,9 @@ def acquire(symbol: str, session: RefreshSession) -> bytes:
                                        f"?FundCode={fund}&SearchDate={day}")
     elif issuer == "fhtrust":
         if symbol == "00731":
-            sources = refresh_fh.acquire(session, datetime.now(ZoneInfo("Asia/Taipei")).date())
+            sources = refresh_fh.acquire(
+                session, datetime.now(
+                    ZoneInfo("Asia/Taipei")).date())
         else:
             sources["page"] = session.get(product["source_url"])
             _, url = fh_download(sources["page"], fund)
@@ -229,7 +248,8 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     if (payload.get("refresh_version") != 1
             or payload.get("symbol") != etf.symbol
             or etf.symbol not in reviewed_products()
-            or etf.source_url != reviewed_products()[etf.symbol]["source_url"]):
+            or etf.source_url != (
+                reviewed_products()[etf.symbol]["source_url"])):
         raise ValueError("Refresh product capture identity mismatch")
 
     def decoded(key: str) -> dict[str, bytes]:
@@ -245,7 +265,8 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
     sources, quotes = decoded("sources"), decoded("quotes")
     if etf.symbol in candidate_products():
         if quotes:
-            raise ValueError("Dated native-weight candidate cannot use quote substitutions")
+            raise ValueError(
+                "Dated native-weight candidate cannot use quote substitutions")
         if reviewed_products()[etf.symbol]['issuer'] != 'cathay':
             raise ValueError('Unreviewed candidate source contract')
         from .refresh_cathay_candidate import source_keys
@@ -261,6 +282,7 @@ def parse(raw: bytes, etf: "SupportedEtf", fetched_at: str) -> Snapshot:
         age = (stamp.astimezone(ZoneInfo("Asia/Taipei")).date()
                - inventory.day).days
         if quotes or not 1 <= age <= refresh_fh.MAX_LOOKBACK_DAYS:
-            raise ValueError("FH API capture is outside the dated acquisition contract")
+            raise ValueError(
+                "FH API capture is outside the dated acquisition contract")
     return build_snapshot(etf.symbol, inventory,
                           list(sources.values()), quotes, fetched_at)

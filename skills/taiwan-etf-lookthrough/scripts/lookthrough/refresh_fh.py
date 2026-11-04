@@ -24,14 +24,16 @@ FIELDS = {"fundID", "twNameFull", "ec002", "etf002", "ec038", "dDate",
 
 def assets_url(day: date) -> str:
     """Use a query date only; the response must independently name its day."""
-    return API + "?" + urlencode({"fundID": "ETF08", "qDate": f"{day:%Y/%m/%d}"})
+    return API + "?" + \
+        urlencode({"fundID": "ETF08", "qDate": f"{day:%Y/%m/%d}"})
 
 
 def payload(raw: bytes) -> dict | None:
     """Recognize only the observed explicit all-null empty response."""
     root = read_json(raw)
     if (not isinstance(root, dict) or not isinstance(root.get("result"), list)
-            or len(root["result"]) != 1 or type(root.get("status")) is not Decimal
+            or len(root["result"]) != 1
+            or type(root.get("status")) is not Decimal
             or root["status"] != 0):
         raise ValueError("Ambiguous FH assets response")
     data = root["result"][0]
@@ -49,9 +51,10 @@ def payload(raw: bytes) -> dict | None:
 
 
 def holding_day(data: dict) -> date:
-    """Require the actual source date; never replace it with the query clock."""
+    """Require the source date without substituting the query clock."""
     stamp = data.get("dDate")
-    if not isinstance(stamp, str) or not re.fullmatch(r"\d{4}/\d{2}/\d{2}", stamp):
+    if not isinstance(stamp, str) or not re.fullmatch(
+            r"\d{4}/\d{2}/\d{2}", stamp):
         raise ValueError("Missing or invalid actual FH assets date")
     return date.fromisoformat(stamp.replace("/", "-"))
 
@@ -70,8 +73,9 @@ def acquire(session, today: date) -> dict[str, bytes]:
             continue
         if holding_day(data) != query_day:
             raise ValueError("FH actual date disagrees with requested date")
-        workbook = session.get("https://www.fhtrust.com.tw/api/assetsExcel/ETF08/"
-                               + query_day.strftime("%Y%m%d"))
+        workbook = session.get(
+            "https://www.fhtrust.com.tw/api/assetsExcel/ETF08/"
+            + query_day.strftime("%Y%m%d"))
         read_inventory(raw, workbook)
         return {"assets": raw, "workbook": workbook}
     raise ValueError("FH assets unavailable within three-day lookup budget")
@@ -91,8 +95,33 @@ def _percent(value, amount: Decimal, nav: Decimal, *, stock=False) -> Decimal:
     return weight / 100
 
 
+def _other_summary(value, amount: Decimal, nav: Decimal,
+                   rounded_rows: list[Decimal]) -> str | None:
+    """Accept only exact verified row sums within their display rounding bound.
+
+    This does not infer an issuer accounting convention. Amounts must still
+    reconcile exactly; canonical book weights continue to use amount/NAV.
+    """
+    if not isinstance(value, str) or not re.fullmatch(r"\d+\.\d{3}%", value):
+        raise ValueError("Invalid FH native percentage unit")
+    ratio = number(value[:-1])
+    actual = amount / nav * 100
+    if not 0 <= ratio <= 100:
+        raise ValueError("FH summary percentage outside verified range")
+    if ratio == actual.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP):
+        return None
+    if (len(rounded_rows) != len(ASSET_KINDS)
+            or ratio != sum(rounded_rows)
+            or abs(ratio - actual) > Decimal("0.005") * len(rounded_rows)):
+        raise ValueError(
+            "FH other-assets summary does not reconcile to verified rows/NAV")
+    return (f"FH other-assets summary {value} equals the sum of independently "
+            f"rounded rows; amount/NAV is {actual:.6f}%; "
+            "book weights retain amount/NAV")
+
+
 def read_inventory(api: bytes, workbook: bytes) -> Inventory:
-    """Require complete same-day native holdings and qualified stock markets."""
+    """Require complete same-day holdings and qualified stock markets."""
     data = payload(api)
     if data is None:
         raise ValueError("Empty FH assets cannot become a snapshot")
@@ -104,9 +133,11 @@ def read_inventory(api: bytes, workbook: bytes) -> Inventory:
             or table[3][0] != "基金資產淨值" or nav_number(table[4][0]) != nav
             or table[10] != ["證券代號", "證券名稱", "股數", "金額", "權重(%)"]):
         raise ValueError("FH workbook identity/date/NAV/header mismatch")
-    details, summaries, totals = data["detail"], data["summary"], data["result"]
+    details, summaries, totals = (
+        data["detail"], data["summary"], data["result"])
     if (not isinstance(details, list) or not 1 <= len(details) <= 1000
-            or not isinstance(summaries, list) or not isinstance(totals, list)):
+            or not isinstance(summaries, list)
+            or not isinstance(totals, list)):
         raise ValueError("Missing complete FH asset inventory")
     workbook_rows = {"股票": [], "期貨": []}
     section = "股票"
@@ -123,6 +154,7 @@ def read_inventory(api: bytes, workbook: bytes) -> Inventory:
     api_rows = {"股票": [], "期貨": []}
     amounts = {"股票": Decimal(0), "期貨": Decimal(0), "其他資產": Decimal(0)}
     other_names = set()
+    other_percentages = []
     for row in details:
         if not isinstance(row, dict) or row.get("ftype") not in amounts:
             raise ValueError("Unknown FH asset class")
@@ -132,7 +164,11 @@ def read_inventory(api: bytes, workbook: bytes) -> Inventory:
         amount, shares = number(row["mvalue"]), number(row["qshare"])
         if amount < 0 or shares < 0 or shares != shares.to_integral():
             raise ValueError("Invalid FH amount or quantity")
-        weight = _percent(row["prate_addaccint"], amount, nav, stock=kind == "股票")
+        weight = _percent(
+            row["prate_addaccint"],
+            amount,
+            nav,
+            stock=kind == "股票")
         amounts[kind] += amount
         if kind in api_rows:
             if (kind, code) in seen:
@@ -141,25 +177,37 @@ def read_inventory(api: bytes, workbook: bytes) -> Inventory:
             api_rows[kind].append([code, name, shares, amount, weight])
         if kind == "股票":
             check_stock(code, name, shares, amount, nav)
-            if resolve_security("00731", code, name)[1] not in {"TWSE", "TPEx"}:
+            if resolve_security("00731", code, name)[
+                    1] not in {"TWSE", "TPEx"}:
                 raise ValueError("Unqualified FH stock listing market")
             stocks.append(SecurityRow(code, name, shares, weight))
         elif kind == "期貨":
-            if not isinstance(code, str) or not re.fullmatch(r"WTX\d{6}", code):
+            if not isinstance(code, str) or not re.fullmatch(
+                    r"WTX\d{6}", code):
                 raise ValueError("Unqualified FH future identity")
             assets.append(Holding(code, name, "futures", None))
         else:
-            if name not in ASSET_KINDS or name in other_names or code != "" or shares != 0:
+            if (name not in ASSET_KINDS or name in other_names
+                    or code != "" or shares != 0):
                 raise ValueError("Unqualified or duplicate FH book asset")
             other_names.add(name)
-            assets.append(Holding(name, name, ASSET_KINDS[name], float(amount / nav)))
+            other_percentages.append(weight * 100)
+            assets.append(
+                Holding(
+                    name,
+                    name,
+                    ASSET_KINDS[name],
+                    float(
+                        amount /
+                        nav)))
     if not stocks or other_names != ASSET_KINDS.keys():
         raise ValueError("Missing FH stocks or book assets")
     for kind in api_rows:
         normalized = []
         for row in workbook_rows[kind]:
-            normalized.append([row[0], row[1], number(row[2]), number(row[3]),
-                               _percent(row[4], number(row[3]), nav, stock=kind == "股票")])
+            normalized.append([
+                row[0], row[1], number(row[2]), number(row[3]),
+                _percent(row[4], number(row[3]), nav, stock=kind == "股票")])
         if normalized != api_rows[kind]:
             raise ValueError("FH API and workbook holdings differ")
     reported, notes = {}, []
@@ -170,7 +218,8 @@ def read_inventory(api: bytes, workbook: bytes) -> Inventory:
         reported[kind] = number(row["totValue"])
         if kind == "股票":
             ratio = row["totRatio"]
-            if not isinstance(ratio, str) or not re.fullmatch(r"\d+\.\d{3}%", ratio):
+            if not isinstance(ratio, str) or not re.fullmatch(
+                    r"\d+\.\d{3}%", ratio):
                 raise ValueError("Invalid FH summary percentage unit")
             expected_ratio = reported[kind] / nav * 100
             delta = abs(number(ratio[:-1]) - expected_ratio)
@@ -180,8 +229,14 @@ def read_inventory(api: bytes, workbook: bytes) -> Inventory:
             if delta > Decimal("0.0005") * len(stocks):
                 raise ValueError("Material FH summary percentage discrepancy")
             if delta > Decimal("0.0005"):
-                notes.append(f"FH stock summary {ratio} differs from amount/NAV "
-                             f"{expected_ratio:.6f}%; native row weights retained")
+                notes.append(
+                    f"FH stock summary {ratio} differs from amount/NAV "
+                    f"{expected_ratio:.6f}%; native row weights retained")
+        elif kind == "其他資產":
+            note = _other_summary(row["totRatio"], reported[kind], nav,
+                                  other_percentages)
+            if note:
+                notes.append(note)
         else:
             _percent(row["totRatio"], reported[kind], nav)
     if reported != amounts:

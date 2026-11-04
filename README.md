@@ -5,9 +5,9 @@ Each skill includes instructions, references, and tools under the [MIT License](
 
 ## Taiwan ETF Lookthrough
 
-[Taiwan ETF Lookthrough v1.7.1](skills/taiwan-etf-lookthrough/SKILL.md) 使用內建持股快照與官方檔案，計算公司曝險、持股重疊與資料缺口；沒有網路也能計算。
+[Taiwan ETF Lookthrough v1.7.3](skills/taiwan-etf-lookthrough/SKILL.md) 使用內建持股快照與官方檔案，計算公司曝險、持股重疊與資料缺口；沒有網路也能計算。
 
-版本標示分成兩部分，例如 `v1.7.1 · 資料包 2026-11-02`。純快照刷新保留程式版本，只更換資料包日期與內容識別碼；功能、解析器、計算規則或操作介面有實質變動時才換版。同日不同內容可區分，同日相同內容不重複提交。實際資料包 ID 與涵蓋範圍以 skill.json 及內建快照索引為準。
+版本標示分成兩部分，例如 `v1.7.3 · 資料包 2026-11-03`。純快照刷新保留程式版本，只更換資料包日期與內容識別碼；功能、解析器、計算規則或操作介面有實質變動時才換版。同日不同內容可區分，同日相同內容不重複提交。實際資料包 ID 與涵蓋範圍以 skill.json 及內建快照索引為準。
 
 資料包日期是台北時間的打包日，不是 ETF 持股日。每檔 ETF 請依各自持股日解讀；未知權重不補零，完整組合分母不縮小，海外股票另列。見[內建快照清單](skills/taiwan-etf-lookthrough/references/snapshot-coverage.md)及[研究與註記模式](skills/taiwan-etf-lookthrough/references/research-and-annotations.md)。固定歷史示範與當期資料分開。
 

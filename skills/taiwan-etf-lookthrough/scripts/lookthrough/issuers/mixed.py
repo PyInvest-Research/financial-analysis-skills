@@ -149,8 +149,12 @@ def _kgi(raw: bytes, symbol: str) -> tuple:
         r'資產成分 計價幣別為新台幣 股票 \$([\d,]+) 期貨 '
         r'\$([\d,]+) 債券 \$([\d,]+) 保證金 \$([\d,]+) 現金 \$([\d,]+)',
         text)
-    if nav_match is None or assets_match is None:
-        raise ValueError('Missing KGI total NAV/currency/asset composition')
+    if nav_match is None:
+        raise ValueError('Missing KGI total NAV/currency')
+    if assets_match is None:
+        raise ValueError(
+            'Unqualified KGI asset composition; review nonstock labels '
+            'and accounting relationships')
     nav = nav_number(nav_match[1])
     stock_value = number(assets_match[1])
     tables = [rows(t) for t in section.find('table')]
