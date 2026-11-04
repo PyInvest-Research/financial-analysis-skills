@@ -1,6 +1,6 @@
 {
   "slug": "kelly-event-sizer",
-  "name": "凱利事件下注框架",
+  "name": "Kelly Event Sizer",
   "version": "1.0.0",
   "summary": "下載 Python Skill，把你對二元事件的機率判斷、賠率與成本交給腳本，計算凱利部位；支援向基準收縮、相關事件聯合配置與 λ 校準。",
   "status": "published",

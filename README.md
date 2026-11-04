@@ -15,7 +15,7 @@ Each skill includes instructions, references, and tools under the [MIT License](
 
 ## Kelly Event Sizer
 
-[凱利事件下注框架 v1.0.0](skills/kelly-event-sizer/SKILL.md) 將使用者提供的二元事件機率、外部基準、可成交賠率與成本，交給 Python 計算部位。支援分數凱利、向基準收縮、YES／NO 選邊、最多三個相關事件的聯合配置，以及歷史預測的 λ 校準。
+[Kelly Event Sizer v1.0.0](skills/kelly-event-sizer/SKILL.md) 將使用者提供的二元事件機率、外部基準、可成交賠率與成本，交給 Python 計算部位。支援分數凱利、向基準收縮、YES／NO 選邊、最多三個相關事件的聯合配置，以及歷史預測的 λ 校準。
 
 腳本提供 `normalize`、`single`、`joint`、`calibrate` 四個 JSON 指令；輸入格式、公式與可重現範例隨套件提供。
 

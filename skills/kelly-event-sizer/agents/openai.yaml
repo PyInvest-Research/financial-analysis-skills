@@ -1,4 +1,4 @@
 interface:
-  display_name: "凱利事件下注框架"
+  display_name: "Kelly Event Sizer"
   short_description: "整理二元事件機率、賠率與成本，用程式計算單一與相關事件的凱利部位"
   default_prompt: "請使用 $kelly-event-sizer 整理我的二元事件假設、賠率與資金，並用腳本計算部位。"
