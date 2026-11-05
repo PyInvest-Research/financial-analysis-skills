@@ -145,6 +145,7 @@
     "scripts/lookthrough/data/snapshots/00900.json",
     "scripts/lookthrough/data/snapshots/00901.json",
     "scripts/lookthrough/data/snapshots/00903.json",
+    "scripts/lookthrough/data/snapshots/00904.json",
     "scripts/lookthrough/data/snapshots/00905.json",
     "scripts/lookthrough/data/snapshots/00907.json",
     "scripts/lookthrough/data/snapshots/00909.json",
@@ -162,8 +163,10 @@
     "scripts/lookthrough/data/snapshots/00940.json",
     "scripts/lookthrough/data/snapshots/00944.json",
     "scripts/lookthrough/data/snapshots/00946.json",
+    "scripts/lookthrough/data/snapshots/00947.json",
     "scripts/lookthrough/data/snapshots/00952.json",
     "scripts/lookthrough/data/snapshots/00961.json",
+    "scripts/lookthrough/data/snapshots/00962.json",
     "scripts/lookthrough/data/snapshots/009802.json",
     "scripts/lookthrough/data/snapshots/009803.json",
     "scripts/lookthrough/data/snapshots/009804.json",
@@ -178,6 +181,7 @@
     "scripts/lookthrough/data/snapshots/00982A.json",
     "scripts/lookthrough/data/snapshots/00984A.json",
     "scripts/lookthrough/data/snapshots/00986A.json",
+    "scripts/lookthrough/data/snapshots/00987A.json",
     "scripts/lookthrough/data/snapshots/00989A.json",
     "scripts/lookthrough/data/snapshots/00991A.json",
     "scripts/lookthrough/data/snapshots/00992A.json",
@@ -214,8 +218,8 @@
     "validationPolicy": "annotated reports and daily publication; preserve unknowns and source dates"
   },
   "data_bundle": {
-    "id": "2026-11-04-891ee5a428b1",
-    "date": "2026-11-04",
-    "sha256": "891ee5a428b1e3e15df2486d0d3a010146541c4d62d37eb834bc8de8ec3a21c1"
+    "id": "2026-11-05-256ef11de397",
+    "date": "2026-11-05",
+    "sha256": "256ef11de39746dcce04c6e2deb07dba2441fc863bc457122bb014a92c800718"
   }
 }
