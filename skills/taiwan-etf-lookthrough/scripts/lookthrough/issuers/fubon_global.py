@@ -31,6 +31,12 @@ MARKET_SHA_00920 = (
     '003d5fa5ac6dd62688d069926f249f252406216f86ae5f6d528edf8634f7962b'
 )
 ASSET_LABELS = {'保證金 (TWD)', '保證金 (USD)', '現金 (TWD)', '現金 (USD)'}
+# Observed in 00903's 2026-11-04 source (run 41956343015).
+# Preserve signed native balances as unknown-weight nonstock rows.
+DAILY_SETTLEMENT_LABELS_00903 = frozenset({
+    '應收(付)證券款 (HKD)', '應收(付)證券款 (TWD)',
+    '應收(付)證券款 (USD)',
+})
 # Observed in 00920's 2026-11-02 source (run 41572697707). These
 # settlement balances are optional, signed, and never converted to NAV
 # weights. Keep the historical candidate and other funds' contracts intact.
@@ -199,9 +205,12 @@ def parse(raw, etf, fetched_at, *, daily=False):
             'SIBE代碼依歷史BME公告與發行人／交易所資料配對；託管PDF文字未與本地原檔逐位元綁定，保留證據限制。',
         ])
     assets = tables['assets']
+    daily_settlement_labels = {
+        '00903': DAILY_SETTLEMENT_LABELS_00903,
+        '00920': DAILY_SETTLEMENT_LABELS_00920,
+    }
     allowed_asset_labels = asset_labels | (
-        DAILY_SETTLEMENT_LABELS_00920 if daily and etf.symbol == '00920'
-        else set())
+        daily_settlement_labels[etf.symbol] if daily else set())
     asset_seen = set()
     for row in assets[1:]:
         if (len(row) != 2 or row[0] not in allowed_asset_labels

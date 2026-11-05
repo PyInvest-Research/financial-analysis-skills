@@ -1,7 +1,7 @@
 {
   "slug": "taiwan-etf-lookthrough",
   "name": "Taiwan ETF Lookthrough",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "summary": "以內建快照與你提供的官方檔計算台灣 ETF 公司曝險、重疊與資料缺口；可離線計算，過期資料標示原持股日。",
   "status": "published",
   "license": "MIT",
