@@ -32,10 +32,11 @@ MARKET_SHA_00920 = (
 )
 ASSET_LABELS = {'保證金 (TWD)', '保證金 (USD)', '現金 (TWD)', '現金 (USD)'}
 # Observed in 00903's 2026-11-04 source (run 41956343015).
+# JPY also observed in its 2026-11-05 source (run 42151349721).
 # Preserve signed native balances as unknown-weight nonstock rows.
 DAILY_SETTLEMENT_LABELS_00903 = frozenset({
     '應收(付)證券款 (HKD)', '應收(付)證券款 (TWD)',
-    '應收(付)證券款 (USD)',
+    '應收(付)證券款 (USD)', '應收(付)證券款 (JPY)',
 })
 # Observed in 00920's 2026-11-02 source (run 41572697707). These
 # settlement balances are optional, signed, and never converted to NAV
