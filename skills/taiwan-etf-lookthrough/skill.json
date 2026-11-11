@@ -155,6 +155,7 @@
     "scripts/lookthrough/data/snapshots/00920.json",
     "scripts/lookthrough/data/snapshots/00923.json",
     "scripts/lookthrough/data/snapshots/00926.json",
+    "scripts/lookthrough/data/snapshots/00927.json",
     "scripts/lookthrough/data/snapshots/00929.json",
     "scripts/lookthrough/data/snapshots/00930.json",
     "scripts/lookthrough/data/snapshots/00935.json",
@@ -218,8 +219,8 @@
     "validationPolicy": "annotated reports and daily publication; preserve unknowns and source dates"
   },
   "data_bundle": {
-    "id": "2026-11-10-9c30966aa88a",
-    "date": "2026-11-10",
-    "sha256": "9c30966aa88a204ec1d421a05b07412e44b71fbf78cdd0919d0bca03c51a6cbb"
+    "id": "2026-11-11-cc5e2b940668",
+    "date": "2026-11-11",
+    "sha256": "cc5e2b94066841fe450c245ad4789e6196de3f87c7f6bed1c9545a9c54d989d6"
   }
 }
