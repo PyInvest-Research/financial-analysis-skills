@@ -219,8 +219,8 @@
     "validationPolicy": "annotated reports and daily publication; preserve unknowns and source dates"
   },
   "data_bundle": {
-    "id": "2026-11-19-47d188bc8418",
-    "date": "2026-11-19",
-    "sha256": "47d188bc8418395f30a5637d37cd6d71149aa0cc6eaa529e376c18eec94ecf53"
+    "id": "2026-11-20-dfad6fe4fddf",
+    "date": "2026-11-20",
+    "sha256": "dfad6fe4fddf933d328e1ceed09e2c4d7772497fc108722b739be986f933e95b"
   }
 }
